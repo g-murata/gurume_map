@@ -3,7 +3,8 @@ import React from "react";
 function App() {
   return (
     <div className="min-h-screen flex justify-center items-center">
-      <div class="max-w-sm rounded overflow-hidden shadow-lg ">
+      <div class="max-w-sm rounded overflow-hidden shadow-lg 
+      transform hover:scale-110 transition-transform">
         <img
           class="w-full"
           src="https://source.unsplash.com/random/1600x900/"
