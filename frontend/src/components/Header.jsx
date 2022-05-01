@@ -36,7 +36,7 @@ export const Header = (props) => {
               <div className='basis-1/2 bg-white'>
                 <ul className=' text-center border-l-2 '>
                   <li className='p-2 border-b-2'>
-                    <button onClick={menuFunction} className='font-bold'>
+                    <button onClick={menuFunction} className="text-blue-400 hover:text-blue-600 active:text-blue-700 text-lg font-bold ">
                       close
                     </button>
                   </li>
