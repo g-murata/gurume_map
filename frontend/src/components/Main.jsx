@@ -1,10 +1,10 @@
 export const Main = () => {
   return (
     <>
-      <div class="max-w-screen-2xl px-4 md:px-8 mx-auto lg:flex lg:space-x-8">
+      <div class="max-w-screen-2xl px-4 md:px-8 mx-auto lg:flex lg:space-x-8 ">
 
         <div class="max-w-sm rounded overflow-hidden shadow-lg 
-              transform hover:scale-110 transition-transform">
+              transform hover:scale-110 transition-transform cursor-pointer">
           <img
               class="w-full"
               src="https://source.unsplash.com/random/1600x900/"
@@ -19,7 +19,7 @@ export const Main = () => {
         </div>
 
         <div class="max-w-sm rounded overflow-hidden shadow-lg 
-              transform hover:scale-110 transition-transform">
+              transform hover:scale-110 transition-transform cursor-pointer">
           <img
               class="w-full"
               src="https://source.unsplash.com/random/1600x900/"

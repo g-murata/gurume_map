@@ -30,7 +30,7 @@ export const Header = (props) => {
 
 
             {openMenu ? (
-            <div className='flex flex-row absolute z-10 top-0 right-0  min-h-fit min-w-full'>
+            <div className='flex flex-row absolute z-10 top-0 right-0  min-h-fit min-w-full lg:hidden'>
               <div className='basis-1/2'></div>
 
               <div className='basis-1/2 bg-white'>
