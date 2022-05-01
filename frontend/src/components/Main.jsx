@@ -1,7 +1,7 @@
 export const Main = () => {
   return (
     <>
-      <div>
+      <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
         <div class="max-w-sm rounded overflow-hidden shadow-lg 
       transform hover:scale-110 transition-transform">
           <img
