@@ -10,7 +10,7 @@ export const Header = (props) => {
 
   const menuFunction = () => {
     setOpenMenu(!openMenu);
-  };  
+  };
 
   return (
     <>
@@ -23,36 +23,36 @@ export const Header = (props) => {
             </a>
 
             <nav class="hidden lg:flex gap-12">
-              <a href="#" class="text-gray-600 hover:text-red-500 active:text-yellow-500 text-lg font-semibold ">about</a>
-              <a href="#" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</a>
-              <a href="#" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</a>
+              <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-500 text-lg font-semibold">about</a>
+              <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</a>
+              <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</a>
             </nav>
 
 
             {openMenu ? (
-            <div className='flex flex-row absolute z-10 top-0 right-0  min-h-fit min-w-full lg:hidden'>
-              <div className='basis-1/2'></div>
+              <div className='flex flex-row absolute z-10 top-0 right-0  min-h-fit min-w-full lg:hidden'>
+                <div className='basis-1/2'></div>
 
-              <div className='basis-1/2 bg-white'>
-                <ul className=' text-center border-l-2 '>
-                  <li className='p-2 border-b-2'>
-                    <button onClick={menuFunction} className="text-blue-400 hover:text-blue-600 active:text-blue-700 text-lg font-bold ">
-                      close
-                    </button>
-                  </li>
-                  <li className='p-2 border-b-2'>
-                    <a href="#" class="text-gray-600 hover:text-red-500 active:text-yellow-500 text-lg font-semibold ">about</a>
-                  </li>
-                  <li className='p-2 border-b-2'>
-                    <a href="#" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</a>
-                  </li>
-                  <li className='p-2 border-b-2'>
-                    <a href="#" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</a>
-                  </li>
-                </ul>
+                <div className='basis-1/2 bg-white'>
+                  <ul className=' text-center border-l-2 '>
+                    <li className='p-2 border-b-2'>
+                      <button onClick={menuFunction} className="text-blue-400 hover:text-blue-600 active:text-blue-700 text-lg font-bold ">
+                        close
+                      </button>
+                    </li>
+                    <li className='p-2 border-b-2'>
+                      <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-500 text-lg font-semibold ">about</a>
+                    </li>
+                    <li className='p-2 border-b-2'>
+                      <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</a>
+                    </li>
+                    <li className='p-2 border-b-2'>
+                      <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
-          ) : undefined}
+            ) : undefined}
 
             <button type="button" onClick={menuFunction} class="inline-flex items-center lg:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
               <label className="text-2xl text-gray-600"><GiHamburgerMenu /></label>
