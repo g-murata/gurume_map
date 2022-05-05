@@ -8,7 +8,8 @@ import {
 
 const containerStyle = {
   height: "60vh",
-  width: "60%",
+  // TODO:widthはスマホの時だけ100%にしたい。
+  width: "100%",
 };
 
 const center = {
@@ -43,7 +44,7 @@ export const Main = () => {
   };
   return (
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
-      <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
+      <div class="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17}>
           <Marker position={positionAkiba} />
           <Marker position={positionIwamotocho} />
