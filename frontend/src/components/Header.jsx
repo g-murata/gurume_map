@@ -18,10 +18,10 @@ export const Header = (props) => {
     <>
       <div class="bg-white lg:pb-12">
         <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
-          <header class="flex justify-between items-center py-4 md:py-8">
+          <header class="flex justify-between items-center py-4 md:py-8">            
             <Link to="/" class="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
               GurumeMap
-              <label className="text-5xl text-red-600"><MdFoodBank /></label>
+              <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} class="w-9" alt="Logo" />
             </Link>
             
             <nav class="hidden lg:flex gap-12">    
