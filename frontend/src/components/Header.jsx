@@ -21,13 +21,12 @@ export const Header = (props) => {
               GurumeMap
               <label className="text-5xl text-red-600"><MdFoodBank /></label>
             </a>
-
-            <nav class="hidden lg:flex gap-12">
-              <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-500 text-lg font-semibold">about</a>
-              <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</a>
-              <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</a>
+            
+            <nav class="hidden lg:flex gap-12">    
+              <a href="/about" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">about</a>            
+              <a href="/blog" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</a>
+              <a href="/hogehoge" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</a>
             </nav>
-
 
             {openMenu ? (
               <div className='flex flex-row absolute z-10 top-0 right-0  min-h-fit min-w-full lg:hidden'>
