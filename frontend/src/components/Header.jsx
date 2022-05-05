@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { MdFoodBank } from "react-icons/md"
 import { GiHamburgerMenu } from "react-icons/gi"
 
 import { Link } from 'react-router-dom';
