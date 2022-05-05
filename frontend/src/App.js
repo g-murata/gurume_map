@@ -9,9 +9,9 @@ import { HogeHoge } from './components/HogeHoge';
 function App() {
   return (
     <>
-    <Header />    
     
       <Router>
+        <Header />    
         <Routes>
           <Route exact path ="/" element={<Main />} />          
           <Route exact path ="/about" element={<About />} />

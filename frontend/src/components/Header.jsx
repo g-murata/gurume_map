@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { MdFoodBank } from "react-icons/md"
 import { GiHamburgerMenu } from "react-icons/gi"
 
+import { Link } from 'react-router-dom';
+
 export const Header = (props) => {
   const [openMenu, setOpenMenu] = useState(false);
   console.log(openMenu);
@@ -23,9 +25,9 @@ export const Header = (props) => {
             </a>
             
             <nav class="hidden lg:flex gap-12">    
-              <a href="/about" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">about</a>            
-              <a href="/blog" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</a>
-              <a href="/hogehoge" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</a>
+              <Link to="/about" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">about</Link>            
+              <Link to="/blog" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</Link>
+              <Link to="/hogehoge" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</Link>
             </nav>
 
             {openMenu ? (
