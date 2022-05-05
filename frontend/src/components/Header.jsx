@@ -4,6 +4,8 @@ import { GiHamburgerMenu } from "react-icons/gi"
 
 import { Link } from 'react-router-dom';
 
+import {HeaderLink} from './HeaderLink'
+
 export const Header = (props) => {
   const [openMenu, setOpenMenu] = useState(false);
   console.log(openMenu);
@@ -25,9 +27,7 @@ export const Header = (props) => {
             </Link>
             
             <nav class="hidden lg:flex gap-12">    
-              <Link to="/about" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">about</Link>            
-              <Link to="/blog" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</Link>
-              <Link to="/hogehoge" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</Link>
+              <HeaderLink />
             </nav>
 
             {openMenu ? (
@@ -41,15 +41,7 @@ export const Header = (props) => {
                         close
                       </button>
                     </li>
-                    <li className='p-2 border-b-2'>
-                      <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-500 text-lg font-semibold ">about</a>
-                    </li>
-                    <li className='p-2 border-b-2'>
-                      <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold ">blog</a>
-                    </li>
-                    <li className='p-2 border-b-2'>
-                      <a href={() => false} class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold">hogehoge</a>
-                    </li>
+                      <HeaderLink />
                   </ul>
                 </div>
               </div>
