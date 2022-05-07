@@ -53,13 +53,13 @@ export const Main = () => {
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17}>
           <Marker position={positionIshiBill} />
           <Marker position={positionKankoku} />
-          <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
-            <div style={divStyle} class="cursor-pointer">
+          <InfoWindow position={positionIshiBill} options={infoWindowOptions} class="cursor-pointer">
+            <div style={divStyle}>
               <h1>石井ビル</h1>
             </div>
           </InfoWindow>
-          <InfoWindow position={positionKankoku} options={infoWindowOptions}>
-            <div style={divStyle} class="cursor-pointer" button onClick={testFunction}>
+          <InfoWindow position={positionKankoku} options={infoWindowOptions} class="cursor-pointer" button onClick={testFunction}>
+            <div style={divStyle}>
               <h1>ヨプの王豚塩焼</h1>
               <p>飲み会でよく行く。</p>
             </div>
