@@ -59,7 +59,7 @@ export const Main = () => {
             </div>
           </InfoWindow>
           <InfoWindow position={positionKankoku} options={infoWindowOptions}>
-            <div style={divStyle}　button onClick={testFunction}>
+            <div style={divStyle} cursor-pointer button onClick={testFunction}>
               <h1>ヨプの王豚塩焼</h1>
               <p>飲み会でよく行く。</p>
             </div>
