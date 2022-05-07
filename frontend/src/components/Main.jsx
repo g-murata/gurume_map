@@ -13,13 +13,13 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 35.69575,
-  lng: 139.77521,
+  lat: 35.666409,
+  lng: 139.7583613,
 };
 
-const positionAkiba = {
-  lat: 35.69731,
-  lng: 139.7747,
+const positionIshiBill = {
+  lat: 35.666409,
+  lng: 139.7583613,
 };
 
 const positionIwamotocho = {
@@ -46,9 +46,9 @@ export const Main = () => {
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
       <div class="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17}>
-          <Marker position={positionAkiba} />
+          <Marker position={positionIshiBill} />
           <Marker position={positionIwamotocho} />
-          <InfoWindow position={positionAkiba} options={infoWindowOptions}>
+          <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
             <div style={divStyle}>
               <h1>秋葉原オフィス</h1>
             </div>
