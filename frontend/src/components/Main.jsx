@@ -13,18 +13,18 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 35.66653820603274,
-  lng: 139.75427865550427,
+  lat: 35.666333273506176,
+  lng: 139.75424473120108,
 };
 
 const positionIshiBill = {
-  lat: 35.66653820603274,
-  lng: 139.75427865550427,
+  lat: 35.666333273506176,
+  lng: 139.75424473120108,
 };
 
 const positionIwamotocho = {
-  lat: 35.69397,
-  lng: 139.7762,
+  lat: 35.666333273506176,
+  lng: 139.75424473120108,
 };
 
 const divStyle = {
@@ -50,12 +50,12 @@ export const Main = () => {
           <Marker position={positionIwamotocho} />
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
             <div style={divStyle}>
-              <h1>秋葉原オフィス</h1>
+              <h1>石井ビル</h1>
             </div>
           </InfoWindow>
           <InfoWindow position={positionIwamotocho} options={infoWindowOptions}>
             <div style={divStyle}>
-              <h1>岩本町オフィス</h1>
+              <h1>石井ビル</h1>
             </div>
           </InfoWindow>
         </GoogleMap>
