@@ -54,12 +54,12 @@ export const Main = () => {
           <Marker position={positionIshiBill} />
           <Marker position={positionKankoku} />
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
-            <div style={divStyle}>
+            <div style={divStyle} class="cursor-pointer">
               <h1>石井ビル</h1>
             </div>
           </InfoWindow>
           <InfoWindow position={positionKankoku} options={infoWindowOptions}>
-            <div style={divStyle} cursor-pointer button onClick={testFunction}>
+            <div style={divStyle} class="cursor-pointer" button onClick={testFunction}>
               <h1>ヨプの王豚塩焼</h1>
               <p>飲み会でよく行く。</p>
             </div>
