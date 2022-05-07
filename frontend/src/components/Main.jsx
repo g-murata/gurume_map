@@ -13,13 +13,13 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 35.666409,
-  lng: 139.7583613,
+  lat: 35.66653820603274,
+  lng: 139.75427865550427,
 };
 
 const positionIshiBill = {
-  lat: 35.666409,
-  lng: 139.7583613,
+  lat: 35.66653820603274,
+  lng: 139.75427865550427,
 };
 
 const positionIwamotocho = {
