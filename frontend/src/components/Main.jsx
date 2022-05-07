@@ -44,7 +44,7 @@ export const Main = () => {
   };
 
   const testFunction = () => {
-    console.log("a");
+    alert("ここでモーダルを出して詳細を表示させたいのさ");
   };
 
   return (
