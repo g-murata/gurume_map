@@ -42,6 +42,11 @@ export const Main = () => {
   const createOffsetSize = () => {
     return setSize(new window.google.maps.Size(0, -45));
   };
+
+  const testFunction = () => {
+    console.log("a");
+  };
+
   return (
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
       <div class="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
@@ -54,7 +59,7 @@ export const Main = () => {
             </div>
           </InfoWindow>
           <InfoWindow position={positionKankoku} options={infoWindowOptions}>
-            <div style={divStyle}>
+            <div style={divStyle}　button onClick={testFunction}>
               <h1>ヨプの王豚塩焼</h1>
               <p>飲み会でよく行く。</p>
             </div>
