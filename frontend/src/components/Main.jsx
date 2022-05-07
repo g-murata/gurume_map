@@ -87,10 +87,36 @@ export const Main = () => {
           <Marker position={positionIshiBill} />
           <Marker position={positionKankoku} />
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
-            <div style={divStyle} class="cursor-pointer">
+            <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
               <h1>石井ビル</h1>
             </div>
           </InfoWindow>
+
+          <Modal
+            isOpen={modalIsOpen}
+            onAfterOpen={afterOpenModal}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+            <div class="flex place-content-between shadow-lg">
+              <div class="text-3xl font-bold mb-2">ababababa</div>
+              <button class="font-bold" onClick={closeModal}>close</button>
+            </div>
+            <img
+                class="w-full"
+                src="https://source.unsplash.com/random/1600x900/"
+                alt="ほげほげ画像"
+              ></img>          
+            <p class="text-gray-700 text-base">
+                <p>ほげほげ本文</p>
+                <p>ほげほげ</p>
+                <p>ほげほげ</p>
+                <p>うましうまし</p>              
+            </p>
+
+          </Modal>     
+
 
           <InfoWindow position={positionKankoku} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
@@ -98,7 +124,7 @@ export const Main = () => {
               <p>飲み会でよく行く。</p>
             </div>
           </InfoWindow>
-          
+
           <Modal
             isOpen={modalIsOpen}
             onAfterOpen={afterOpenModal}
