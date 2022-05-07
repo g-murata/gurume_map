@@ -22,9 +22,9 @@ const positionIshiBill = {
   lng: 139.75424473120108,
 };
 
-const positionIwamotocho = {
-  lat: 35.666333273506176,
-  lng: 139.75424473120108,
+const positionKankoku = {
+  lat: 35.66702060417376,
+  lng: 139.75487166876127,
 };
 
 const divStyle = {
@@ -47,15 +47,16 @@ export const Main = () => {
       <div class="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17}>
           <Marker position={positionIshiBill} />
-          <Marker position={positionIwamotocho} />
+          <Marker position={positionKankoku} />
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
             <div style={divStyle}>
               <h1>石井ビル</h1>
             </div>
           </InfoWindow>
-          <InfoWindow position={positionIwamotocho} options={infoWindowOptions}>
+          <InfoWindow position={positionKankoku} options={infoWindowOptions}>
             <div style={divStyle}>
-              <h1>石井ビル</h1>
+              <h1>ヨプの王豚塩焼</h1>
+              <p>飲み会でよく行く。</p>
             </div>
           </InfoWindow>
         </GoogleMap>
