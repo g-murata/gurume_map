@@ -49,8 +49,8 @@ const positionKankoku = {
 };
 
 const positionZenSaburo = {
-  lat: 35.66668464131653,
-  lng: 139.75472479718823,
+  lat: 35.6666040969312,
+  lng: 139.75474687094697,
 };
 
 
