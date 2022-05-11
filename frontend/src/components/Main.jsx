@@ -48,6 +48,12 @@ const positionKankoku = {
   lng: 139.75487166876127,
 };
 
+const positionZenSaburo = {
+  lat: 35.66668464131653,
+  lng: 139.75472479718823,
+};
+
+
 const divStyle = {
   background: "white",
   fontSize: 7.5,
@@ -96,6 +102,13 @@ export const Main = () => {
             <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
               <h1>ヨプの王豚塩焼</h1>
               <p>飲み会でよく行く。</p>
+            </div>
+          </InfoWindow>
+
+          <InfoWindow position={positionZenSaburo} options={infoWindowOptions}>
+            <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
+              <h1>常陸秋そば　善三郎</h1>
+              <p>蕎麦屋さん</p>
             </div>
           </InfoWindow>
           
