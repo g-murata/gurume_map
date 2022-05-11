@@ -9,6 +9,7 @@
     width: 50%;
 	} 
 }
+/* スマホサイズ */
 @media screen and (max-width:768px) {
 	.ReactModal__Content{
     height: 60%;   

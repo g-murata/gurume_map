@@ -92,6 +92,7 @@ export const Main = () => {
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17}>
           <Marker position={positionIshiBill} />
           <Marker position={positionKankoku} />
+          <Marker position={positionZenSaburo} />          
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer">
               <h1>石井ビル</h1>
@@ -101,7 +102,7 @@ export const Main = () => {
           <InfoWindow position={positionKankoku} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
               <h1>ヨプの王豚塩焼</h1>
-              <p>飲み会でよく行く。</p>
+              <p>韓国料理屋（夜しか行ったことない）</p>
             </div>
           </InfoWindow>
 
