@@ -26,8 +26,13 @@ export const GurumeModal = () => {
   let subtitle;
 
   const [selectedItem, setSelectedItem] = useState('')
-  const ButtonList = ['石井ビル', 'ヨプの王豚塩焼', '常陸秋そば　善三郎', 'Button4', 'Button5']
 
+  const restaurants = {
+    id: [1,2,3,4,5],
+    name: ['ヨプの王豚塩焼', '常陸秋そば　善三郎', 'Button3', 'Button4', 'Button5'],
+    evaluation: ['3.5','3.5','','',''],
+    review: ['','','','','']
+  }
 
   const onOpenDialog = (name) => {
     setSelectedItem(name)
@@ -44,7 +49,7 @@ export const GurumeModal = () => {
 
   return (
     <>
-        { ButtonList.map((item) => {
+        { restaurants.name.map((item) => {
           return(
             <>
               <button onClick={ () => onOpenDialog(item)}>{item}</button>
@@ -66,6 +71,7 @@ export const GurumeModal = () => {
                     alt="ほげほげ画像"
                   ></img>          
                 <p class="text-gray-700 text-base w-11/12 m-auto">
+                    <p>評価{}</p>
                     <p>{item}</p>
                 </p>
             </Modal>
