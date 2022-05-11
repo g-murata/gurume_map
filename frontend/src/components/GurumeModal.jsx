@@ -50,16 +50,16 @@ export const GurumeModal = () => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-          <div class="flex place-content-between shadow-lg">
+          <div class="flex place-content-between w-11/12  m-auto">
             <div class="text-3xl font-bold mb-2">ヨプの王豚塩焼</div>
             <button class="font-bold" onClick={closeModal}>close</button>
           </div>
           <img
-              class="w-full"
+              class="w-11/12 m-auto"
               src="https://source.unsplash.com/random/1600x900/"
               alt="ほげほげ画像"
             ></img>          
-          <p class="text-gray-700 text-base">
+          <p class="text-gray-700 text-base w-11/12 m-auto">
               <p>ほげほげ本文</p>
               <p>ほげほげ</p>
               <p>ほげほげ</p>
