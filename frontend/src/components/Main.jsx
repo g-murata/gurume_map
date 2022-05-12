@@ -28,7 +28,7 @@ const customStyles = {
 
 
 const containerStyle = {
-  height: "50vh",
+  height: "60vh",
   // TODO:widthはスマホの時だけ100%にしたい。
   // 隣の要素を40で固定することで実現できたぞ。（荒業？）
   width: "100%",
