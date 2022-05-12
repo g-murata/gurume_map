@@ -91,8 +91,6 @@ export const Main = () => {
     return setSize(new window.google.maps.Size(0, -45));
   };
 
-  let subtitle;
-  
   const [selectedItem, setSelectedItem] = useState('')
 
   const restaurants = {
@@ -109,11 +107,6 @@ export const Main = () => {
   const onCloseDialog = () => {
     setSelectedItem(false)
   }  
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = '#f00';
-  }
 
   return (
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
