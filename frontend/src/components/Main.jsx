@@ -118,7 +118,7 @@ export const Main = () => {
             </div>
           </InfoWindow>
 
-          <InfoWindow position={positionZenSaburo} options={infoWindowOptions}>
+          <InfoWindow position={positionEbiPota} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
               <h1>SHRIMP NOODLE海老ポタ</h1>
               <p>雰囲気がお洒落</p>
