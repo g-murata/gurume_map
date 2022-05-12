@@ -54,11 +54,9 @@ const positionZenSaburo = {
 };
 
 const positionEbiPota = {
-  lat: 35.666548356841915, 
-  lng: 139.7563162969425,
+  lat: 35.66646119314796, 
+  lng: 139.75629483927176,
 };
-
-
 
 const divStyle = {
   background: "white",

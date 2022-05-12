@@ -29,9 +29,9 @@ export const GurumeModal = () => {
 
   const restaurants = {
     id: [1,2,3,4,5],
-    name: ['ヨプの王豚塩焼', '常陸秋そば　善三郎', 'Button3', 'Button4', 'Button5'],
-    evaluation: ['3.5','3.5','','',''],
-    review: ['','','','','']
+    name: ['ヨプの王豚塩焼', '常陸秋そば　善三郎', 'SHRIMP NOODLE海老ポタ', 'Button4', 'Button5'],
+    evaluation: ['3.5','3.5','4.0','',''],
+    review: ['焼肉うまし','卵はINしない方が良い。','クリーミーでうまい','','']
   }
 
   const onOpenDialog = (name) => {
