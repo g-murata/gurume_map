@@ -28,8 +28,9 @@ const customStyles = {
 
 
 const containerStyle = {
-  height: "60vh",
+  height: "50vh",
   // TODO:widthはスマホの時だけ100%にしたい。
+  // 隣の要素を40で固定することで実現できたぞ。（荒業？）
   width: "100%",
 };
 
@@ -92,7 +93,7 @@ export const Main = () => {
 
   return (
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
-      <div class="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
+      <div class="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17}>
           <Marker position={positionIshiBill} />
           <Marker position={positionKankoku} />
@@ -100,7 +101,7 @@ export const Main = () => {
           <Marker position={positionEbiPota} />                    
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer">
-              <h1>石井ビル</h1>
+              <h1>シェルト</h1>
             </div>
           </InfoWindow>
 
@@ -153,7 +154,16 @@ export const Main = () => {
           </Modal>     
 
         </GoogleMap>
-      </div>     
+
+        <div class="w-2/5 ">
+          <div class="mx-8">
+            <h1>Hello</h1>
+            <h1>Hello</h1>
+            <h1>Hello</h1>                    
+          </div>
+        </div> 
+
+      </div>   
     </LoadScript>
   );
 };
