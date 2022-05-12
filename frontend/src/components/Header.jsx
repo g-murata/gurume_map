@@ -17,7 +17,7 @@ export const Header = (props) => {
 
   return (
     <>
-      <div class="bg-white lg:pb-12">
+      <div class="bg-white md:pb-12">
         <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
           <header class="flex justify-between items-center py-4 md:py-8">            
             <Link to="/" class="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
@@ -25,12 +25,12 @@ export const Header = (props) => {
               <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} class="w-9" alt="Logo" />
             </Link>
             
-            <nav class="hidden lg:flex gap-12">    
+            <nav class="hidden md:flex gap-12">    
               <HeaderLink />
             </nav>
 
             {openMenu ? (
-              <div className='flex flex-row absolute z-10 top-0 right-0  min-h-fit min-w-full lg:hidden'>
+              <div className='flex flex-row absolute z-10 top-0 right-0  min-h-fit min-w-full md:hidden'>
                 <div className='basis-1/2'></div>
 
                 <div className='basis-1/2 bg-white'>
@@ -46,7 +46,7 @@ export const Header = (props) => {
               </div>
             ) : undefined}
 
-            <button type="button" onClick={menuFunction} class="inline-flex items-center lg:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
+            <button type="button" onClick={menuFunction} class="inline-flex items-center md:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
               <label className="text-2xl text-gray-600"><GiHamburgerMenu /></label>
             </button>
           </header>
