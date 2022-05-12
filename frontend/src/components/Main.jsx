@@ -156,7 +156,7 @@ export const Main = () => {
         </GoogleMap>
 
         <div class="w-2/5 ">
-          <div class="mx-8">
+          <div class="md:mx-8">
             <h1>Hello</h1>
             <h1>Hello</h1>
             <h1>Hello</h1>                    

@@ -11,9 +11,11 @@ export const Blog = () => {
               alt="ほげほげ画像"
             ></img>          
             <div class="px-6 py-4">
-              <div class="font-bold text-xl mb-2">ほげほげタイトル</div>
+              <div class="font-bold text-xl mb-2">本アプリの構成！</div>
               <p class="text-gray-700 text-base">
-              ほげほげ本文
+              フロントエンド：React、<br></br>
+              デプロイ先：netlify<br></br>
+              …
               </p>
             </div>
         </div>
@@ -26,9 +28,11 @@ export const Blog = () => {
               alt="ほげほげ画像"
             ></img>          
             <div class="px-6 py-4">
-              <div class="font-bold text-xl mb-2">ほげほげタイトル</div>
+              <div class="font-bold text-xl mb-2">レスポンシブデザインについて</div>
               <p class="text-gray-700 text-base">
-              ほげほげ本文
+              実は（？）たいしたことをしていない気がする。<br></br>
+              画面サイズごとにCSSを切り替えているだけ。<br></br>
+              …
               </p>
             </div>
         </div>
