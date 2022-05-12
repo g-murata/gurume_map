@@ -53,6 +53,12 @@ const positionZenSaburo = {
   lng: 139.75474687094697,
 };
 
+const positionEbiPota = {
+  lat: 35.666548356841915, 
+  lng: 139.7563162969425,
+};
+
+
 
 const divStyle = {
   background: "white",
@@ -93,6 +99,7 @@ export const Main = () => {
           <Marker position={positionIshiBill} />
           <Marker position={positionKankoku} />
           <Marker position={positionZenSaburo} />          
+          <Marker position={positionEbiPota} />                    
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer">
               <h1>石井ビル</h1>
@@ -109,10 +116,19 @@ export const Main = () => {
           <InfoWindow position={positionZenSaburo} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
               <h1>常陸秋そば　善三郎</h1>
-              <p>蕎麦屋さん</p>
+              <p>肉汁そば</p>
             </div>
           </InfoWindow>
-          
+
+          <InfoWindow position={positionZenSaburo} options={infoWindowOptions}>
+            <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
+              <h1>SHRIMP NOODLE海老ポタ</h1>
+              <p>雰囲気がお洒落</p>
+            </div>
+          </InfoWindow>
+
+
+
           <Modal
             isOpen={modalIsOpen}
             onAfterOpen={afterOpenModal}
