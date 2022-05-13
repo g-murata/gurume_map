@@ -154,7 +154,7 @@ export const Main = () => {
           <InfoWindow position={positionOreIta} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
               <h1>俺のイタリアン</h1>
-              <p>トマトパスタ実食。「俺の」ってついてるだけあり、結構多い。</p>
+              <p>トマトパスタ実食。</p>
             </div>
           </InfoWindow>
 
