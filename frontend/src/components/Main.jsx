@@ -59,6 +59,11 @@ const positionEbiPota = {
   lng: 139.75629483927176,
 };
 
+const positionOreIta = {
+  lat: 35.66597013898227, 
+  lng: 139.7551374727801,
+};
+
 const divStyle = {
   background: "white",
   fontSize: 7.5,
@@ -95,9 +100,9 @@ export const Main = () => {
 
   const restaurants = {
     id: [1,2,3,4,5],
-    name: ['ヨプの王豚塩焼', '常陸秋そば　善三郎', 'SHRIMP NOODLE海老ポタ', 'Button4', 'Button5'],
-    evaluation: ['3.5','3.5','4.0','',''],
-    review: ['焼肉うまし','卵はINしない方が良い。','クリーミーでうまい','','']
+    name: ['ヨプの王豚塩焼', '常陸秋そば　善三郎', 'SHRIMP NOODLE海老ポタ', '俺のイタリアン', 'Button5'],
+    evaluation: ['3.5','3.5','4.0','3.5',''],
+    review: ['焼肉うまし','卵はINしない方が良い。','クリーミーでうまい','トマトパスタ実食。「俺の」ってついてるだけあり、結構多い。','']
   }
 
   const onOpenDialog = (name) => {
@@ -117,6 +122,7 @@ export const Main = () => {
           <Marker position={positionKankoku} />
           <Marker position={positionZenSaburo} />          
           <Marker position={positionEbiPota} />    
+          <Marker position={positionOreIta} />
 
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
             <div style={divStyle} class="cursor-pointer">
@@ -145,6 +151,12 @@ export const Main = () => {
             </div>
           </InfoWindow>
 
+          <InfoWindow position={positionOreIta} options={infoWindowOptions}>
+            <div style={divStyle} class="cursor-pointer" button onClick={openModal}>
+              <h1>俺のイタリアン</h1>
+              <p>トマトパスタ実食。「俺の」ってついてるだけあり、結構多い。</p>
+            </div>
+          </InfoWindow>
 
 
           <Modal
