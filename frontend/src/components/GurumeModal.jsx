@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import Modal from 'react-modal';
 
-import Data from './../data.json'; // 追加
-import Restaurants from './../restaurants.json'; // 追加
+import Restaurants from './../restaurants.json';
 
 const restaurants = Restaurants.data;
 console.log(restaurants)
-console.log(Object.keys(restaurants).length)
-const titleText = Data.data.header.title;
 
 // const descriptionText = Data.data.header.text;
 
@@ -71,13 +68,13 @@ export const GurumeModal = () => {
                 <button class="font-bold" onClick={onCloseDialog}>close</button>
               </div>
               <img
-                class="w-11/12 m-auto"
+                class="w-10/12 m-auto"
                 src="https://source.unsplash.com/random/1600x900/"
                 alt="ほげほげ画像"
               ></img>
               <p class="text-gray-700 text-base w-11/12 m-auto">
                 <p>評価{restaurants[item].evaluation}</p>
-                <p>{restaurants[item].review}</p>
+                <p className="review">{restaurants[item].review}</p>
               </p>
             </Modal>
           </>
@@ -86,37 +83,3 @@ export const GurumeModal = () => {
     </>
   )
 }
-
-  // return (
-  //   <>
-  //     {Object.keys(restaurants).map(item => {
-  //       return (
-  //         <>
-  //           <button onClick={() => onOpenDialog(item)}>{item}</button>
-  //           <div class="bg-black"></div>
-  //           <Modal
-  //             isOpen={item === selectedItem}
-  //             onAfterOpen={afterOpenModal}
-  //             onRequestClose={onCloseDialog}
-  //             style={customStyles}
-  //             contentLabel="Example Modal"
-  //           >
-  //             <div class="flex place-content-between w-11/12  m-auto">
-  //               <div class="text-3xl font-bold mb-2">{item}</div>
-  //               <button class="font-bold" onClick={onCloseDialog}>close</button>
-  //             </div>
-  //             <img
-  //               class="w-11/12 m-auto"
-  //               src="https://source.unsplash.com/random/1600x900/"
-  //               alt="ほげほげ画像"
-  //             ></img>
-  //             <p class="text-gray-700 text-base w-11/12 m-auto">
-  //               <p>評価{titleText}</p>
-  //               <p>{restaurants}</p>
-  //             </p>
-  //           </Modal>
-  //         </>
-  //       )
-  //       )}}
-  //   </>
-  // )

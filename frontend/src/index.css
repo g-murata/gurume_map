@@ -16,3 +16,7 @@
     width: 90%;
 	} 
 }
+/* レビュー本文改行されるようするため */
+.review{
+    white-space: pre-wrap;
+}
