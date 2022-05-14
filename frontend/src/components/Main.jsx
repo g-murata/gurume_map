@@ -86,7 +86,7 @@ export const Main = () => {
 
           <Marker position={positionIshiBill} />
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
-            <div style={divStyle}>
+            <div style={divStyle} class="cursor-pointer" button onClick={() => alert('自社です')}>
               <h1>シェルト</h1>
             </div>
           </InfoWindow>
@@ -135,13 +135,13 @@ export const Main = () => {
           })}
         </GoogleMap>
 
-        <div class="w-2/5 ">
-          <div class="md:mx-8">
+        <div class="md:w-3/5">
+          <div class="flex flex-col md:mx-8">
             {Object.keys(restaurants).map(item => {
               return (
                 <>
-                  <button onClick={() => onOpenDialog(restaurants[item].id)}>{restaurants[item].name}</button>
-                  <div class="bg-black"></div>
+                  <button class="p-2 border-b-2 list-none " onClick={() => onOpenDialog(restaurants[item].id)}>{restaurants[item].name}
+                  </button>
                   <Modal
                     isOpen={restaurants[item].id === selectedItem}
                     onAfterOpen={afterOpenModal}
@@ -171,7 +171,7 @@ export const Main = () => {
         </div>
 
       </div>
-    </LoadScript>
+    </LoadScript >
   );
 };
 
