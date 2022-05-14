@@ -86,7 +86,7 @@ export const Main = () => {
 
           <Marker position={positionIshiBill} />
           <InfoWindow position={positionIshiBill} options={infoWindowOptions}>
-            <div style={divStyle} class="cursor-pointer">
+            <div style={divStyle}>
               <h1>シェルト</h1>
             </div>
           </InfoWindow>
@@ -121,8 +121,8 @@ export const Main = () => {
                     <button class="font-bold" onClick={onCloseDialog}>close</button>
                   </div>
                   <img
-                    class="w-10/12 m-auto"
-                    src="https://source.unsplash.com/random/1600x900/"
+                    class="w-7/12 m-auto"
+                    src={restaurants[item].image}
                     alt="ほげほげ画像"
                   ></img>
                   <p class="text-gray-700 text-base w-11/12 m-auto">
@@ -151,6 +151,7 @@ export const Main = () => {
                   >
                     <div class="flex place-content-between w-11/12  m-auto">
                       <div class="text-3xl font-bold mb-2">{restaurants[item].name}</div>
+                      <p>評価{restaurants[item].evaluation}</p>
                       <button class="font-bold" onClick={onCloseDialog}>close</button>
                     </div>
                     <img
