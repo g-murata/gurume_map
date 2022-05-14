@@ -136,7 +136,7 @@ export const Main = () => {
         </GoogleMap>
 
         <div class="md:w-3/5">
-          <div class="flex flex-col md:mx-8">
+          <div class="flex flex-col md:mx-8 overflow-auto ">
             {Object.keys(restaurants).map(item => {
               return (
                 <>
