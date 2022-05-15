@@ -15,6 +15,23 @@ export const Header = (props) => {
     setOpenMenu(!openMenu);
   };
 
+  const testFunction = (e,setter) => {
+    console.log(e)
+    // console.log("↓↓↓↓↓選択した要素↓↓↓↓↓")
+    console.log(e.target)    
+    // console.log("↑↑↑↑↑選択した要素↑↑↑↑↑")
+
+    console.log(e.currentTarget)
+
+    if (e.target === e.currentTarget) {
+      //メニューの外側をクリックしたときだけメニューを閉じる
+      console.log("メニューの外側をクリックした");
+      setter(false);
+    } else {
+      console.log("メニューの内側をクリックした");
+    }    
+  }
+
   return (
     <>
       <div class="bg-white md:pb-12">
@@ -28,15 +45,13 @@ export const Header = (props) => {
             <nav class="hidden md:flex gap-12">
               <HeaderLink />
             </nav>
-
+            <div className={`menuWrapper ${openMenu ? "menuWrapper__active" : ""}`} onClick={(e) =>{testFunction(e,setOpenMenu)}}>
             {openMenu ? (
-              <div className='flex flex-row absolute z-10 top-0 right-0  min-h-fit min-w-full md:hidden'>
-                <div className='basis-1/2'></div>
-
-                <div className='basis-1/2 bg-white'>
+              <div className='flex flex-row absolute top-0 right-0 h-screen min-h-fit md:hidden'>
+                <div className='bg-white'>
                   <ul className=' text-center border-l-2 '>
                     <li className='p-2 border-b-2'>
-                      <button onClick={menuFunction} className="text-blue-400 hover:text-blue-600 active:text-blue-700 text-lg font-bold ">
+                      <button onClick={menuFunction} className="text-blue-400 hover:text-blue-600 active:text-blue-700 text-lg font-bold p-2">
                         close
                       </button>
                     </li>
@@ -44,10 +59,12 @@ export const Header = (props) => {
                   </ul>
                 </div>
               </div>
-            ) : undefined}
+            ) : undefined}              
+            </div>
+            <div className='basis-1/2'></div>
 
             <button type="button" onClick={menuFunction} class="inline-flex items-center md:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
-              <label className="text-2xl text-gray-600"><GiHamburgerMenu /></label>
+              <label className="text-2xl text-gray-600 "><GiHamburgerMenu /></label>
             </button>
           </header>
 
