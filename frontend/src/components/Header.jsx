@@ -3,7 +3,7 @@ import { GiHamburgerMenu } from "react-icons/gi"
 
 import { Link } from 'react-router-dom';
 
-import { HeaderLink } from './HeaderLink'
+// import { HeaderLink } from './HeaderLink'
 
 export const Header = (props) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -29,6 +29,23 @@ export const Header = (props) => {
     }    
   }
 
+  const HeaderLink = () => {
+    return (
+      <>      
+        <li className='p-8 border-b-2 list-none md:border-none'>
+          <Link to="/about" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >GurumeMapとは</Link>
+        </li>             
+        <li className='p-8 border-b-2 list-none md:border-none'>
+          <Link to="/blog" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
+        </li>  
+        {/* <li className='p-8 border-b-2 list-none md:border-none'>
+          <Link to="/hogehoge" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block">ほげほげ</Link>
+        </li>   */}
+      </>
+    )
+  }
+
+
   return (
     <>
       <div class="bg-white md:pb-12">
@@ -42,21 +59,21 @@ export const Header = (props) => {
             <nav class="hidden md:flex gap-12">
               <HeaderLink />
             </nav>
-            <div  className={`menuWrapper ${openMenu ? "menuWrapper__active" : ""}`} onClick={(e) =>{testFunction(e,setOpenMenu)} }>
-            {openMenu ? (
-              <div className='flex flex-row absolute top-0 right-0 h-screen min-h-fit md:hidden'>
-                <div className='bg-white'>
-                  <ul className=' text-center border-l-2 '>
-                    <li className='p-2 border-b-2'>
-                      <button onClick={menuFunction} className="text-blue-400 hover:text-blue-600 active:text-blue-700 text-lg font-bold p-2">
-                        close
-                      </button>
-                    </li>
-                    <HeaderLink />
-                  </ul>
+            <div className={`md:hidden menuWrapper ${openMenu ? "menuWrapper__active" : ""}`} onClick={(e) =>{testFunction(e,setOpenMenu)} }>
+              {openMenu ? (
+                <div className='flex flex-row absolute top-0 right-0 h-screen min-h-fit'>
+                  <div className='bg-white'>
+                    <ul className=' text-center border-l-2 '>
+                      <li className='p-2 border-b-2'>
+                        <button onClick={menuFunction} className="text-blue-400 hover:text-blue-600 active:text-blue-700 text-lg font-bold p-2">
+                          close
+                        </button>
+                      </li>
+                      <HeaderLink />
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            ) : undefined}              
+              ) : undefined}              
             </div>
 
             <button type="button" onClick={menuFunction} class="inline-flex items-center md:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
