@@ -32,7 +32,7 @@ const customStyles = {
 
 
 const containerStyle = {
-  height: "60vh",
+  height: "55vh",
   // TODO:widthはスマホの時だけ100%にしたい。
   // 隣の要素を40で固定することで実現できたぞ。（荒業？）
   width: "100%",
@@ -136,7 +136,7 @@ export const Main = () => {
         </GoogleMap>
 
         <div class="md:w-3/5">
-          <div class="flex flex-col md:mx-8 overflow-auto h-36 md:h-3/5 ">
+          <div class="flex flex-col md:mx-8 overflow-auto h-44 md:h-3/5 ">
             {Object.keys(restaurants).map(item => {
               return (
                 <>
