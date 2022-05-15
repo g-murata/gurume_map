@@ -20,3 +20,16 @@
 .review{
     white-space: pre-wrap;
 }
+
+/* ハンバーガーメニューをクリックした際ニュッと出てくるように。 */
+.menuWrapper{
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+.menuWrapper__active{
+    inset: 0px;
+    /* background-color: rgba(0, 0, 0, 0.6); */
+    position: fixed;
+    z-index: 10;
+    transform: none;
+}
