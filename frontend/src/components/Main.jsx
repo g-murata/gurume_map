@@ -130,8 +130,8 @@ export const Main = () => {
           })}
         </GoogleMap>
 
-        <div class="md:w-3/5">
-          <div class="flex flex-col md:mx-8 overflow-auto h-44 md:h-3/5 ">
+        <div class="md:w-2/5">
+          <div class="flex flex-col md:mx-8 overflow-auto h-44 md:h-2/5 ">
             {Object.keys(restaurants).map(item => {
               return (
                 <>
