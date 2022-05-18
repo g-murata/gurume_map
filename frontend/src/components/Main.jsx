@@ -1,3 +1,5 @@
+/*global google*/
+
 import { useState } from "react";
 import {
   GoogleMap,
@@ -79,17 +81,32 @@ export const Main = () => {
     setSelectedItem(false)
   }
 
-  const setLatLng = ({ x, y, lat, lng, event }) => {
-    console.log(lat);
-    console.log(lng);
-    console.log("a")
+  const getLatLng = (event) => {
+    // 座標の取得
+    console.log(event)    
+    console.log(event.latLng.lat())
+    console.log(event.latLng.lng())
+
+    //marker作成
+    var marker = new google.maps.Marker();
+
+    //markerの位置を設定
+    //event.latLng.lat()でクリックしたところの緯度を取得
+    marker.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
+    //marker設置
+    // < Marker position={{
+    //   lat: event.latLng.lat(),
+    //   lng: event.latLng.lng(),
+    // }}/>
+    // marker.setMap(map);    
+
 
   };
 
   return (
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
       <div class="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17} onClick={setLatLng}>
+        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17} onClick={getLatLng}>
 
           <Marker position={positionIshiBill} button onClick={() => alert('自社です。')} />
           {/* <Marker icon={'https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png'} position={positionIshiBill} button onClick={() => alert('自社です')}/> */}
