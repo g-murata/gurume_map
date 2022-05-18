@@ -79,10 +79,17 @@ export const Main = () => {
     setSelectedItem(false)
   }
 
+  const setLatLng = ({ x, y, lat, lng, event }) => {
+    console.log(lat);
+    console.log(lng);
+    console.log("a")
+
+  };
+
   return (
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
       <div class="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17}>
+        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17} onClick={setLatLng}>
 
           <Marker position={positionIshiBill} button onClick={() => alert('自社です。')} />
           {/* <Marker icon={'https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png'} position={positionIshiBill} button onClick={() => alert('自社です')}/> */}
