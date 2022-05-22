@@ -100,7 +100,7 @@ export const Main = () => {
     // }}/>
     // marker.setMap(map);    
 
-
+    
   };
 
   return (
@@ -145,7 +145,8 @@ export const Main = () => {
                     alt="ほげほげ画像"
                   ></img>
                   <p class="text-gray-700 text-base w-11/12 m-auto">
-                    <p>評価{restaurants[item].evaluation}</p>
+                    <span>評価：</span>
+                    <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
                     <p className="review">{restaurants[item].review}</p>
                   </p>
                 </Modal>
