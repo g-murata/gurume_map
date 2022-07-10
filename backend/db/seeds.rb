@@ -5,3 +5,18 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+3.times do |n|
+  restraunts = Restraunt.new(
+    name: "テストレストラン_#{n}",
+  )
+  restraunts.save!
+
+  blogs = Blog.new(
+    title: "ほげほげ〜#{n}",
+    content: "ほげほげ_#{n}"
+  )
+  restraunts.save!  
+  blogs.save!
+  
+end
