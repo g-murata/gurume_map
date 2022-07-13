@@ -6,17 +6,17 @@ import { Link } from 'react-router-dom';
 
 export const Blog = () => {
 
-  const [state, setIssues] = useState([]);
+  const [state, setBlogs] = useState([]);
   
   useEffect(()  =>  {
     async function fetchData()  {
-      const result = axios.get(fetchBlogs)
-        console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓")
-        console.log(result)
-        console.log(result.data)
-        console.log("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑")
-
-        setIssues(result.data);
+      // const result = axios.get(fetchBlogs)
+      const result = await axios.get('http://localhost:3001/api/v1/blogs')      
+        setBlogs(result.data.blogs);
+        console.log("↓↓↓↓↓↓↓")
+        console.log(result.data.blogs);
+        console.log("↑↑↑↑↑↑↑")        
+        return result;
       }
       fetchData();
       }, []);
