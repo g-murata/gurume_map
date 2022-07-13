@@ -4,9 +4,9 @@ import axios from 'axios';
 import { fetchBlogs } from '../apis/blogs';
 import { Link } from 'react-router-dom';
 
-export const Blog = () => {
+function GetBlogs ()  {
 
-  const [state, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   
   useEffect(()  =>  {
     async function fetchData()  {
@@ -16,11 +16,25 @@ export const Blog = () => {
         console.log("↓↓↓↓↓↓↓")
         console.log(result.data.blogs);
         console.log("↑↑↑↑↑↑↑")        
-        return result;
+        return(
+          <>
+            <div>
+              <h1>"hogehoge"</h1>
+              {blogs}
+            </div>
+          </>
+        );
       }
       fetchData();
       }, []);
 }
+
+export const Blog = () => {
+  GetBlogs()
+}
+
+// export const Blog = () => {
+
 
 // export const Blog = () => {
 //   return (
