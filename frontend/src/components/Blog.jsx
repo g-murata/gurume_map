@@ -1,19 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 
 import axios from 'axios';
 import { fetchBlogs } from '../apis/blogs';
 import { Link } from 'react-router-dom';
 
 export const Blog = () => {
+  const [photo, setPhoto] = useState([])
   useEffect(() => {
     fetchBlogs()
       .then((data) =>
-        console.log(data)
+        setPhoto(data.blogs)
       )
   }, [])
   return (
     <>
+      {console.log(photo)}
       <h1>Hello,Rails</h1>
+      {Object.keys(photo).map(item => (
+        <>
+          {item}
+        </>
+      ))
+      }
     </>
   )
 }
