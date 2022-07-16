@@ -4,33 +4,18 @@ import axios from 'axios';
 import { fetchBlogs } from '../apis/blogs';
 import { Link } from 'react-router-dom';
 
-function GetBlogs ()  {
-
-  const [blogs, setBlogs] = useState([]);
-  
-  useEffect(()  =>  {
-    async function fetchData()  {
-      // const result = axios.get(fetchBlogs)
-      const result = await axios.get('http://localhost:3001/api/v1/blogs')      
-        setBlogs(result.data.blogs);
-        console.log("↓↓↓↓↓↓↓")
-        console.log(result.data.blogs);
-        console.log("↑↑↑↑↑↑↑")        
-        return(
-          <>
-            <div>
-              <h1>"hogehoge"</h1>
-              {blogs}
-            </div>
-          </>
-        );
-      }
-      fetchData();
-      }, []);
-}
-
 export const Blog = () => {
-  GetBlogs()
+  useEffect(() => {
+    fetchBlogs()
+      .then((data) =>
+        console.log(data)
+      )
+  }, [])
+  return (
+    <>
+      <h1>Hello,Rails</h1>
+    </>
+  )
 }
 
 // export const Blog = () => {
