@@ -2,7 +2,7 @@ module Api
   module V1
     class BlogsController < ApplicationController
       def index
-        blogs = Blog.all
+        blogs = Blog.all.order(created_at: "DESC")
 
         render json: {
           blogs: blogs
