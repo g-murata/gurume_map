@@ -7,8 +7,15 @@ module Api
         render json: {
           blogs: blogs
         }, status: :ok
-
       end
+
+      def show
+        blog = Blog.find(params[:id])
+        render json: {
+          blogs: blog
+        }, status: :ok
+      end
+
     end
   end 
 end
