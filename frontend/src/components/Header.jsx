@@ -37,10 +37,8 @@ export const Header = (props) => {
         </li>             
         <li className='p-8 border-b-2 list-none md:border-none'>
           <Link to="/blog" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
+          <div class="text-red-400 text-xs text-right">2022/5/31更新</div>
         </li>  
-        {/* <li className='p-8 border-b-2 list-none md:border-none'>
-          <Link to="/hogehoge" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block">ほげほげ</Link>
-        </li>   */}
       </>
     )
   }
