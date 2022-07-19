@@ -2,10 +2,10 @@
   "data": {
     "1": {
       "id": 1,
-      "title": "今後の実装計画",
-      "contents": "・誰でもレビューをPostできるようにする。\n・Ruby on Railsの導入。\n（Python？Firebase？いや、Rubyだ！）\n・当サイトをイケてるデザインにする。\n\n★こうご期待！",
-      "image": "https://m.media-amazon.com/images/I/81tZ0WBBHpS._AC_SX679_.jpg",
-      "created_at": "2022/05/30"
+      "title": "鋭意作成中！",
+      "contents": "どうも。gurume_mapの開発を水面下で進めております。\nいまはRails環境を導入しているところです。\n進捗としてはフロントエンドからRails APIで\nデータのやり取り（GET)はできるようになりました。\nただここからが大変そうですね…。\nPOSTできるようにしたり、誰がレビューを投稿したのかわかるようにユーザ認証とかも入れたりとか、\nherokuにデプロイとか、面倒くさそうな作業が多い…。\n8月リリースを目指して頑張ります。",
+      "image": "https://techracho.bpsinc.jp/wp-content/uploads/2021/12/rails7_welcome_page.png",
+      "created_at": "2022/07/19"
     },
     "2": {
       "id": 2,
@@ -13,6 +13,13 @@
       "contents": "本アプリは前職で隣に座っていたふくよかな方から着想を得ています。\nその方、ExcelにGoogle mapのスクショを貼り付けて会社付近の飲食店のレビューを独断と偏見で記録していたんですよ。\nそのExcelは共有フォルダに置いてあったので、よくランチの参考にさせてもらっていたんですよね。\n\n時は流れ、\nReactの教材は軽く読んだし、そろそろオリジナルのアプリでも作ってみるか～でも何を作るか～と思ったとき、\n思いついたのがあのグルメマップのウェブ版だったんです。\n",
       "image": "https://www.kirby.jp/images/character/dedede-slide-img01.png",
       "created_at": "2022/05/31"
-    }
+    },
+    "3": {
+      "id": 3,
+      "title": "今後の実装計画",
+      "contents": "・誰でもレビューをPostできるようにする。\n・Ruby on Railsの導入。\n（Python？Firebase？いや、Rubyだ！）\n・当サイトをイケてるデザインにする。\n\n★こうご期待！",
+      "image": "https://m.media-amazon.com/images/I/81tZ0WBBHpS._AC_SX679_.jpg",
+      "created_at": "2022/05/30"
+    }    
   }
 }
