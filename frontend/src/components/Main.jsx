@@ -1,6 +1,7 @@
 /*global google*/
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { fetchRestaurants } from '../apis/restraunts';
 import {
   GoogleMap,
   LoadScript,
@@ -11,8 +12,8 @@ import {
 
 import Modal from 'react-modal';
 
-import Restaurants from './../restaurants.json';
-const restaurants = Restaurants.data;
+// import Restaurants from './../restaurants.json';
+// const restaurants = Restaurants.data;
 
 
 const customStyles = {
@@ -58,6 +59,16 @@ const divStyle = {
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
 export const Main = () => {
+
+  const [restaurants, setRestraunt] = useState([])
+
+  useEffect(() => {
+    fetchRestaurants()
+      .then((data) =>
+      setRestraunt(data.restraunts)
+      )
+  }, [])
+
 
   const [size, setSize] = useState(undefined);
   const infoWindowOptions = {
