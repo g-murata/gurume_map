@@ -3,8 +3,8 @@
     "1": {
       "id": 1,
       "title": "山の日",
-      "contents": "本日は山の日。\n2、3年くらい前にできた祝日だよなと思っていたら6年前に出来た祝日ということで少し動揺しました。\n今日は久しぶりにグルメマップの開発を進めて、お店の一覧をRails APIから取得できるようにしました。（ローカル環境）\n次はHerokuにRails APIをアップします。\n\nユーザ認証は当初deviseを使おうと思っていましたが、Firebaseを使うと結構簡単に実装できそうなのでそちらも検討します。",
-      "image": "https://i0.wp.com/neirof.com/wp-content/uploads/2018/06/6469f65618dc4f79087374c50c34014e.png?fit=450%2C302&ssl=1",
+      "contents": "本日は山の日。\n2、3年くらい前にできた祝日だよなと思っていたら6年前に出来た祝日と知り少し動揺しました。\n今日は久しぶりにグルメマップの開発を進めて、お店の一覧をRails APIから取得できるようにしました。（ローカル環境）\n次はHerokuにRails APIをアップします。\n\nユーザ認証は当初deviseを使おうと思っていましたが、Firebaseを使うと結構簡単に実装できそうなのでそちらも検討します。",
+      "image": "https://6yye61ds.user.webaccel.jp/wp-content/uploads/2020/05/IMG_0438.jpg",
       "created_at": "2022/08/11"
     },    
     "2": {
