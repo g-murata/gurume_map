@@ -14,7 +14,7 @@
 
   blogs = Blog.new(
     title: "ほげほげ〜#{n}",
-    content: "ほげほげ_#{n}"
+    content: "ほげほげ_#{n}",
     image: "https://media.istockphoto.com/vectors/stamprsimp2red-vector-id1096052566?k=20&m=1096052566&s=612x612&w=0&h=CPU7LLHBwJm2OKoXCLxqKDzGaR0Xa1WGTQoryfdWQ3g="
   )
   restraunts.save!  
