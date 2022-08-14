@@ -11,10 +11,6 @@ export const Post = () => {
   const { id } = useParams()
 
   useEffect(() => {
-    console.log("↓↓↓↓↓")
-    console.log(id)
-    console.log("↑↑↑↑↑")
-
     fetchBlog(id)
       .then((data) =>
         setBlog(data.blogs)
