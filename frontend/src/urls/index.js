@@ -1,4 +1,6 @@
-const DEFAULT_API_LOCALHOST = 'http://localhost:3001/api/v1'
+// const DEFAULT_API_LOCALHOST = 'http://localhost:3001/api/v1'
+const DEFAULT_API_LOCALHOST = process.env.NODE_ENV === "development" ? "http://localhost:3001/api/v1" : "https://gurume-map.herokuapp.com/api/v1/";
+
 
 export const restaurantsIndex = `${DEFAULT_API_LOCALHOST}/restraunts`
 export const blogsIndex = `${DEFAULT_API_LOCALHOST}/blogs`
