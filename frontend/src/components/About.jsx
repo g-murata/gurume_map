@@ -11,10 +11,10 @@ export const About = () => {
           <h1 class="text-lg bg-orange-300">使用している技術</h1>
           <p>フロントエンド：React</p>          
           <p>CSSフレームワーク：Tailwind CSS</p>                    
-          <p>バックエンド：未使用（Railsを導入予定）</p>                    
-          <p>データベース：未使用（PostgreSQLを導入予定）</p>                    
-          <p>デプロイ先：netlify（静的サイトホスティングサービス。最初にブランチを連携すれば/・・、後はマスターにプッシュするたび自動でデプロイしてくれます。）</p>                              
-          <p>デプロイ先（バックエンド）：heroku（netlifyにRailsのデプロイは出来ないと思うので…）</p>                                        
+          <p>バックエンド：Ruby on Rails（予定）</p>                    
+          <p>データベース：PostgreSQL（予定）</p>                    
+          <p>デプロイ先（フロントエンド）：netlify</p>                              
+          <p>デプロイ先（バックエンド）：heroku（予定）</p>                                        
         </div>
       </div>   
     </>
