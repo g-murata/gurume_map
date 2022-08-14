@@ -15,7 +15,7 @@ export const Post = () => {
       .then((data) =>
         setBlog(data.blogs)
       )
-  }, [])
+  }, [id])
 
   return (
     <>
