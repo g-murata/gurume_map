@@ -34,7 +34,7 @@ export const Post = () => {
           </div>
 
           <div class="w-80 md:w-full break-words whitespace-normal text-gray-800 text-base ">
-            <p className="review">{blog.contents}</p>
+            <p className="review">{blog.content}</p>
           </div>
 
         </div>
