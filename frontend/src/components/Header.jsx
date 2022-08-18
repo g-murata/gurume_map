@@ -15,9 +15,9 @@ export const Header = (props) => {
     setOpenMenu(!openMenu);
   };
 
-  const testFunction = (e,setter) => {
+  const testFunction = (e, setter) => {
     console.log(e)
-    console.log(e.target)    
+    console.log(e.target)
     console.log(e.currentTarget)
 
     if (e.target === e.currentTarget) {
@@ -26,19 +26,19 @@ export const Header = (props) => {
       setter(false);
     } else {
       console.log("メニューの内側をクリックした");
-    }    
+    }
   }
 
   const HeaderLink = () => {
     return (
-      <>      
+      <>
         <li className='p-8 border-b-2 list-none md:border-none'>
           <Link to="/about" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >GurumeMapとは</Link>
-        </li>             
+        </li>
         <li className='p-8 border-b-2 list-none md:border-none'>
           <Link to="/blog" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
-          <div class="text-red-400 text-xs md:text-right">2022/8/11更新</div>
-        </li>  
+          <div class="text-red-400 text-xs md:text-right">2022/8/15更新</div>
+        </li>
       </>
     )
   }
@@ -57,7 +57,7 @@ export const Header = (props) => {
             <nav class="hidden md:flex gap-12">
               <HeaderLink />
             </nav>
-            <div className={`md:hidden menuWrapper ${openMenu ? "menuWrapper__active" : ""}`} onClick={(e) =>{testFunction(e,setOpenMenu)} }>
+            <div className={`md:hidden menuWrapper ${openMenu ? "menuWrapper__active" : ""}`} onClick={(e) => { testFunction(e, setOpenMenu) }}>
               {openMenu ? (
                 <div className='flex flex-row absolute top-0 right-0 h-screen min-h-fit'>
                   <div className='bg-white'>
@@ -71,7 +71,7 @@ export const Header = (props) => {
                     </ul>
                   </div>
                 </div>
-              ) : undefined}              
+              ) : undefined}
             </div>
 
             <button type="button" onClick={menuFunction} class="inline-flex items-center md:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
