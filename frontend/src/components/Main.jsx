@@ -65,7 +65,7 @@ export const Main = () => {
   useEffect(() => {
     fetchRestaurants()
       .then((data) =>
-      setRestraunt(data.restraunts)
+        setRestraunt(data.restraunts)
       )
   }, [])
 
@@ -94,7 +94,7 @@ export const Main = () => {
 
   const getLatLng = (event) => {
     // 座標の取得
-    console.log(event)    
+    console.log(event)
     console.log(event.latLng.lat())
     console.log(event.latLng.lng())
 
@@ -111,7 +111,7 @@ export const Main = () => {
     // }}/>
     // marker.setMap(map);    
 
-    
+
   };
 
   return (
@@ -182,7 +182,6 @@ export const Main = () => {
                   >
                     <div class="flex place-content-between w-11/12  m-auto">
                       <div class="text-3xl font-bold mb-2">{restaurants[item].name}</div>
-                      <p>評価{restaurants[item].evaluation}</p>
                       <button class="font-bold" onClick={onCloseDialog}>close</button>
                     </div>
                     <img
