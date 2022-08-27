@@ -146,20 +146,6 @@ export const Main = () => {
                   style={customStyles}
                   contentLabel="Example Modal"
                 >
-                  <div class="flex place-content-between w-11/12  m-auto">
-                    <div class="text-3xl font-bold mb-2">{restaurants[item].name}</div>
-                    <button class="font-bold" onClick={onCloseDialog}>close</button>
-                  </div>
-                  <img
-                    class="w-7/12 m-auto"
-                    src={restaurants[item].image}
-                    alt="ほげほげ画像"
-                  ></img>
-                  <p class="text-gray-700 text-base w-11/12 m-auto">
-                    <span>評価：</span>
-                    <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
-                    <p className="review">{restaurants[item].review}</p>
-                  </p>
                 </Modal>
               </>
             )
@@ -182,15 +168,16 @@ export const Main = () => {
                   >
                     <div class="flex place-content-between w-11/12  m-auto">
                       <div class="text-3xl font-bold mb-2">{restaurants[item].name}</div>
-                      <button class="font-bold" onClick={onCloseDialog}>close</button>
+                      <button class="font-bold" onClick={onCloseDialog}>Close</button>
                     </div>
                     <img
-                      class="w-10/12 m-auto"
-                      src="https://source.unsplash.com/random/1600x900/"
+                      class="w-7/12 m-auto"
+                      src={restaurants[item].image}
                       alt="ほげほげ画像"
                     ></img>
                     <p class="text-gray-700 text-base w-11/12 m-auto">
-                      <p>評価{restaurants[item].evaluation}</p>
+                      <span>評価：</span>
+                      <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
                       <p className="review">{restaurants[item].review}</p>
                     </p>
                   </Modal>
