@@ -187,9 +187,9 @@ export const Main = () => {
           </div>
         </div>
       </div>
-      <div class="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
+      <div class="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
         {/* TODO: HerokuのDBにレコード入れたら消す。 */}
-        <h1 class="wd:text-6xl text-4xl ">ただいま工事中です。（2022.08.14）</h1>
+        <h1 class="text-3xl ">試験も終わったので開発再開！<br></br>課題：React思い出す、Herokuの移行先を考える（2022.11.27）</h1>        
       </div>
 
     </LoadScript >
