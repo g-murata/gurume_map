@@ -5,6 +5,7 @@ import { Main } from "./components/Main";
 import { About } from './components/About';
 import { Blog } from './components/Blog';
 import { HogeHoge } from './components/HogeHoge';
+import { SignUp } from './components/SignUp';
 import { Post } from './components/blogs/Post';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<Post />} />
           <Route exact path="/hogehoge" element={<HogeHoge />} />
+          <Route exact path="/signup" element={<SignUp />} />          
         </Routes>
       </Router>
       {/* <Main /> */}
