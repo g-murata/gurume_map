@@ -7,6 +7,7 @@ import { Blog } from './components/Blog';
 import { HogeHoge } from './components/HogeHoge';
 import { SignUp } from './components/SignUp';
 import { Post } from './components/blogs/Post';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
@@ -20,7 +21,11 @@ function App() {
           <Route exact path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<Post />} />
           <Route exact path="/hogehoge" element={<HogeHoge />} />
-          <Route exact path="/signup" element={<SignUp />} />          
+          <Route exact path="/signup" element={
+            <AuthProvider>
+              <SignUp />
+            </AuthProvider>
+          } />
         </Routes>
       </Router>
       {/* <Main /> */}
