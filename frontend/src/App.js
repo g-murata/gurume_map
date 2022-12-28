@@ -6,6 +6,7 @@ import { About } from './components/About';
 import { Blog } from './components/Blog';
 import { HogeHoge } from './components/HogeHoge';
 import { SignUp } from './components/SignUp';
+import { Login } from './components/Login';
 import { Post } from './components/blogs/Post';
 import { AuthProvider } from './context/AuthContext';
 
@@ -26,6 +27,12 @@ function App() {
               <SignUp />
             </AuthProvider>
           } />
+          <Route exact path="/login" element={
+            <AuthProvider>
+              <Login />
+            </AuthProvider>
+          } />
+
         </Routes>
       </Router>
       {/* <Main /> */}
