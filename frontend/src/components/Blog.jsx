@@ -16,7 +16,7 @@ export const Blog = () => {
   return (
     <>
       {/* TODO: ローディング画面を作ったら消す。 */}
-      <h1 class="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto text-blue-500 p-8 md:flex-row md:space-x-8">（表示されるまで時間がかかることがあります…）</h1>
+      <h1 class="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto text-blue-500 p-8 md:flex-row md:space-x-8">Heroku無料プランが終了したから待っててもレスポンスは返ってこないよ。</h1>
       <div class="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:flex-row md:space-x-8">
         <>
           {Object.keys(blogs).map(item => (
