@@ -1,6 +1,6 @@
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { useState } from 'react';
 
 export const Login = () => {
@@ -53,9 +53,9 @@ export const Login = () => {
         <div>
           <button>ログイン</button>
         </div>
-        <div>
+        {/* <div>
           ユーザ登録は<Link to={'/signup'}>こちら</Link>から
-        </div>
+        </div> */}
       </form>
       <h1 class="text-blue-500 active:text-yellow-700 text-lg font-semibold block">ただいま開発中！！！！※トップページ行こうとするとloginページにリダイレクトされるけど開発中につき！</h1>
     </div>
