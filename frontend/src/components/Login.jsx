@@ -1,12 +1,9 @@
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { signOut } from 'firebase/auth';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuthContext } from '../context/AuthContext';
 import { useState } from 'react';
 
 export const Login = () => {
-  const { user } = useAuthContext();
   const navigate = useNavigate();
   const [error, setError] = useState('');
 
@@ -36,19 +33,6 @@ export const Login = () => {
       )
   };
 
-  const handleLogout = () => {
-    signOut(auth);
-    navigate('/login');
-  };
-
-  { if (user){
-    return(
-    <div>
-      <h1>ログインユーザ： {user.email}</h1>
-      <button onClick={handleLogout}>ログアウト</button>
-    </div>
-    )
-  }else{
   return (
     <div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -77,7 +61,6 @@ export const Login = () => {
     </div>
 
   );
-  }
-}
+  
 };
 
