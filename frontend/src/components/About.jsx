@@ -16,10 +16,11 @@ export const About = () => {
             <p>CSSフレームワーク：Tailwind CSS</p>
             <p>バックエンド：Ruby on Rails</p>
             <p>データベース：PostgreSQL</p>
+            <p>ユーザ認証機能：Firebase Authentication</p>            
             <br></br>
             <p>＜デプロイ先＞</p>
             <p>フロントエンド：netlify</p>
-            <p>バックエンド：heroku</p>
+            <p>バックエンド：heroku→無料プラン終了につき移行先検討中</p>
           </div>
         </div>
       </div>
