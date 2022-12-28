@@ -29,7 +29,7 @@ export const Login = () => {
   }else{
   return (
     <div>
-      <h1>ログイン</h1>
+      <h1 class="text-red-600 active:text-yellow-700 text-lg font-semibold block">ただいま開発中！！！！※トップページ行こうとするとloginページにリダイレクトされるけど開発中につき！</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">メールアドレス</label>
