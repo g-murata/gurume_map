@@ -1,6 +1,5 @@
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { signOut } from 'firebase/auth';
 import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -32,11 +31,6 @@ export const Login = () => {
         }
       }
       )
-  };
-
-  const handleLogout = () => {
-    signOut(auth);
-    navigate('/login');
   };
 
   return (
