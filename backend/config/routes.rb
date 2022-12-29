@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :restraunts
       resources :blogs      
+      resources :users, only: :create            
     end 
   end   
 end
