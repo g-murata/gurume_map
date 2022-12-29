@@ -5,6 +5,7 @@ const DEFAULT_API_LOCALHOST = process.env.NODE_ENV === "development" ? "http://l
 export const restaurantsIndex = `${DEFAULT_API_LOCALHOST}/restraunts`
 export const blogsIndex = `${DEFAULT_API_LOCALHOST}/blogs`
 export const blogShow = (blogsId) => `${DEFAULT_API_LOCALHOST}/blogs/${blogsId}`
+export const createUser = `${DEFAULT_API_LOCALHOST}/users`
 
 // export const blogShow = `${DEFAULT_API_LOCALHOST}/blogs/1`
 // export const foodsIndex = (restaurantId) =>
