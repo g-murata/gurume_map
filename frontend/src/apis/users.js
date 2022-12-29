@@ -5,6 +5,7 @@ export const postCreateUser = (params) => {
   console.log(params)
   return axios.post(createUser,
     {
+      name: params.name,
       email: params.email,
       password: params.password,
     }
