@@ -61,6 +61,15 @@ export const Main = () => {
   const [restaurants, setRestraunt] = useState([])
 
   const [coordinate, setCoordinate] = useState('');
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  const OpenModal = () => {
+    setIsOpen(true)
+  }
+  const closeModal = () => {
+    setIsOpen(false);
+  }
+
 
   useEffect(() => {
     fetchRestaurants()
@@ -116,7 +125,7 @@ export const Main = () => {
     // TODO: マーカーが置けないので代替え手段
     setCoordinate(`座標：\n${event.latLng.lat()}\n${event.latLng.lng()}`);
     console.log(`座標：\n${event.latLng.lat()}\n${event.latLng.lng()}`)
-
+    OpenModal()
   };
 
   return (
@@ -192,9 +201,45 @@ export const Main = () => {
         </div>
       </div>
       <div class="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-        <p class="zahyou" style={{ color: 'red' }}>{coordinate}</p>
+        {/* <p class="zahyou" style={{ color: 'red' }}>{coordinate}</p> */}
       </div>
 
+      {/* <button onClick={OpenModal}>Open Modal</button> */}
+      <Modal isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <div class="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+          <div class="text-3xl font-bold text-center">
+            新規店名登録
+          </div>
+          <div class="text-right">
+            <button class="font-bold" onClick={closeModal}>Close</button>
+          </div>
+          <div class="flex place-content-between w-11/12  m-auto">
+          </div>
+          <label htmlFor="email" class="block text-gray-700 text-sm font-bold mb-2" for="email">
+            店名
+          </label>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
+          <div>
+            <label htmlFor="password" class="block text-gray-700 text-sm font-bold mb-2" for="password">
+              評価
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" name="evaluation" placeholder="評価" />
+          </div>
+          <div>
+            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">感想</label>
+            <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
+          </div>
+          <div>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+          </div>
+          <p class="zahyou" style={{ color: 'red' }}>{coordinate}</p>
+        </div>
+      </Modal>
     </LoadScript >
   );
 };

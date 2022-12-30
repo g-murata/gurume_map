@@ -13,7 +13,7 @@
 /* スマホサイズ */
 @media screen and (max-width:768px) {
     .ReactModal__Content {
-        height: 60%;
+        height: 70%;
         width: 90%;
     }
 }
