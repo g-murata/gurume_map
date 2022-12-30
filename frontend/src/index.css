@@ -18,12 +18,6 @@
     }
 }
 
-/* TODO:仮置き */
-.zahyou {
-    white-space: pre-wrap;
-}
-
-
 /* レビュー本文改行されるようするため */
 .review {
     white-space: pre-wrap;

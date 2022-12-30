@@ -1,14 +1,13 @@
 /*global google*/
 
 import { useState, useEffect } from "react";
-import { fetchRestaurants } from '../apis/restraunts';
+import { fetchRestaurants, postRestraunt } from '../apis/restraunts';
 import {
   GoogleMap,
   LoadScript,
   InfoWindow,
   Marker,
 } from "@react-google-maps/api";
-
 
 import Modal from 'react-modal';
 
@@ -56,21 +55,44 @@ const divStyle = {
 
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
-const handleSubmit = (event) => {
-  event.preventDefault();
-  const { name, evaluation, password, lat, lng } = event.target.elements;
-  console.log("★")
-  console.log(name.value)
-  console.log(evaluation.value)
-  console.log("■")
-  alert(name)
-}
 
 export const Main = () => {
+  const [error, setError] = useState('');
+  const handleSubmit = (event) => {
+
+    event.preventDefault();
+    const { name, evaluation, review, lat, lng } = event.target.elements;
+    postRestraunt({
+      name: name.value,
+      evaluation: evaluation.value,
+      review: review.value,
+      lat: lat.value,
+      lng: lng.value
+    })
+    .then(() => {
+      closeModal();  
+    })
+    .catch((error) => {
+      console.log("エラー")
+      console.log(error.code);
+      switch (error.code) {
+        case 'ERR_BAD_RESPONSE':
+          setError('不備あり！');
+          break;
+        default:
+          setError('ふびあり！TODO！');
+          break;
+      }
+    });    
+  }
+  
+
 
   const [restaurants, setRestraunt] = useState([])
 
-  const [coordinate, setCoordinate] = useState('');
+  const [coordinateLat, setCoordinateLat] = useState('');
+  const [coordinateLng, setCoordinateLng] = useState('');
+
   const [modalIsOpen, setIsOpen] = useState(false);
 
   const OpenModal = () => {
@@ -133,8 +155,11 @@ export const Main = () => {
 
 
     // TODO: マーカーが置けないので代替え手段
-    setCoordinate(`座標：\n${event.latLng.lat()}\n${event.latLng.lng()}`);
-    console.log(`座標：\n${event.latLng.lat()}\n${event.latLng.lng()}`)
+    setCoordinateLat(event.latLng.lat());
+    setCoordinateLng(event.latLng.lng());
+
+    console.log(coordinateLat)
+    console.log(coordinateLng)
     OpenModal()
   };
 
@@ -226,6 +251,7 @@ export const Main = () => {
             <div class="text-3xl font-bold text-center">
               新規店名登録
             </div>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div class="text-right">
               <button class="font-bold" onClick={closeModal}>Close</button>
             </div>
@@ -240,13 +266,26 @@ export const Main = () => {
               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="evaluation" name="evaluation" placeholder="評価" />
             </div>
             <div>
-              <label for="review" class="block text-gray-700 text-sm font-bold mb-2">感想</label>
+              <label for="review" class="block text-gray-700 text-sm font-bold mb-2">
+                感想
+              </label>              
               <textarea id="review" name="review" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
+            </div>
+            <div>
+              <label for="lat" class="block text-gray-700 text-sm font-bold mb-2">
+                経緯
+              </label>              
+              <input id="lat" name="lat" rows="4" readonly="true" class="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLat}></input>
+            </div>
+            <div>
+              <label for="lng" class="block text-gray-700 text-sm font-bold mb-2">
+                経度
+              </label>              
+              <input id="lng" name="lng" rows="4" readonly="true" class="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
             </div>
             <div>
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
             </div>
-            <p class="zahyou" style={{ color: 'red' }}>{coordinate}</p>
           </div>
         </form>
       </Modal>

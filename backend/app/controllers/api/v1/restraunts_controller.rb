@@ -11,12 +11,13 @@ module Api
       end
 
       def create
-        user = Restraunt.new(params.permit(:name, :evaluation, :password, :lat, :lng))
-
-        if user.save
-          render json: user
+        restraunt = Restraunt.new(params.permit(:name, :evaluation, :review, :lat, :lng))
+        if restraunt.save
+          render json: {
+            restraunts: restraunt
+            },status: :ok
         else
-          render json: user.errors
+          render status: restraunt.errors
         end       
 
       end
