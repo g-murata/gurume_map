@@ -60,6 +60,8 @@ export const Main = () => {
 
   const [restaurants, setRestraunt] = useState([])
 
+  const [coordinate, setCoordinate] = useState('');
+
   useEffect(() => {
     fetchRestaurants()
       .then((data) =>
@@ -91,17 +93,18 @@ export const Main = () => {
   }
 
   const getLatLng = (event) => {
+
     // 座標の取得
-    console.log(event)
-    console.log(event.latLng.lat())
-    console.log(event.latLng.lng())
+    // console.log(event.latLng.lat())
+    // console.log(event.latLng.lng())
+    // console.log(`${event.latLng.lat()},${event.latLng.lng()}`)
 
     //marker作成
-    var marker = new google.maps.Marker();
+    // var marker = new google.maps.Marker();
 
     //markerの位置を設定
     //event.latLng.lat()でクリックしたところの緯度を取得
-    marker.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
+    // marker.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
     //marker設置
     // < Marker position={{
     //   lat: event.latLng.lat(),
@@ -109,6 +112,10 @@ export const Main = () => {
     // }}/>
     // marker.setMap(map);    
 
+
+    // TODO: マーカーが置けないので代替え手段
+    setCoordinate(`座標：\n${event.latLng.lat()}\n${event.latLng.lng()}`);
+    console.log(`座標：\n${event.latLng.lat()}\n${event.latLng.lng()}`)
 
   };
 
@@ -149,9 +156,8 @@ export const Main = () => {
             )
           })}
         </GoogleMap>
-
         <div class="md:w-2/5">
-          <div class="flex flex-col md:mx-8 overflow-auto h-56 md:h-4/5 ">
+          <div class="flex flex-col md:mx-8 overflow-auto max-height:h-56 md:h-4/5 ">
             {Object.keys(restaurants).map(item => {
               return (
                 <>
@@ -186,8 +192,7 @@ export const Main = () => {
         </div>
       </div>
       <div class="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-        {/* TODO: HerokuのDBにレコード入れたら消す。 */}
-        <h1 class="text-3xl ">試験も終わったので開発再開！<br></br>課題：React思い出す、Herokuの移行先を考える（2022.11.27）</h1>        
+        <p class="zahyou" style={{ color: 'red' }}>{coordinate}</p>
       </div>
 
     </LoadScript >
