@@ -9,6 +9,18 @@ module Api
         }, status: :ok
 
       end
+
+      def create
+        user = Restraunt.new(params.permit(:name, :evaluation, :password, :lat, :lng))
+
+        if user.save
+          render json: user
+        else
+          render json: user.errors
+        end       
+
+      end
+
     end
   end 
 end
