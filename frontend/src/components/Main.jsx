@@ -1,4 +1,3 @@
-/*global google*/
 
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
@@ -97,7 +96,7 @@ export const Main = () => {
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
 
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(true);
 
   const editOnOff = () => {
     setEditMode(!editMode)
