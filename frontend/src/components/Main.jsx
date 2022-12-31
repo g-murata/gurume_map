@@ -59,7 +59,6 @@ const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
 export const Main = () => {
   const user = auth.currentUser;
-  console.log(user.email)
 
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
@@ -97,6 +96,13 @@ export const Main = () => {
 
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
+
+  const [editMode, setEditMode] = useState(false);
+
+  const hogehoge = () => {
+    setEditMode(!editMode)
+    console.log(editMode)
+  }
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -241,9 +247,9 @@ export const Main = () => {
         </div>
       </div>
       <div class="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-        {/* <p class="zahyou" style={{ color: 'red' }}>{coordinate}</p> */}
+        <button class="font-bold" onClick={hogehoge}>編集モード</button>
+        <p style={{ color: 'red' }}>{(editMode == true) ? "あああ" : "ううう"}</p>
       </div>
-
       {/* <button onClick={OpenModal}>Open Modal</button> */}
       <Modal isOpen={modalIsOpen}
         onAfterOpen={afterOpenModal}
@@ -251,6 +257,7 @@ export const Main = () => {
         style={customStyles}
         contentLabel="Example Modal"
       >
+        {/* todo: */}
         <form onSubmit={handleSubmit}>
           <div class="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
             <div class="text-3xl font-bold text-center">
