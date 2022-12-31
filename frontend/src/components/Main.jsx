@@ -245,7 +245,7 @@ export const Main = () => {
         </div>
       </div>
       <div class="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-        <button class="font-bold" onClick={editOnOff} style={{ color: 'red' }}>{(editMode == true) ? "編集モード：ON" : "編集モード：OFF"}</button>
+        <button class="font-bold" onClick={editOnOff} style={{ color: 'red' }}>{(editMode === true) ? "編集モード：ON" : "編集モード：OFF"}</button>
       </div>
       {/* <button onClick={OpenModal}>Open Modal</button> */}
       <Modal isOpen={modalIsOpen}
