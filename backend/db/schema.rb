@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_29_101801) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_31_053107) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,6 +37,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_29_101801) do
     t.string "image"
     t.float "lat"
     t.float "lng"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_restraunts_on_user_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -59,4 +61,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_29_101801) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "restraunts", "users"
 end

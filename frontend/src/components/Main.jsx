@@ -1,14 +1,13 @@
-/*global google*/
 
+import { auth } from '../firebase';
 import { useState, useEffect } from "react";
-import { fetchRestaurants } from '../apis/restraunts';
+import { fetchRestaurants, postRestraunt } from '../apis/restraunts';
 import {
   GoogleMap,
   LoadScript,
   InfoWindow,
   Marker,
 } from "@react-google-maps/api";
-
 
 import Modal from 'react-modal';
 
@@ -56,9 +55,62 @@ const divStyle = {
 
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
+
 export const Main = () => {
+  const user = auth.currentUser;
+
+  const [error, setError] = useState('');
+  const handleSubmit = (event) => {
+
+    event.preventDefault();
+    const { name, evaluation, review, lat, lng } = event.target.elements;
+    postRestraunt({
+      name: name.value,
+      evaluation: evaluation.value,
+      review: review.value,
+      lat: lat.value,
+      lng: lng.value,
+      email: user.email
+    })
+      .then(() => {
+        closeModal();
+      })
+      .catch((error) => {
+        console.log("エラー")
+        console.log(error.code);
+        switch (error.code) {
+          case 'ERR_BAD_RESPONSE':
+            setError('不備あり！');
+            break;
+          default:
+            setError('エラーっす！Herokuのデプロイ先どうしようか？');
+            break;
+        }
+      });
+  }
+
+
 
   const [restaurants, setRestraunt] = useState([])
+
+  const [coordinateLat, setCoordinateLat] = useState('');
+  const [coordinateLng, setCoordinateLng] = useState('');
+
+  const [editMode, setEditMode] = useState(true);
+
+  const editOnOff = () => {
+    setEditMode(!editMode)
+  }
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  const OpenModal = () => {
+    setIsOpen(true)
+  }
+  const closeModal = () => {
+    setIsOpen(false);
+  }
+
 
   useEffect(() => {
     fetchRestaurants()
@@ -91,17 +143,18 @@ export const Main = () => {
   }
 
   const getLatLng = (event) => {
+
     // 座標の取得
-    console.log(event)
-    console.log(event.latLng.lat())
-    console.log(event.latLng.lng())
+    // console.log(event.latLng.lat())
+    // console.log(event.latLng.lng())
+    // console.log(`${event.latLng.lat()},${event.latLng.lng()}`)
 
     //marker作成
-    var marker = new google.maps.Marker();
+    // var marker = new google.maps.Marker();
 
     //markerの位置を設定
     //event.latLng.lat()でクリックしたところの緯度を取得
-    marker.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
+    // marker.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
     //marker設置
     // < Marker position={{
     //   lat: event.latLng.lat(),
@@ -110,6 +163,13 @@ export const Main = () => {
     // marker.setMap(map);    
 
 
+    // TODO: マーカーが置けないので代替え手段
+    setCoordinateLat(event.latLng.lat());
+    setCoordinateLng(event.latLng.lng());
+
+    console.log(coordinateLat)
+    console.log(coordinateLng)
+    if (editMode) { OpenModal() }
   };
 
   return (
@@ -117,7 +177,7 @@ export const Main = () => {
       <div class="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17} onClick={getLatLng}>
 
-          <Marker position={positionIshiBill} button onClick={() => alert('自社です。')} />
+          <Marker position={positionIshiBill} button onClick={() => alert('開発中！')} />
           {/* <Marker icon={'https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png'} position={positionIshiBill} button onClick={() => alert('自社です')}/> */}
 
           {Object.keys(restaurants).map(item => {
@@ -149,9 +209,8 @@ export const Main = () => {
             )
           })}
         </GoogleMap>
-
         <div class="md:w-2/5">
-          <div class="flex flex-col md:mx-8 overflow-auto h-56 md:h-4/5 ">
+          <div class="flex flex-col md:mx-8 overflow-auto max-height:h-56 md:h-4/5 ">
             {Object.keys(restaurants).map(item => {
               return (
                 <>
@@ -186,10 +245,59 @@ export const Main = () => {
         </div>
       </div>
       <div class="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-        {/* TODO: HerokuのDBにレコード入れたら消す。 */}
-        <h1 class="text-3xl ">試験も終わったので開発再開！<br></br>課題：React思い出す、Herokuの移行先を考える（2022.11.27）</h1>        
+        <button class="font-bold" onClick={editOnOff} style={{ color: 'red' }}>{(editMode === true) ? "編集モード：ON" : "編集モード：OFF"}</button>
       </div>
-
+      {/* <button onClick={OpenModal}>Open Modal</button> */}
+      <Modal isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        {/* todo: */}
+        <form onSubmit={handleSubmit}>
+          <div class="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+            <div class="text-3xl font-bold text-center">
+              新規店名登録
+            </div>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div class="text-right">
+              <button class="font-bold" onClick={closeModal}>Close</button>
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+              店名
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
+                評価
+              </label>
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="evaluation" name="evaluation" placeholder="評価" />
+            </div>
+            <div>
+              <label for="review" class="block text-gray-700 text-sm font-bold mb-2">
+                感想
+              </label>
+              <textarea id="review" name="review" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
+            </div>
+            <div>
+              <label for="lat" class="block text-gray-700 text-sm font-bold mb-2">
+                経緯
+              </label>
+              <input id="lat" name="lat" rows="4" readonly="true" class="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLat}></input>
+            </div>
+            <div>
+              <label for="lng" class="block text-gray-700 text-sm font-bold mb-2">
+                経度
+              </label>
+              <input id="lng" name="lng" rows="4" readonly="true" class="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
+            </div>
+            <div>
+              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+            </div>
+          </div>
+        </form>
+      </Modal>
     </LoadScript >
   );
 };

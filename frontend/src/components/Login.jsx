@@ -52,7 +52,7 @@ export const Login = () => {
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" name="password" placeholder="パスワード" />
           </div>
           <div>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">ログイン</button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">ログイン</button>
           </div>
           {/* <div>
             ユーザ登録は<Link to={'/signup'}>こちら</Link>から
