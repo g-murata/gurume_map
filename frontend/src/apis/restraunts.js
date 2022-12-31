@@ -15,8 +15,9 @@ export const postRestraunt = (params) => {
       name: params.name,
       evaluation: params.evaluation,
       review: params.review,
-      lat: params.lat, 
-      lng: params.lng,           
+      lat: params.lat,
+      lng: params.lng,
+      email: params.email,
     }
   )
     .then(res => {

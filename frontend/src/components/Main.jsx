@@ -1,5 +1,6 @@
 /*global google*/
 
+import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt } from '../apis/restraunts';
 import {
@@ -57,6 +58,9 @@ const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
 
 export const Main = () => {
+  const user = auth.currentUser;
+  console.log(user.email)
+
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
 
@@ -67,25 +71,26 @@ export const Main = () => {
       evaluation: evaluation.value,
       review: review.value,
       lat: lat.value,
-      lng: lng.value
+      lng: lng.value,
+      email: user.email
     })
-    .then(() => {
-      closeModal();  
-    })
-    .catch((error) => {
-      console.log("エラー")
-      console.log(error.code);
-      switch (error.code) {
-        case 'ERR_BAD_RESPONSE':
-          setError('不備あり！');
-          break;
-        default:
-          setError('ふびあり！TODO！');
-          break;
-      }
-    });    
+      .then(() => {
+        closeModal();
+      })
+      .catch((error) => {
+        console.log("エラー")
+        console.log(error.code);
+        switch (error.code) {
+          case 'ERR_BAD_RESPONSE':
+            setError('不備あり！');
+            break;
+          default:
+            setError('エラーっす！Herokuのデプロイ先どうしようか？');
+            break;
+        }
+      });
   }
-  
+
 
 
   const [restaurants, setRestraunt] = useState([])
@@ -268,19 +273,19 @@ export const Main = () => {
             <div>
               <label for="review" class="block text-gray-700 text-sm font-bold mb-2">
                 感想
-              </label>              
+              </label>
               <textarea id="review" name="review" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
             </div>
             <div>
               <label for="lat" class="block text-gray-700 text-sm font-bold mb-2">
                 経緯
-              </label>              
+              </label>
               <input id="lat" name="lat" rows="4" readonly="true" class="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLat}></input>
             </div>
             <div>
               <label for="lng" class="block text-gray-700 text-sm font-bold mb-2">
                 経度
-              </label>              
+              </label>
               <input id="lng" name="lng" rows="4" readonly="true" class="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
             </div>
             <div>
