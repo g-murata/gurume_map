@@ -108,6 +108,8 @@ export const Main = () => {
     setIsOpen(true)
   }
   const closeModal = () => {
+    // todo:エラーの消し方これでいいんかな？
+    setError('')
     setIsOpen(false);
   }
 
