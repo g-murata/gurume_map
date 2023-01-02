@@ -33,11 +33,15 @@ export const Login = () => {
       )
   };
 
+  const guestLogin = (event) => {
+    signInWithEmailAndPassword(auth, "guest@guest.co.jp", process.env.REACT_APP_GUEST_LOGIN)
+      .then(() => {
+        navigate('/');
+      })
+  }
+
   return (
     <div class="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
-      <div>
-        <h1 class="text-yellow-500 active:text-yellow-700 text-lg font-semibold block">ただいま開発中！！！！</h1>
-      </div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
@@ -59,6 +63,7 @@ export const Login = () => {
           </div> */}
         </div>
       </form >
+      <button class="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
     </div >
 
   );
