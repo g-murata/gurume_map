@@ -66,7 +66,7 @@ export const Login = () => {
       {process.env.NODE_ENV === "development" ?
       <button className="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
       :
-      <h1>開発中です！しばし待て！</h1>
+      <h1 className="font-bold" style={{color: 'red'}}>開発中です！しばし待たれよ！(2023.01.07)</h1>
     }
     </div >
 
