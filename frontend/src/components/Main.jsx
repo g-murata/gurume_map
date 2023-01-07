@@ -74,6 +74,15 @@ export const Main = () => {
     })
       .then(() => {
         closeModal();
+        const newRestaurants = [...restaurants,
+          {
+           name:name.value,
+           evaluation: evaluation.value,
+           review: review.value,
+           lat: Number(lat.value),
+           lng: Number(lng.value)
+         }]    
+         setRestraunt(newRestaurants)  
       })
       .catch((error) => {
         console.log("エラー")
@@ -113,7 +122,6 @@ export const Main = () => {
     setIsOpen(false);
   }
 
-
   useEffect(() => {
     fetchRestaurants()
       .then((data) =>
@@ -144,41 +152,17 @@ export const Main = () => {
     setSelectedItem(false)
   }
 
-  const getLatLng = (event) => {
-
-    // 座標の取得
-    // console.log(event.latLng.lat())
-    // console.log(event.latLng.lng())
-    // console.log(`${event.latLng.lat()},${event.latLng.lng()}`)
-
-    //marker作成
-    // var marker = new google.maps.Marker();
-
-    //markerの位置を設定
-    //event.latLng.lat()でクリックしたところの緯度を取得
-    // marker.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
-    //marker設置
-    // < Marker position={{
-    //   lat: event.latLng.lat(),
-    //   lng: event.latLng.lng(),
-    // }}/>
-    // marker.setMap(map);    
-
-
-    // TODO: マーカーが置けないので代替え手段
+  const getLatLng = (event) => {    
     setCoordinateLat(event.latLng.lat());
     setCoordinateLng(event.latLng.lng());
-
-    console.log(coordinateLat)
-    console.log(coordinateLng)
+    
     if (editMode) { OpenModal() }
   };
 
-  return (
+  return (    
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
-      <div class="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
+      <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17} onClick={getLatLng}>
-
           <Marker position={positionIshiBill} button onClick={() => alert('開発中！')} />
           {/* <Marker icon={'https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png'} position={positionIshiBill} button onClick={() => alert('自社です')}/> */}
 
@@ -194,7 +178,7 @@ export const Main = () => {
                   lat: restaurants[item].lat,
                   lng: restaurants[item].lng,
                 }} options={infoWindowOptions}>
-                  <div style={divStyle} class="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}>
+                  <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}>
                     <h1>{restaurants[item].name}</h1>
                   </div>
                 </InfoWindow>
@@ -211,12 +195,12 @@ export const Main = () => {
             )
           })}
         </GoogleMap>
-        <div class="md:w-2/5">
-          <div class="flex flex-col md:mx-8 overflow-auto max-height:h-56 md:h-4/5 ">
+        <div className="md:w-2/5">
+          <div className="flex flex-col md:mx-8 overflow-auto max-height:h-56 md:h-4/5 ">
             {Object.keys(restaurants).map(item => {
               return (
                 <>
-                  <button class="p-2 border-b-2 list-none " onClick={() => onOpenDialog(restaurants[item].id)}>{restaurants[item].name}
+                  <button className="p-2 border-b-2 list-none " onClick={() => onOpenDialog(restaurants[item].id)}>{restaurants[item].name}
                   </button>
                   <Modal
                     isOpen={restaurants[item].id === selectedItem}
@@ -225,16 +209,16 @@ export const Main = () => {
                     style={customStyles}
                     contentLabel="Example Modal"
                   >
-                    <div class="flex place-content-between w-11/12  m-auto">
-                      <div class="text-3xl font-bold mb-2">{restaurants[item].name}</div>
-                      <button class="font-bold" onClick={onCloseDialog}>Close</button>
+                    <div className="flex place-content-between w-11/12  m-auto">
+                      <div className="text-3xl font-bold mb-2">{restaurants[item].name}</div>
+                      <button className="font-bold" onClick={onCloseDialog}>Close</button>
                     </div>
                     <img
-                      class="w-7/12 m-auto"
+                      className="w-7/12 m-auto"
                       src={restaurants[item].image}
                       alt="ほげほげ画像"
                     ></img>
-                    <p class="text-gray-700 text-base w-11/12 m-auto">
+                    <p className="text-gray-700 text-base w-11/12 m-auto">
                       <span>評価：</span>
                       <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
                       <p className="review">{restaurants[item].review}</p>
@@ -246,8 +230,8 @@ export const Main = () => {
           </div>
         </div>
       </div>
-      <div class="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-        <button class="font-bold" onClick={editOnOff} style={{ color: 'red' }}>{(editMode === true) ? "編集モード：ON" : "編集モード：OFF"}</button>
+      <div className="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
+        <button className="font-bold" onClick={editOnOff} style={{ color: 'red' }}>{(editMode === true) ? "編集モード：ON" : "編集モード：OFF"}</button>
       </div>
       {/* <button onClick={OpenModal}>Open Modal</button> */}
       <Modal isOpen={modalIsOpen}
@@ -258,44 +242,44 @@ export const Main = () => {
       >
         {/* todo: */}
         <form onSubmit={handleSubmit}>
-          <div class="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
-            <div class="text-3xl font-bold text-center">
+          <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+            <div className="text-3xl font-bold text-center">
               新規店名登録
             </div>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div class="text-right">
-              <button class="font-bold" onClick={closeModal}>Close</button>
+            <div className="text-right">
+              <button className="font-bold" onClick={closeModal}>Close</button>
             </div>
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+            <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
               店名
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
             <div>
-              <label class="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
+              <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
                 評価
               </label>
-              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="evaluation" name="evaluation" placeholder="評価" />
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="evaluation" name="evaluation" placeholder="評価" />
             </div>
             <div>
-              <label for="review" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="review" className="block text-gray-700 text-sm font-bold mb-2">
                 感想
               </label>
-              <textarea id="review" name="review" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
+              <textarea id="review" name="review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
             </div>
             <div>
-              <label for="lat" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
                 経緯
               </label>
-              <input id="lat" name="lat" rows="4" readonly="true" class="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLat}></input>
+              <input id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLat}></input>
             </div>
             <div>
-              <label for="lng" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
                 経度
               </label>
-              <input id="lng" name="lng" rows="4" readonly="true" class="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
+              <input id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
             </div>
             <div>
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
             </div>
           </div>
         </form>
