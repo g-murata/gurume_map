@@ -41,29 +41,29 @@ export const Login = () => {
   }
 
   return (
-    <div class="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+    <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email" class="block text-gray-700 text-sm font-bold mb-2" for="email">
+          <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2" for="email">
             メールアドレス
           </label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" id="email" placeholder="メールアドレス" name="email" />
+          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" id="email" placeholder="メールアドレス" name="email" />
           <div>
-            <label htmlFor="password" class="block text-gray-700 text-sm font-bold mb-2" for="password">
+            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2" for="password">
               パスワード
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" name="password" placeholder="パスワード" />
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" name="password" placeholder="パスワード" />
           </div>
           <div>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">ログイン</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">ログイン</button>
           </div>
           {/* <div>
             ユーザ登録は<Link to={'/signup'}>こちら</Link>から
           </div> */}
         </div>
       </form >
-      <button class="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
+      <button className="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
     </div >
 
   );

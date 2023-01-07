@@ -15,7 +15,7 @@
       },
       {
         "title": "JS（文字列）",
-        "text": "JSでテキストの文字列追加「<span class='inner__text--hello'></span>」"
+        "text": "JSでテキストの文字列追加「<span className='inner__text--hello'></span>」"
       }
     ],
     "footer": {

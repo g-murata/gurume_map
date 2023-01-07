@@ -55,7 +55,7 @@ export const GurumeModal = () => {
         return (
           <>
             <button onClick={() => onOpenDialog(restaurants[item].id)}>{restaurants[item].name}</button>
-            <div class="bg-black"></div>
+            <div className="bg-black"></div>
             <Modal
               isOpen={restaurants[item].id === selectedItem}
               onAfterOpen={afterOpenModal}
@@ -63,16 +63,16 @@ export const GurumeModal = () => {
               style={customStyles}
               contentLabel="Example Modal"
             >
-              <div class="flex place-content-between w-11/12  m-auto">
-                <div class="text-3xl font-bold mb-2">{restaurants[item].name}</div>
-                <button class="font-bold" onClick={onCloseDialog}>close</button>
+              <div className="flex place-content-between w-11/12  m-auto">
+                <div className="text-3xl font-bold mb-2">{restaurants[item].name}</div>
+                <button className="font-bold" onClick={onCloseDialog}>close</button>
               </div>
               <img
-                class="w-10/12 m-auto"
+                className="w-10/12 m-auto"
                 src="https://source.unsplash.com/random/1600x900/"
                 alt="ほげほげ画像"
               ></img>
-              <p class="text-gray-700 text-base w-11/12 m-auto">
+              <p className="text-gray-700 text-base w-11/12 m-auto">
                 <p>評価{restaurants[item].evaluation}</p>
                 <p className="review">{restaurants[item].review}</p>
               </p>

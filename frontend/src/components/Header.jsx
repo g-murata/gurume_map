@@ -41,17 +41,17 @@ export const Header = (props) => {
       return (
         <>
           <li className='p-8 border-b-2 list-none md:border-none'>
-            <Link to="/about" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >GurumeMapとは</Link>
+            <Link to="/about" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >GurumeMapとは</Link>
           </li>
           <li className='p-8 border-b-2 list-none md:border-none'>
-            <Link to="/blog" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
-            <div class="text-red-400 text-xs md:text-right">2022/8/15更新</div>
+            <Link to="/blog" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
+            <div className="text-red-400 text-xs md:text-right">2022/8/15更新</div>
           </li>
 
           { user  
             ?<>
               <li className='p-8 border-b-2 list-none md:border-none'>
-                <Link to="/login" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>
+                <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>
               </li>
             </>
             :
@@ -59,14 +59,14 @@ export const Header = (props) => {
               { process.env.NODE_ENV === "development" 
                 ?<>
                     <li className='p-8 border-b-2 list-none md:border-none'>
-                      <Link to="/signup" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >新規会員登録</Link>
+                      <Link to="/signup" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >新規会員登録</Link>
                     </li>
                   </>
                 :
                 <></>
               }
               <li className='p-8 border-b-2 list-none md:border-none'>
-                <Link to="/login" class="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >ログイン</Link>
+                <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >ログイン</Link>
               </li>
             </>
         }
@@ -80,15 +80,15 @@ export const Header = (props) => {
 
   return (
     <>
-      <div class="bg-white md:pb-12">
-        <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
-          <header class="flex justify-between items-center py-4 md:py-8">
-            <Link to="/" class="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
+      <div className="bg-white md:pb-12">
+        <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
+          <header className="flex justify-between items-center py-4 md:py-8">
+            <Link to="/" className="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
               GurumeMap
-              <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} class="w-9" alt="Logo" />
+              <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} className="w-9" alt="Logo" />
             </Link>
 
-            <nav class="hidden md:flex gap-12">
+            <nav className="hidden md:flex gap-12">
               <HeaderLink />
             </nav>
             <div className={`md:hidden menuWrapper ${openMenu ? "menuWrapper__active" : ""}`} onClick={(e) => { testFunction(e, setOpenMenu) }}>
@@ -108,7 +108,7 @@ export const Header = (props) => {
               ) : undefined}
             </div>
 
-            <button type="button" onClick={menuFunction} class="inline-flex items-center md:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
+            <button type="button" onClick={menuFunction} className="inline-flex items-center md:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
               <label className="text-2xl text-gray-600 "><GiHamburgerMenu /></label>
             </button>
           </header>
