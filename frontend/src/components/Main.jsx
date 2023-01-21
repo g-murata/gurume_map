@@ -10,6 +10,8 @@ import {
 } from "@react-google-maps/api";
 
 import Modal from 'react-modal';
+import ReactStarsRating from 'react-awesome-stars-rating';
+
 
 // import Restaurants from './../restaurants.json';
 // const restaurants = Restaurants.data;
@@ -63,10 +65,10 @@ export const Main = () => {
   const handleSubmit = (event) => {
 
     event.preventDefault();
-    const { name, evaluation, review, lat, lng } = event.target.elements;
+    const { name, review, lat, lng } = event.target.elements;
     postRestraunt({
       name: name.value,
-      evaluation: evaluation.value,
+      evaluation: evaluation,
       review: review.value,
       lat: lat.value,
       lng: lng.value,
@@ -75,14 +77,14 @@ export const Main = () => {
       .then(() => {
         closeModal();
         const newRestaurants = [...restaurants,
-          {
-           name:name.value,
-           evaluation: evaluation.value,
-           review: review.value,
-           lat: Number(lat.value),
-           lng: Number(lng.value)
-         }]    
-         setRestraunt(newRestaurants)  
+        {
+          name: name.value,
+          evaluation: evaluation,
+          review: review.value,
+          lat: Number(lat.value),
+          lng: Number(lng.value)
+        }]
+        setRestraunt(newRestaurants)
       })
       .catch((error) => {
         console.log("エラー")
@@ -152,14 +154,20 @@ export const Main = () => {
     setSelectedItem(false)
   }
 
-  const getLatLng = (event) => {    
+  const getLatLng = (event) => {
     setCoordinateLat(event.latLng.lat());
     setCoordinateLng(event.latLng.lng());
-    
+
     if (editMode) { OpenModal() }
   };
 
-  return (    
+  const [evaluation, setEvaluation] = useState(3);
+
+  const onChange = (value) => {
+    setEvaluation(value)
+  };
+
+  return (
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
       <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17} onClick={getLatLng}>
@@ -258,7 +266,7 @@ export const Main = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
                 評価
               </label>
-              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="evaluation" name="evaluation" placeholder="評価" />
+              <ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={onChange} value={evaluation} />
             </div>
             <div>
               <label for="review" className="block text-gray-700 text-sm font-bold mb-2">

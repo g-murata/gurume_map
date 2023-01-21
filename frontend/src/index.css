@@ -40,6 +40,11 @@
 
 /* https://kinocolog.com/css_star_rating/ */
 
+/* react-awesome-stars-ratingのCSS */
+.evaluation {
+    display: flex;
+}
+
 /* レビューを星で表現 */
 .star5_rating {
     position: relative;

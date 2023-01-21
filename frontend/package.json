@@ -10,6 +10,7 @@
     "axios": "^0.27.2",
     "firebase": "^9.15.0",
     "react": "^18.0.0",
+    "react-awesome-stars-rating": "^0.13.3",
     "react-dom": "^18.0.0",
     "react-icons": "^4.3.1",
     "react-modal": "^3.15.1",
