@@ -120,7 +120,9 @@ export const Main = () => {
   }
   const closeModal = () => {
     // todo:エラーの消し方これでいいんかな？
+    // TODO:評価の戻し方これでいいのかなぁ
     setError('')
+    setEvaluation(3)
     setIsOpen(false);
   }
 
