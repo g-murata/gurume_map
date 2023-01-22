@@ -156,6 +156,7 @@ export const Main = () => {
   const onCloseDialog = () => {
     setSelectedItem(false)
     setEditModalIsOpen(false);
+    setEvaluation(3)
   }
 
   const getLatLng = (event) => {
@@ -173,8 +174,9 @@ export const Main = () => {
 
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
-  const onEditDialog = () => {
+  const onEditDialog = (value) => {
     setEditModalIsOpen(true)
+    setEvaluation(value.evaluation)
   }
 
 
@@ -233,7 +235,7 @@ export const Main = () => {
                       <>
                         <div className="flex place-content-between w-11/12  m-auto">
                           <div className="text-3xl font-bold mb-2">{restaurants[item].name}</div>
-                          <button className="font-bold" onClick={onEditDialog}>編集</button>
+                          <button className="font-bold" onClick={() => onEditDialog((restaurants[item]))}>編集</button>
                           <button className="font-bold" onClick={onCloseDialog}>Close</button>
                         </div>
                         <img
@@ -268,10 +270,7 @@ export const Main = () => {
                               <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
                                 評価
                               </label>
-                              <div className="flex space-x-8">
-                                <ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={onChange} value={restaurants[item].evaluation} />
-                                <span>評価：{evaluation}</span>
-                              </div>
+                              <ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={onChange} value={evaluation} />
                             </div>
                             <div>
                               <label for="review" className="block text-gray-700 text-sm font-bold mb-2">
@@ -293,7 +292,7 @@ export const Main = () => {
                               <input id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lng}></input>
                             </div>
                             <div>
-                              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+                              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">更新</button>
                             </div>
                           </div>
                         </form>
