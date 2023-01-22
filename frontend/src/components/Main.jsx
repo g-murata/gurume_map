@@ -11,6 +11,7 @@ import {
 
 import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
+import { HogeHoge } from './HogeHoge';
 
 
 // import Restaurants from './../restaurants.json';
@@ -154,6 +155,7 @@ export const Main = () => {
 
   const onCloseDialog = () => {
     setSelectedItem(false)
+    setEditModalIsOpen(false);
   }
 
   const getLatLng = (event) => {
@@ -168,6 +170,13 @@ export const Main = () => {
   const onChange = (value) => {
     setEvaluation(value)
   };
+
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+
+  const onEditDialog = () => {
+    setEditModalIsOpen(true)
+  }
+
 
   return (
     <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
@@ -219,20 +228,77 @@ export const Main = () => {
                     style={customStyles}
                     contentLabel="Example Modal"
                   >
-                    <div className="flex place-content-between w-11/12  m-auto">
-                      <div className="text-3xl font-bold mb-2">{restaurants[item].name}</div>
-                      <button className="font-bold" onClick={onCloseDialog}>Close</button>
-                    </div>
-                    <img
-                      className="w-7/12 m-auto"
-                      src={restaurants[item].image}
-                      alt="ほげほげ画像"
-                    ></img>
-                    <p className="text-gray-700 text-base w-11/12 m-auto">
-                      <span>評価：</span>
-                      <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
-                      <p className="review">{restaurants[item].review}</p>
-                    </p>
+
+                    {!editModalIsOpen ?
+                      <>
+                        <div className="flex place-content-between w-11/12  m-auto">
+                          <div className="text-3xl font-bold mb-2">{restaurants[item].name}</div>
+                          <button className="font-bold" onClick={onEditDialog}>編集</button>
+                          <button className="font-bold" onClick={onCloseDialog}>Close</button>
+                        </div>
+                        <img
+                          className="w-7/12 m-auto"
+                          src={restaurants[item].image}
+                          alt="ほげほげ画像"
+                        ></img>
+
+                        <p className="text-gray-700 text-base w-11/12 m-auto">
+                          <span>評価：</span>
+                          <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
+                          <p className="review">{restaurants[item].review}</p>
+                        </p>
+                      </>
+                      :
+                      <>
+                        <form onSubmit={handleSubmit}>
+                          <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+                            <div className="text-3xl font-bold text-center">
+                              編集
+                            </div>
+                            {error && <p style={{ color: 'red' }}>{error}</p>}
+                            <div className="text-right">
+                              <button className="font-bold" onClick={onCloseDialog}>Close</button>
+                            </div>
+                            <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
+                              店名
+                            </label>
+                            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name"
+                              defaultValue={restaurants[item].name} />
+                            <div>
+                              <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
+                                評価
+                              </label>
+                              <div className="flex space-x-8">
+                                <ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={onChange} value={restaurants[item].evaluation} />
+                                <span>評価：{evaluation}</span>
+                              </div>
+                            </div>
+                            <div>
+                              <label for="review" className="block text-gray-700 text-sm font-bold mb-2">
+                                感想
+                              </label>
+                              <textarea id="review" name="review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"
+                                defaultValue={restaurants[item].review}></textarea>
+                            </div>
+                            <div>
+                              <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
+                                経緯
+                              </label>
+                              <input id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lat}></input>
+                            </div>
+                            <div>
+                              <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
+                                経度
+                              </label>
+                              <input id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lng}></input>
+                            </div>
+                            <div>
+                              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+                            </div>
+                          </div>
+                        </form>
+                      </>
+                    }
                   </Modal>
                 </>
               )
