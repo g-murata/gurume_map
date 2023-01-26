@@ -1,7 +1,7 @@
 
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
-import { fetchRestaurants, postRestraunt } from '../apis/restraunts';
+import { fetchRestaurants, postRestraunt, updateRestraunt } from '../apis/restraunts';
 import {
   GoogleMap,
   LoadScript,
@@ -99,6 +99,49 @@ export const Main = () => {
             break;
         }
       });
+  }
+
+  const handleUpdateSubmit = (event) => {
+
+    event.preventDefault();
+    const { id, name, review, lat, lng } = event.target.elements;
+    updateRestraunt({
+      id: id.value,
+      name: name.value,
+      evaluation: evaluation,
+      review: review.value,
+    })
+      .then(() => {
+        setEditModalIsOpen(false);
+        setError('')
+
+        // UPDATEの参考
+        // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
+        const updateRestaurants = restaurants.map( ( restaurant ) =>{
+          if(Number(restaurant.id) === Number(id.value))
+          {
+            restaurant.name = name.value;
+            restaurant.evaluation =  evaluation;
+            restaurant.review = review.value;
+            restaurant.lat = Number(lat.value);
+            restaurant.lng = Number(lng.value);         
+          }
+          return restaurant;
+      })
+        setRestraunt(updateRestaurants);
+       })
+        .catch((error) => {
+          console.log("エラー")
+          console.log(error.code);
+          switch (error.code) {
+            case 'ERR_BAD_RESPONSE':
+              setError('不備あり！');
+              break;
+            default:
+              setError('エラーっす！Herokuのデプロイ先どうしようか？');
+              break;
+          }
+        });
   }
 
 
@@ -252,7 +295,7 @@ export const Main = () => {
                       </>
                       :
                       <>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleUpdateSubmit}>
                           <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
                             <div className="text-3xl font-bold text-center">
                               編集
@@ -264,6 +307,8 @@ export const Main = () => {
                             <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
                               店名
                             </label>
+                            {/* TODO: hiddenはいくないね～書き換えられちゃうからね。リリース前に必ず直す。 */}
+                            <input type="hidden" id="id" name="id" value={restaurants[item].id}></input>
                             <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name"
                               defaultValue={restaurants[item].name} />
                             <div>
@@ -280,16 +325,16 @@ export const Main = () => {
                                 defaultValue={restaurants[item].review}></textarea>
                             </div>
                             <div>
-                              <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
+                              {/* <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
                                 経緯
-                              </label>
-                              <input id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lat}></input>
+                              </label> */}
+                              <input type ="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lat}></input>
                             </div>
                             <div>
-                              <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
+                              {/* <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
                                 経度
-                              </label>
-                              <input id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lng}></input>
+                              </label> */}
+                              <input type ="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lng}></input>
                             </div>
                             <div>
                               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">更新</button>
