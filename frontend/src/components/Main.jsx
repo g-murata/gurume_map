@@ -117,78 +117,55 @@ export const Main = () => {
 
         // UPDATEの参考
         // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
-        const updateRestaurants = restaurants.map( ( restaurant ) =>{
-          if(Number(restaurant.id) === Number(id.value))
-          {
+        const updateRestaurants = restaurants.map((restaurant) => {
+          if (Number(restaurant.id) === Number(id.value)) {
             restaurant.name = name.value;
-            restaurant.evaluation =  evaluation;
+            restaurant.evaluation = evaluation;
             restaurant.review = review.value;
             restaurant.lat = Number(lat.value);
-            restaurant.lng = Number(lng.value);         
+            restaurant.lng = Number(lng.value);
           }
           return restaurant;
-      })
+        })
         setRestraunt(updateRestaurants);
-       })
-        .catch((error) => {
-          console.log("エラー")
-          console.log(error.code);
-          switch (error.code) {
-            case 'ERR_BAD_RESPONSE':
-              setError('不備あり！');
-              break;
-            default:
-              setError('エラーっす！Herokuのデプロイ先どうしようか？');
-              break;
-          }
-        });
+      })
+      .catch((error) => {
+        console.log("エラー")
+        console.log(error.code);
+        switch (error.code) {
+          case 'ERR_BAD_RESPONSE':
+            setError('不備あり！');
+            break;
+          default:
+            setError('エラーっす！Herokuのデプロイ先どうしようか？');
+            break;
+        }
+      });
   }
 
-  const handleDeleteSubmit = (event) => {
-
-    // event.preventDefault();
-    // const { id } = event.id;
-    // alert(event.id)
+  const handleDeleteSubmit = (index) => {
 
     deleteRestraunt({
-      id: event.id
+      id: restaurants[index].id
     })
       .then(() => {
         onCloseDialog();
-        // setEditModalIsOpen(false);
-        // setError('')
-
-      //   const updateRestaurants = restaurants.map( ( restaurant ) =>{
-      //     if(Number(restaurant.id) === Number(id.value))
-      //     {
-      //       restaurant.name = name.value;
-      //       restaurant.evaluation =  evaluation;
-      //       restaurant.review = review.value;
-      //       restaurant.lat = Number(lat.value);
-      //       restaurant.lng = Number(lng.value);         
-      //     }
-      //     return restaurant;
-      // })
-        // TODO:
         const newRestaurants = [...restaurants]
-        console.log(newRestaurants)
-        console.log(event.id)
-        newRestaurants.splice(event.id, 1)
-        console.log(newRestaurants)
+        newRestaurants.splice(index, 1)
         setRestraunt(newRestaurants);
-       })
-        .catch((error) => {
-          console.log("エラー")
-          console.log(error.code);
-          switch (error.code) {
-            case 'ERR_BAD_RESPONSE':
-              setError('不備あり！');
-              break;
-            default:
-              setError('エラーっす！Herokuのデプロイ先どうしようか？');
-              break;
-          }
-        });
+      })
+      .catch((error) => {
+        console.log("エラー")
+        console.log(error.code);
+        switch (error.code) {
+          case 'ERR_BAD_RESPONSE':
+            setError('不備あり！');
+            break;
+          default:
+            setError('エラーっす！Herokuのデプロイ先どうしようか？');
+            break;
+        }
+      });
   }
 
 
@@ -326,7 +303,7 @@ export const Main = () => {
                         <div className="flex place-content-between w-11/12  m-auto">
                           <div className="text-3xl font-bold mb-2">{restaurants[item].name}</div>
                           <button className="font-bold" onClick={() => onEditDialog((restaurants[item]))}>編集</button>
-                          <button className="font-bold" onClick={() => handleDeleteSubmit((restaurants[item]))}>削除</button>
+                          <button className="font-bold" onClick={() => handleDeleteSubmit((item))}>削除</button>
                           <button className="font-bold" onClick={onCloseDialog}>Close</button>
                         </div>
                         <img
@@ -376,13 +353,13 @@ export const Main = () => {
                               {/* <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
                                 経緯
                               </label> */}
-                              <input type ="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lat}></input>
+                              <input type="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lat}></input>
                             </div>
                             <div>
                               {/* <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
                                 経度
                               </label> */}
-                              <input type ="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lng}></input>
+                              <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lng}></input>
                             </div>
                             <div>
                               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">更新</button>
