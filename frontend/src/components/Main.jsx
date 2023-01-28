@@ -75,10 +75,11 @@ export const Main = () => {
       lng: lng.value,
       email: user.email
     })
-      .then(() => {
+      .then((res) => {
         closeModal();
         const newRestaurants = [...restaurants,
         {
+          id: res.restraunts.id,
           name: name.value,
           evaluation: evaluation,
           review: review.value,
@@ -144,6 +145,7 @@ export const Main = () => {
   }
 
   const handleDeleteSubmit = (index) => {
+    console.log(restaurants[index])
 
     deleteRestraunt({
       id: restaurants[index].id
