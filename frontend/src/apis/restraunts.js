@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { restaurants } from '../urls/index'
+import { restaurants, restaurant } from '../urls/index'
 
 export const fetchRestaurants = () => {
   return axios.get(restaurants)
@@ -18,6 +18,35 @@ export const postRestraunt = (params) => {
       lat: params.lat,
       lng: params.lng,
       email: params.email,
+    }
+  )
+    .then(res => {
+      console.log(res)
+      return res.data
+    })
+    .catch((e) => { throw e; })
+};
+
+export const updateRestraunt = (params) => {
+  return axios.patch(`${restaurant(params.id)}`,
+    {
+      name: params.name,
+      evaluation: params.evaluation,
+      review: params.review,
+    }
+  )
+    .then(res => {
+      console.log(res)
+      return res.data
+    })
+    .catch((e) => { throw e; })
+};
+
+export const deleteRestraunt = (params) => {
+
+  return axios.delete(`${restaurant(params.id)}`,
+    {
+      id: params.id      
     }
   )
     .then(res => {

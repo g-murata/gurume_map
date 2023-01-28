@@ -24,6 +24,33 @@ module Api
 
       end
 
+
+      def update
+        restraunt = Restraunt.find(params[:id])
+       
+        if restraunt.update(name: params[:name], evaluation: params[:evaluation], review: params[:review])
+          render json: {
+            restraunts: restraunt
+            },status: :ok
+        else
+          render status: restraunt.errors
+        end       
+
+      end
+
+      def destroy
+        restraunt = Restraunt.find(params[:id])
+       
+        if restraunt.destroy
+          render json: {
+            restraunts: restraunt
+            },status: :ok
+        else
+          render status: restraunt.errors
+        end       
+
+      end
+
     end
   end 
 end
