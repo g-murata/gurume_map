@@ -80,11 +80,11 @@ export const Main = () => {
         const newRestaurants = [...restaurants,
         {
           id: res.restraunts.id,
-          name: name.value,
-          evaluation: evaluation,
-          review: review.value,
-          lat: Number(lat.value),
-          lng: Number(lng.value)
+          name: res.restraunts.name,
+          evaluation: res.restraunts.evaluation,
+          review: res.restraunts.review,
+          lat: res.restraunts.lat,
+          lng: res.restraunts.lng
         }]
         setRestraunt(newRestaurants)
       })
@@ -145,7 +145,6 @@ export const Main = () => {
   }
 
   const handleDeleteSubmit = (index) => {
-    console.log(restaurants[index])
 
     deleteRestraunt({
       id: restaurants[index].id
