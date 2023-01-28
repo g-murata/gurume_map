@@ -1,7 +1,7 @@
 
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
-import { fetchRestaurants, postRestraunt, updateRestraunt } from '../apis/restraunts';
+import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
 import {
   GoogleMap,
   LoadScript,
@@ -129,6 +129,53 @@ export const Main = () => {
           return restaurant;
       })
         setRestraunt(updateRestaurants);
+       })
+        .catch((error) => {
+          console.log("エラー")
+          console.log(error.code);
+          switch (error.code) {
+            case 'ERR_BAD_RESPONSE':
+              setError('不備あり！');
+              break;
+            default:
+              setError('エラーっす！Herokuのデプロイ先どうしようか？');
+              break;
+          }
+        });
+  }
+
+  const handleDeleteSubmit = (event) => {
+
+    // event.preventDefault();
+    // const { id } = event.id;
+    // alert(event.id)
+
+    deleteRestraunt({
+      id: event.id
+    })
+      .then(() => {
+        onCloseDialog();
+        // setEditModalIsOpen(false);
+        // setError('')
+
+      //   const updateRestaurants = restaurants.map( ( restaurant ) =>{
+      //     if(Number(restaurant.id) === Number(id.value))
+      //     {
+      //       restaurant.name = name.value;
+      //       restaurant.evaluation =  evaluation;
+      //       restaurant.review = review.value;
+      //       restaurant.lat = Number(lat.value);
+      //       restaurant.lng = Number(lng.value);         
+      //     }
+      //     return restaurant;
+      // })
+        // TODO:
+        const newRestaurants = [...restaurants]
+        console.log(newRestaurants)
+        console.log(event.id)
+        newRestaurants.splice(event.id, 1)
+        console.log(newRestaurants)
+        setRestraunt(newRestaurants);
        })
         .catch((error) => {
           console.log("エラー")
@@ -279,6 +326,7 @@ export const Main = () => {
                         <div className="flex place-content-between w-11/12  m-auto">
                           <div className="text-3xl font-bold mb-2">{restaurants[item].name}</div>
                           <button className="font-bold" onClick={() => onEditDialog((restaurants[item]))}>編集</button>
+                          <button className="font-bold" onClick={() => handleDeleteSubmit((restaurants[item]))}>削除</button>
                           <button className="font-bold" onClick={onCloseDialog}>Close</button>
                         </div>
                         <img

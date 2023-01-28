@@ -41,3 +41,17 @@ export const updateRestraunt = (params) => {
     })
     .catch((e) => { throw e; })
 };
+
+export const deleteRestraunt = (params) => {
+
+  return axios.delete(`${restaurant(params.id)}`,
+    {
+      id: params.id      
+    }
+  )
+    .then(res => {
+      console.log(res)
+      return res.data
+    })
+    .catch((e) => { throw e; })
+};

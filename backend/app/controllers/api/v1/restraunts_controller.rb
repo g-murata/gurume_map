@@ -38,6 +38,19 @@ module Api
 
       end
 
+      def destroy
+        restraunt = Restraunt.find(params[:id])
+       
+        if restraunt.destroy
+          render json: {
+            restraunts: restraunt
+            },status: :ok
+        else
+          render status: restraunt.errors
+        end       
+
+      end
+
     end
   end 
 end
