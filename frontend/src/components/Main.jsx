@@ -112,7 +112,7 @@ export const Main = () => {
       evaluation: evaluation,
       review: review.value,
     })
-      .then(() => {
+      .then((res) => {
         setEditModalIsOpen(false);
         setError('')
 
@@ -120,11 +120,11 @@ export const Main = () => {
         // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
         const updateRestaurants = restaurants.map((restaurant) => {
           if (Number(restaurant.id) === Number(id.value)) {
-            restaurant.name = name.value;
-            restaurant.evaluation = evaluation;
-            restaurant.review = review.value;
-            restaurant.lat = Number(lat.value);
-            restaurant.lng = Number(lng.value);
+            restaurant.name = res.restraunts.name;
+            restaurant.evaluation = res.restraunts.evaluation;
+            restaurant.review = res.restraunts.review;
+            restaurant.lat = res.restraunts.lat;
+            restaurant.lng = res.restraunts.lng;
           }
           return restaurant;
         })
