@@ -11,7 +11,6 @@ import {
 
 import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
-import { HogeHoge } from './HogeHoge';
 
 
 // import Restaurants from './../restaurants.json';
@@ -105,7 +104,7 @@ export const Main = () => {
   const handleUpdateSubmit = (event) => {
 
     event.preventDefault();
-    const { id, name, review, lat, lng } = event.target.elements;
+    const { id, name, review } = event.target.elements;
     updateRestraunt({
       id: id.value,
       name: name.value,
