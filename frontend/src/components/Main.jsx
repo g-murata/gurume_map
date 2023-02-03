@@ -11,6 +11,7 @@ import {
 
 import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
+import Loading from './Loading';
 
 
 // import Restaurants from './../restaurants.json';
@@ -63,9 +64,9 @@ export const Main = () => {
 
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
-
     event.preventDefault();
     const { name, review, lat, lng } = event.target.elements;
+    setIsLoading(true);
     postRestraunt({
       name: name.value,
       evaluation: evaluation,
@@ -86,6 +87,7 @@ export const Main = () => {
           lng: res.restraunts.lng
         }]
         setRestraunt(newRestaurants)
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log("エラー")
@@ -98,6 +100,7 @@ export const Main = () => {
             setError('エラーっす！Herokuのデプロイ先どうしようか？');
             break;
         }
+        setIsLoading(false);
       });
   }
 
@@ -175,6 +178,8 @@ export const Main = () => {
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
 
+  const [ isLoading, setIsLoading ] = useState(false);
+
   const [editMode, setEditMode] = useState(true);
 
   const editOnOff = () => {
@@ -195,9 +200,12 @@ export const Main = () => {
   }
 
   useEffect(() => {
+    setIsLoading(true);    
     fetchRestaurants()
-      .then((data) =>
+      .then((data) =>{
         setRestraunt(data.restraunts)
+        setIsLoading(false);        
+      }
       )
   }, [])
 
@@ -282,9 +290,10 @@ export const Main = () => {
               </>
             )
           })}
-        </GoogleMap>
+        </GoogleMap> 
         <div className="md:w-2/5">
-          <div className="flex flex-col md:mx-8 overflow-auto max-height:h-56 md:h-4/5 ">
+          <div className="flex flex-col md:mx-8 overflow-auto md:h-3/5 ">
+            { isLoading ? <Loading /> :<h1>※この書き方だと不備ありなので修正</h1> }
             {Object.keys(restaurants).map(item => {
               return (
                 <>
