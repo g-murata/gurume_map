@@ -2,6 +2,7 @@ module Api
   module V1
     class RestrauntsController < ApplicationController
       def index
+        sleep(2)
         restraunts = Restraunt.all
 
         render json: {
