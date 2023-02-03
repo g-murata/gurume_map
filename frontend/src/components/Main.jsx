@@ -293,7 +293,6 @@ export const Main = () => {
         </GoogleMap> 
         <div className="md:w-2/5">
           <div className="flex flex-col md:mx-8 overflow-auto md:h-3/5 ">
-            { isLoading ? <Loading /> :<h1>※この書き方だと不備ありなので修正</h1> }
             {Object.keys(restaurants).map(item => {
               return (
                 <>
