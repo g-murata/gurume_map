@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import Loading from '../components/Loading';
 
 const AuthContext = createContext();
 
@@ -28,7 +29,7 @@ export function AuthProvider({ children }) {
     };
   }, []);
   if (loading) {
-    return <p>ローディングなう！</p>;
+    return <Loading />
   } else {
     return (
       <AuthContext.Provider value={value}>
