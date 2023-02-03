@@ -11,7 +11,7 @@ import {
 
 import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
-import Loading from './Loading';
+// import Loading from './Loading';
 
 
 // import Restaurants from './../restaurants.json';
