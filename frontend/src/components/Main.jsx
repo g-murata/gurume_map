@@ -11,7 +11,7 @@ import {
 
 import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
-// import Loading from './Loading';
+import Loading from './Loading';
 
 
 // import Restaurants from './../restaurants.json';
@@ -108,6 +108,7 @@ export const Main = () => {
 
     event.preventDefault();
     const { id, name, review } = event.target.elements;
+    setIsLoading(true);
     updateRestraunt({
       id: id.value,
       name: name.value,
@@ -131,6 +132,7 @@ export const Main = () => {
           return restaurant;
         })
         setRestraunt(updateRestaurants);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log("エラー")
@@ -143,6 +145,7 @@ export const Main = () => {
             setError('エラーっす！Herokuのデプロイ先どうしようか？');
             break;
         }
+        setIsLoading(false);
       });
   }
 
@@ -178,7 +181,7 @@ export const Main = () => {
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
 
-  const [ isLoading, setIsLoading ] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [editMode, setEditMode] = useState(true);
 
@@ -200,11 +203,11 @@ export const Main = () => {
   }
 
   useEffect(() => {
-    setIsLoading(true);    
+    setIsLoading(true);
     fetchRestaurants()
-      .then((data) =>{
+      .then((data) => {
         setRestraunt(data.restraunts)
-        setIsLoading(false);        
+        setIsLoading(false);
       }
       )
   }, [])
@@ -254,7 +257,6 @@ export const Main = () => {
     setEvaluation(value.evaluation)
   }
 
-
   return (
     <>
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
@@ -277,6 +279,7 @@ export const Main = () => {
                   }} options={infoWindowOptions}>
                     <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}>
                       <h1>{restaurants[item].name}</h1>
+                      <h1 className="star5_rating" data-rate={restaurants[item].evaluation}></h1>
                     </div>
                   </InfoWindow>
 
@@ -291,7 +294,7 @@ export const Main = () => {
                 </>
               )
             })}
-          </GoogleMap> 
+          </GoogleMap>
           <div className="md:w-2/5">
             <div className="flex flex-col md:mx-8 overflow-auto md:h-3/5 ">
               {Object.keys(restaurants).map(item => {
@@ -299,6 +302,8 @@ export const Main = () => {
                   <>
                     <button className="p-2 border-b-2 list-none " onClick={() => onOpenDialog(restaurants[item].id)}>{restaurants[item].name}
                     </button>
+                    {/* 吹き出しが何個も出る件について。ここに置いたらなんかうまくいったけど、新規登録すると相変わらず出るし、原因を調べる。TODO: */}
+                    {isLoading ? <Loading /> : <></>}
                     <Modal
                       isOpen={restaurants[item].id === selectedItem}
                       onAfterOpen={afterOpenModal}
@@ -421,16 +426,16 @@ export const Main = () => {
                 <textarea id="review" name="review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
               </div>
               <div>
-                <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
+                {/* <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
                   経緯
-                </label>
-                <input id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLat}></input>
+                </label> */}
+                <input type="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLat}></input>
               </div>
               <div>
-                <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
+                {/* <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
                   経度
-                </label>
-                <input id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
+                </label> */}
+                <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
               </div>
               <div>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
