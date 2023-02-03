@@ -279,7 +279,7 @@ export const Main = () => {
                   }} options={infoWindowOptions}>
                     <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}>
                       <h1>{restaurants[item].name}</h1>
-                      <h1 className="star5_rating" data-rate={restaurants[item].evaluation}></h1>
+                      <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
                     </div>
                   </InfoWindow>
 
