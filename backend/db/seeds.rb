@@ -12,7 +12,7 @@ restraunts = Restraunt.create(
   name: "テストレストラン",
   evaluation: 3.5,
   review: "hoge\nhogehoge",
-  image: "https://media.istockphoto.com/vectors/stamprsimp2red-vector-id1096052566?k=20&m=1096052566&s=612x612&w=0&h=CPU7LLHBwJm2OKoXCLxqKDzGaR0Xa1WGTQoryfdWQ3g=",
+  image: "https://2.bp.blogspot.com/-NSxv59ZcJfA/VpjCbp0555I/AAAAAAAA3AM/jVD3WGXyRlU/s800/group_kids.png",
   lat: "35.66587105141782",
   lng: "139.7545815170528",
   user_id: user.id
@@ -22,7 +22,7 @@ restraunts = Restraunt.create(
   blogs = Blog.new(
     title: "サンプル#{n}",
     content: "サンプル_#{n}",
-    image: "https://media.istockphoto.com/vectors/stamprsimp2red-vector-id1096052566?k=20&m=1096052566&s=612x612&w=0&h=CPU7LLHBwJm2OKoXCLxqKDzGaR0Xa1WGTQoryfdWQ3g="
+    image: "https://2.bp.blogspot.com/-NSxv59ZcJfA/VpjCbp0555I/AAAAAAAA3AM/jVD3WGXyRlU/s800/group_kids.png"
   )
   blogs.save!
   
