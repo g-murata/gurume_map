@@ -2,21 +2,26 @@ import { useState, useEffect } from 'react';
 
 import { fetchBlogs } from '../apis/blogs';
 import { Link } from 'react-router-dom';
+import Loading from './Loading';
 
 export const Blog = () => {
   const [blogs, setBlog] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true)
     fetchBlogs()
-      .then((data) =>
+      .then((data) => {
         setBlog(data.blogs)
+        setIsLoading(false)
+      }
       )
   }, [])
 
   return (
     <>
       {/* TODO: ローディング画面を作ったら消す。 */}
-      <h1 className="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto text-blue-500 p-8 md:flex-row md:space-x-8">Heroku無料プランが終了したから待っててもレスポンスは返ってこないよ。</h1>
+      {isLoading && <Loading />}
       <div className="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:flex-row md:space-x-8">
         <>
           {Object.keys(blogs).map(item => (
@@ -41,6 +46,6 @@ export const Blog = () => {
           }
         </>
       </div >
-    </>    
+    </>
   )
 }
