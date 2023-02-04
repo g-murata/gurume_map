@@ -6,23 +6,24 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-3.times do |n|
-  restraunts = Restraunt.new(
-    name: "テストレストラン_#{n}",
-    evaluation: 3,
-    review: "hoge\nhogehoge",
-    image: "https://media.istockphoto.com/vectors/stamprsimp2red-vector-id1096052566?k=20&m=1096052566&s=612x612&w=0&h=CPU7LLHBwJm2OKoXCLxqKDzGaR0Xa1WGTQoryfdWQ3g=",
-    lat: "3#{n}.66702060417376",
-    lng: "13#{n}.75487166876127"    
-  )
-  restraunts.save!
+user = User.create(email: "guest@guest.co.jp", password: "uso_no_password")
 
+restraunts = Restraunt.create(
+  name: "テストレストラン",
+  evaluation: 3.5,
+  review: "hoge\nhogehoge",
+  image: "https://media.istockphoto.com/vectors/stamprsimp2red-vector-id1096052566?k=20&m=1096052566&s=612x612&w=0&h=CPU7LLHBwJm2OKoXCLxqKDzGaR0Xa1WGTQoryfdWQ3g=",
+  lat: "35.66587105141782",
+  lng: "139.7545815170528",
+  user_id: user.id
+)
+
+3.times do |n|  
   blogs = Blog.new(
-    title: "ほげほげ〜#{n}",
-    content: "ほげほげ_#{n}",
+    title: "サンプル#{n}",
+    content: "サンプル_#{n}",
     image: "https://media.istockphoto.com/vectors/stamprsimp2red-vector-id1096052566?k=20&m=1096052566&s=612x612&w=0&h=CPU7LLHBwJm2OKoXCLxqKDzGaR0Xa1WGTQoryfdWQ3g="
   )
-  restraunts.save!  
   blogs.save!
   
 end
