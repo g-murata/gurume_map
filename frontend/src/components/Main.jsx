@@ -259,6 +259,11 @@ export const Main = () => {
     setEvaluation(value.evaluation)
   }
 
+  const onCloseEditDialog = () => {
+    setEditModalIsOpen(false);
+  }
+
+
   return (
     <>
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
@@ -384,8 +389,11 @@ export const Main = () => {
                                 </label> */}
                                 <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lng}></input>
                               </div>
-                              <div>
+                              <div className='flex justify-center '>
                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">更新</button>
+                              </div>
+                              <div className="text-right">
+                                <button className="font-bold" onClick={onCloseEditDialog}>詳細画面に戻る</button>
                               </div>
                             </div>
                           </form>
@@ -446,7 +454,7 @@ export const Main = () => {
                 </label> */}
                 <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
               </div>
-              <div>
+              <div className='flex justify-center '>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
               </div>
             </div>
