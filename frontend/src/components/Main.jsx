@@ -303,7 +303,7 @@ export const Main = () => {
                     <button className="p-2 border-b-2 list-none " onClick={() => onOpenDialog(restaurants[item].id)}>{restaurants[item].name}
                     </button>
                     {/* 吹き出しが何個も出る件について。ここに置いたらなんかうまくいったけど、新規登録すると相変わらず出るし、原因を調べる。TODO: */}
-                    {isLoading && <Loading />}
+                    {/* {isLoading && <Loading />} */}
                     <Modal
                       isOpen={restaurants[item].id === selectedItem}
                       onAfterOpen={afterOpenModal}
