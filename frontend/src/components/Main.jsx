@@ -320,11 +320,17 @@ export const Main = () => {
                             <button className="font-bold" onClick={() => handleDeleteSubmit((item))}>削除</button>
                             <button className="font-bold" onClick={onCloseDialog}>Close</button>
                           </div>
-                          <img
-                            className="w-7/12 m-auto"
-                            src={restaurants[item].image}
-                            alt="ほげほげ画像"
-                          ></img>
+                          {restaurants[item].image == null ?
+                            <div className="flex justify-center ">
+                              <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-2/4" alt="Logo" />
+                            </div>
+                            :
+                            <img
+                              className="w-7/12 m-auto"
+                              src={restaurants[item].image}
+                              alt="ほげほげ画像"
+                            ></img>
+                          }
 
                           <p className="text-gray-700 text-base w-11/12 m-auto">
                             <span>評価：</span>
