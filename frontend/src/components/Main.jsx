@@ -1,3 +1,5 @@
+// 一時的にコメントアウトすることもあるので
+/* eslint no-unused-vars: 0 */
 
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
