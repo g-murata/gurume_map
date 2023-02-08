@@ -200,6 +200,7 @@ export const Main = () => {
     setIsLoading(true);
     fetchRestaurants()
       .then((data) => {
+        console.log(data.restraunts)
         setRestraunt(data.restraunts)
         setIsLoading(false);
       }
@@ -320,6 +321,9 @@ export const Main = () => {
                           </div>
 
                           <p className="text-gray-700 text-base w-11/12 m-auto">
+                            {/* TODO:平均評価を計算する */}
+                            {/* <span>平均評価：</span>
+                            <span className="star5_rating" data-rate={restaurants[item].evaluation}></span> */}
                             {restaurants[item].image == null ?
                               <div className="flex justify-center ">
                                 <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-2/4" alt="Logo" />
@@ -331,6 +335,14 @@ export const Main = () => {
                                 alt="ほげほげ画像"
                               ></img>
                             }
+                            <span>このお店を登録した人：</span>
+                            <p className="user_name">{restaurants[item].user_name}</p>
+                            <span>レビューした人：</span>
+                            <p className="user_name">{restaurants[item].reviewer}</p>
+                            <span>評価：</span>
+                            <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
+                            <p>感想：</p>
+                            <p className="review">{restaurants[item].content}</p>                            
                           </p>
                         </>
                         :
