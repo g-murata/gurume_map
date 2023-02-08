@@ -67,12 +67,10 @@ export const Main = () => {
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { name, review, lat, lng } = event.target.elements;
+    const { name, lat, lng } = event.target.elements;
     setIsLoading(true);
     postRestraunt({
       name: name.value,
-      evaluation: evaluation,
-      review: review.value,
       lat: lat.value,
       lng: lng.value,
       email: user.email
@@ -83,8 +81,6 @@ export const Main = () => {
         {
           id: res.restraunts.id,
           name: res.restraunts.name,
-          evaluation: res.restraunts.evaluation,
-          review: res.restraunts.review,
           lat: res.restraunts.lat,
           lng: res.restraunts.lng
         }]
@@ -109,13 +105,11 @@ export const Main = () => {
   const handleUpdateSubmit = (event) => {
 
     event.preventDefault();
-    const { id, name, review } = event.target.elements;
+    const { id, name } = event.target.elements;
     setIsLoading(true);
     updateRestraunt({
       id: id.value,
       name: name.value,
-      evaluation: evaluation,
-      review: review.value,
     })
       .then((res) => {
         setEditModalIsOpen(false);
@@ -126,8 +120,6 @@ export const Main = () => {
         const updateRestaurants = restaurants.map((restaurant) => {
           if (Number(restaurant.id) === Number(id.value)) {
             restaurant.name = res.restraunts.name;
-            restaurant.evaluation = res.restraunts.evaluation;
-            restaurant.review = res.restraunts.review;
             restaurant.lat = res.restraunts.lat;
             restaurant.lng = res.restraunts.lng;
           }
@@ -286,7 +278,6 @@ export const Main = () => {
                   }} options={infoWindowOptions}>
                     <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}>
                       <h1>{restaurants[item].name}</h1>
-                      <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
                     </div>
                   </InfoWindow>
 
@@ -329,8 +320,6 @@ export const Main = () => {
                           </div>
 
                           <p className="text-gray-700 text-base w-11/12 m-auto">
-                            <span>評価：</span>
-                            <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
                             {restaurants[item].image == null ?
                               <div className="flex justify-center ">
                                 <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-2/4" alt="Logo" />
@@ -342,8 +331,6 @@ export const Main = () => {
                                 alt="ほげほげ画像"
                               ></img>
                             }
-
-                            <p className="review">{restaurants[item].review}</p>
                           </p>
                         </>
                         :
@@ -364,19 +351,6 @@ export const Main = () => {
                               <input type="hidden" id="id" name="id" value={restaurants[item].id}></input>
                               <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name"
                                 defaultValue={restaurants[item].name} />
-                              <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
-                                  評価
-                                </label>
-                                <ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={onChange} value={evaluation} />
-                              </div>
-                              <div>
-                                <label for="review" className="block text-gray-700 text-sm font-bold mb-2">
-                                  感想
-                                </label>
-                                <textarea id="review" name="review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"
-                                  defaultValue={restaurants[item].review}></textarea>
-                              </div>
                               <div>
                                 {/* <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
                                   経緯
@@ -430,18 +404,6 @@ export const Main = () => {
                 店名
               </label>
               <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
-                  評価
-                </label>
-                <ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={onChange} value={evaluation} />
-              </div>
-              <div>
-                <label for="review" className="block text-gray-700 text-sm font-bold mb-2">
-                  感想
-                </label>
-                <textarea id="review" name="review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
-              </div>
               <div>
                 {/* <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
                   経緯
