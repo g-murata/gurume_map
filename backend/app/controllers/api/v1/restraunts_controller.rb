@@ -2,10 +2,7 @@ module Api
   module V1
     class RestrauntsController < ApplicationController
       def index
-        # TODO: このSQLだとレビューの数だけお店が表示される課題あり。
-        restraunts = Restraunt.joins(:user).joins(:reviews).
-                      joins("inner join users as users2 on reviews.user_id = users2.id").
-                      select(:id, :name, :image, :lat, :lng, :user_id, "reviews.content, reviews.evaluation, users.name as user_name, users2.name as reviewer")  
+        restraunts = Restraunt.joins(:user).select("restraunts.*, users.name as user_name")
         render json: {
           restraunts: restraunts
         }, status: :ok
