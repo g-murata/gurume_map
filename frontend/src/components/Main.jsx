@@ -4,6 +4,7 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
+import { fetchReviews, fetchShowReview } from '../apis/reviews';
 import {
   GoogleMap,
   LoadScript,
@@ -171,6 +172,8 @@ export const Main = () => {
 
 
   const [restaurants, setRestraunt] = useState([])
+  const [reviews, setReview] = useState([])
+
 
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
@@ -218,8 +221,17 @@ export const Main = () => {
 
   const [selectedItem, setSelectedItem] = useState('')
 
-  const onOpenDialog = (name) => {
-    setSelectedItem(name)
+  const onOpenDialog = (id) => {
+    setSelectedItem(id)
+    
+    setIsLoading(true);
+    fetchShowReview(id)
+    .then((data) => {
+      console.log(data.review)
+      setReview(data.review)
+      setIsLoading(false);
+    }
+    )    
   }
 
   function afterOpenModal() {
@@ -337,12 +349,39 @@ export const Main = () => {
                             }
                             <span>このお店を登録した人：</span>
                             <p className="user_name">{restaurants[item].user_name}</p>
-                            <span>レビューした人：</span>
-                            <p className="user_name">{restaurants[item].reviewer}</p>
-                            <span>評価：</span>
-                            <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
-                            <p>感想：</p>
-                            <p className="review">{restaurants[item].content}</p>                            
+                            <div className='flex justify-center'>
+                              <button className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する</button>      
+                            </div>                      
+                            {isLoading ? <Loading /> : 
+                            <>                            
+                              {reviews.length> 0 ?
+                                <>
+                                  {Object.keys(reviews).map(item => {
+                                    return(
+                                      <>
+                                        {console.log("TODO:再レンダリングしすぎ")}
+                                        {console.log(item)}
+                                        <div class="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
+                                          <span>レビューした人：</span>
+                                          <p className="user_name">{reviews[item].user_name}</p>
+                                          <span>評価：</span>
+                                          <span className="star5_rating" data-rate={reviews[item].evaluation}></span>
+                                          <p>感想：</p>
+                                          <p className="review">{reviews[item].content}</p>
+                                          <div>                                          
+                                            <button className="font-bold " onClick={() => onEditDialog((restaurants[item]))}>編集(未完成)</button>
+                                            <button className="font-bold mx-8" onClick={() => handleDeleteSubmit((item))}>削除(未完成)</button>
+                                          </div>
+                                        </div>
+                                      </>
+                                    )        
+                                  })}
+                                </>                            
+                                :
+                                  <div style={{ color: 'red' }}>まだこのお店のレビューをした人はいないみたいです。</div>
+                              }
+                            </>
+                            }
                           </p>
                         </>
                         :
