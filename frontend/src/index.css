@@ -5,8 +5,8 @@
 /* Reactモーダル用CSS */
 @media screen and (min-width:480px) {
     .ReactModal__Content {
-        height: 80%;
-        width: 50%;
+        height: 90%;
+        width: 40%;
     }
 }
 

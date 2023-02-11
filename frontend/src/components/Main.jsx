@@ -35,6 +35,7 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
+    overflow: "hidden",
   },
 };
 
@@ -351,11 +352,12 @@ export const Main = () => {
                             <p className="user_name">{restaurants[item].user_name}</p>
                             <div className='flex justify-center'>
                               <button className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する</button>      
-                            </div>                      
-                            {isLoading ? <Loading /> : 
+                            </div>     
+                            <>                 
+                            {isLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> : 
                             <>                            
                               {reviews.length> 0 ?
-                                <>
+                                <div className='overflow-auto h-56'>
                                   {Object.keys(reviews).map(item => {
                                     return(
                                       <>
@@ -376,12 +378,13 @@ export const Main = () => {
                                       </>
                                     )        
                                   })}
-                                </>                            
+                                </div>                            
                                 :
                                   <div style={{ color: 'red' }}>まだこのお店のレビューをした人はいないみたいです。</div>
                               }
                             </>
                             }
+                          </>
                           </p>
                         </>
                         :
