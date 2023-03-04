@@ -1,3 +1,7 @@
+import { useRef } from "react";
+import Main from "./Main";
+
+
 export const CreateRestrauntModal = (props) => {
   return (
     <>
@@ -7,7 +11,7 @@ export const CreateRestrauntModal = (props) => {
       </div>
       {props.error && <p style={{ color: 'red' }}>{props.error}</p>}
       <div className="text-right">
-        {/* <button className="font-bold" onClick={closeModal}>Close</button> */}
+        <button className="font-bold" onClick={() => Main.closeModal}>Close</button>
       </div>
       <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
         店名
