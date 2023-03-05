@@ -1,3 +1,5 @@
+import CreateReViewModal from "./CreateReviewModal";
+
 export const ShowRestrauntModal = (props) => {
   return (
     <>
@@ -26,7 +28,9 @@ export const ShowRestrauntModal = (props) => {
         <span>このお店を登録した人：</span>
         <p className="user_name">{props.restaurant.user_name}</p>
         <div className='flex justify-center'>
-          <button className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する</button>
+          <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
+            className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
+          </button>
         </div>
         <>
           {props.isLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> :

@@ -18,6 +18,7 @@ import Loading from './Loading';
 import CreateRestrauntModal from './modal/CreateRestrauntModal';
 import EditRestrauntModal from './modal/EditRestrauntModal';
 import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
+import CreateReviewModal from './modal/CreateReviewModal';
 
 
 // import Restaurants from './../restaurants.json';
@@ -191,6 +192,7 @@ export const Main = () => {
   }
 
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
 
   const OpenModal = () => {
     setIsOpen(true)
@@ -202,6 +204,17 @@ export const Main = () => {
     setEvaluation(3)
     setIsOpen(false);
   }
+
+  const OpenReviewModal = () => {
+    setSelectedItem(false);
+
+    setIsReviewOpen(true)
+  }
+  const closeReviewModal = () => {
+    setError('')
+    setIsReviewOpen(false);
+  }
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -240,6 +253,9 @@ export const Main = () => {
 
   function afterOpenModal() {
     // subtitle.style.color = '#f00';
+  }
+  function afterReviewOpenModal() {
+
   }
 
   const onCloseDialog = () => {
@@ -333,6 +349,7 @@ export const Main = () => {
                             onEditDialog={onEditDialog}
                             handleDeleteSubmit={handleDeleteSubmit}
                             onCloseDialog={onCloseDialog}
+                            OpenReviewModal={OpenReviewModal}
                             restaurant={restaurants[item]}
                             reviews={reviews}
                             isLoading={isLoading}
@@ -378,6 +395,23 @@ export const Main = () => {
             />
           </form>
         </Modal>
+
+        {/* レビューモーダル */}
+        <Modal isOpen={reviewModalIsOpen}
+          onAfterOpen={afterReviewOpenModal}
+          onRequestClose={closeReviewModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          {/* todo: */}
+          <form onSubmit={handleSubmit}>
+            <CreateReviewModal
+              closeReviewModal={closeReviewModal}
+              error={error}
+            />
+          </form>
+        </Modal>
+
       </LoadScript >
     </>
   );
