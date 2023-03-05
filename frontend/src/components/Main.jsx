@@ -16,6 +16,7 @@ import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import Loading from './Loading';
 import CreateRestrauntModal from './CreateRestrauntModal';
+import EditRestrauntModal from './EditRestrauntModal';
 
 
 // import Restaurants from './../restaurants.json';
@@ -196,7 +197,6 @@ export const Main = () => {
   const closeModal = () => {
     // todo:エラーの消し方これでいいんかな？
     // TODO:評価の戻し方これでいいのかなぁ
-    alert("aa")
     setError('')
     setEvaluation(3)
     setIsOpen(false);
@@ -226,15 +226,15 @@ export const Main = () => {
 
   const onOpenDialog = (id) => {
     setSelectedItem(id)
-    
+
     setIsLoading(true);
     fetchShowReview(id)
-    .then((data) => {
-      console.log(data.review)
-      setReview(data.review)
-      setIsLoading(false);
-    }
-    )    
+      .then((data) => {
+        console.log(data.review)
+        setReview(data.review)
+        setIsLoading(false);
+      }
+      )
   }
 
   function afterOpenModal() {
@@ -353,46 +353,51 @@ export const Main = () => {
                             <span>このお店を登録した人：</span>
                             <p className="user_name">{restaurants[item].user_name}</p>
                             <div className='flex justify-center'>
-                              <button className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する</button>      
-                            </div>     
-                            <>                 
-                            {isLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> : 
-                            <>                            
-                              {reviews.length> 0 ?
-                                <div className='overflow-auto h-56'>
-                                  {Object.keys(reviews).map(item => {
-                                    return(
-                                      <>
-                                        {console.log("TODO:再レンダリングしすぎ")}
-                                        {console.log(item)}
-                                        <div class="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
-                                          <span>レビューした人：</span>
-                                          <p className="user_name">{reviews[item].user_name}</p>
-                                          <span>評価：</span>
-                                          <span className="star5_rating" data-rate={reviews[item].evaluation}></span>
-                                          <p>感想：</p>
-                                          <p className="review">{reviews[item].content}</p>
-                                          <div>                                          
-                                            <button className="font-bold " onClick={() => onEditDialog((restaurants[item]))}>編集(未完成)</button>
-                                            <button className="font-bold mx-8" onClick={() => handleDeleteSubmit((item))}>削除(未完成)</button>
-                                          </div>
-                                        </div>
-                                      </>
-                                    )        
-                                  })}
-                                </div>                            
-                                :
-                                  <div style={{ color: 'red' }}>まだこのお店のレビューをした人はいないみたいです。</div>
+                              <button className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する</button>
+                            </div>
+                            <>
+                              {isLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> :
+                                <>
+                                  {reviews.length > 0 ?
+                                    <div className='overflow-auto h-56'>
+                                      {Object.keys(reviews).map(item => {
+                                        return (
+                                          <>
+                                            {console.log("TODO:再レンダリングしすぎ")}
+                                            {console.log(item)}
+                                            <div class="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
+                                              <span>レビューした人：</span>
+                                              <p className="user_name">{reviews[item].user_name}</p>
+                                              <span>評価：</span>
+                                              <span className="star5_rating" data-rate={reviews[item].evaluation}></span>
+                                              <p>感想：</p>
+                                              <p className="review">{reviews[item].content}</p>
+                                              <div>
+                                                <button className="font-bold " onClick={() => onEditDialog((restaurants[item]))}>編集(未完成)</button>
+                                                <button className="font-bold mx-8" onClick={() => handleDeleteSubmit((item))}>削除(未完成)</button>
+                                              </div>
+                                            </div>
+                                          </>
+                                        )
+                                      })}
+                                    </div>
+                                    :
+                                    <div style={{ color: 'red' }}>まだこのお店のレビューをした人はいないみたいです。</div>
+                                  }
+                                </>
                               }
                             </>
-                            }
-                          </>
                           </p>
                         </>
                         :
                         <>
                           <form onSubmit={handleUpdateSubmit}>
-
+                            <EditRestrauntModal
+                              onCloseEditDialog={onCloseEditDialog}
+                              onCloseDialog={onCloseDialog}
+                              error={error}
+                              restaurant={restaurants[item]}
+                            />
                           </form>
                         </>
                       }
@@ -415,7 +420,8 @@ export const Main = () => {
         >
           {/* todo: */}
           <form onSubmit={handleSubmit}>
-            <CreateRestrauntModal 
+            <CreateRestrauntModal
+              closeModal={closeModal}
               error={error}
               coordinateLat={coordinateLat}
               coordinateLng={coordinateLng}
