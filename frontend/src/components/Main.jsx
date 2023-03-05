@@ -334,6 +334,8 @@ export const Main = () => {
                             handleDeleteSubmit={handleDeleteSubmit}
                             onCloseDialog={onCloseDialog}
                             restaurant={restaurants[item]}
+                            reviews={reviews}
+                            isLoading={isLoading}
                           />
 
                         </>

@@ -29,25 +29,25 @@ export const ShowRestrauntModal = (props) => {
           <button className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する</button>
         </div>
         <>
-          {/* {isLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> :
+          {props.isLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> :
             <>
-              {reviews.length > 0 ?
+              {props.reviews.length > 0 ?
                 <div className='overflow-auto h-56'>
-                  {Object.keys(reviews).map(item => {
+                  {Object.keys(props.reviews).map(item => {
                     return (
                       <>
                         {console.log("TODO:再レンダリングしすぎ")}
                         {console.log(item)}
                         <div class="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
                           <span>レビューした人：</span>
-                          <p className="user_name">{reviews[item].user_name}</p>
+                          <p className="user_name">{props.reviews[item].user_name}</p>
                           <span>評価：</span>
-                          <span className="star5_rating" data-rate={reviews[item].evaluation}></span>
+                          <span className="star5_rating" data-rate={props.reviews[item].evaluation}></span>
                           <p>感想：</p>
-                          <p className="review">{reviews[item].content}</p>
+                          <p className="review">{props.reviews[item].content}</p>
                           <div>
-                            <button className="font-bold " onClick={() => onEditDialog((props.restaurant))}>編集(未完成)</button>
-                            <button className="font-bold mx-8" onClick={() => handleDeleteSubmit((props.restaurant.id))}>削除(未完成)</button>
+                            <button className="font-bold " onClick={() => props.onEditDialog((props.restaurant))}>編集(未完成)</button>
+                            <button className="font-bold mx-8" onClick={() => props.handleDeleteSubmit((props.restaurant.id))}>削除(未完成)</button>
                           </div>
                         </div>
                       </>
@@ -58,7 +58,7 @@ export const ShowRestrauntModal = (props) => {
                 <div style={{ color: 'red' }}>まだこのお店のレビューをした人はいないみたいです。</div>
               }
             </>
-          } */}
+          }
         </>
       </p>
     </>
