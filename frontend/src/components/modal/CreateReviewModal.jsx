@@ -12,22 +12,25 @@ export const CreateReViewModal = (props) => {
         <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
           店名
         </label>
-        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
+        <p className="user_name">{"props.restaurant.user_name"}</p>
         <div>
-          {/* <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
-          経緯
-        </label> */}
-          <input type="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLat}></input>
+          <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
+            評価
+          </label>
+          <props.ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={props.onChange} value={props.evaluation} />
         </div>
         <div>
-          {/* <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
-          経度
-        </label> */}
-          <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLng}></input>
+          <label for="review" className="block text-gray-700 text-sm font-bold mb-2">
+            感想
+          </label>
+          <textarea id="review" name="review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
         </div>
         <div className='flex justify-center '>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
         </div>
+        {/* <div className="text-right">
+          <button className="font-bold" onClick={() => props.closeReviewModal()}>詳細画面に戻る</button>
+        </div> */}
       </div>
     </>
   )

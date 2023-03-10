@@ -179,17 +179,10 @@ export const Main = () => {
   const [restaurants, setRestraunt] = useState([])
   const [reviews, setReview] = useState([])
 
-
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const [editMode, setEditMode] = useState(true);
-
-  const editOnOff = () => {
-    setEditMode(!editMode)
-  }
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
@@ -268,7 +261,7 @@ export const Main = () => {
     setCoordinateLat(event.latLng.lat());
     setCoordinateLng(event.latLng.lng());
 
-    if (editMode) { OpenModal() }
+    OpenModal()
   };
 
   const [evaluation, setEvaluation] = useState(3);
@@ -375,10 +368,6 @@ export const Main = () => {
             </div>
           </div>
         </div>
-        <div className="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-          <button className="font-bold" onClick={editOnOff} style={{ color: 'red' }}>{(editMode === true) ? "編集モード：ON" : "編集モード：OFF"}</button>
-        </div>
-        {/* <button onClick={OpenModal}>Open Modal</button> */}
         <Modal isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
@@ -403,10 +392,12 @@ export const Main = () => {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          {/* todo: */}
           <form onSubmit={handleSubmit}>
             <CreateReviewModal
+              ReactStarsRating={ReactStarsRating}
               closeReviewModal={closeReviewModal}
+              evaluation={evaluation}
+              onChange={onChange}
               error={error}
             />
           </form>
