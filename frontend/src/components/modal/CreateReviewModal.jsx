@@ -12,8 +12,6 @@ export const CreateReViewModal = (props) => {
         <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
           店名
         </label>
-        {/* TODO: hiddenはいくないね～書き換えられちゃうからね。リリース前に必ず直す。 */}
-        <input type="hidden" id="restraunt_id" name="restraunt_id" value={props.restaurant.id}></input>
         <p className="restaurant_name">{props.restaurant.name}</p>
         <div>
           <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
@@ -30,9 +28,9 @@ export const CreateReViewModal = (props) => {
         <div className='flex justify-center '>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
         </div>
-        {/* <div className="text-right">
+        <div className="text-right">
           <button className="font-bold" onClick={() => props.closeReviewModal()}>詳細画面に戻る</button>
-        </div> */}
+        </div>
       </div>
     </>
   )

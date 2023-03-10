@@ -12,8 +12,6 @@ export const EditRestrauntModal = (props) => {
         <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
           店名
         </label>
-        {/* TODO: hiddenはいくないね～書き換えられちゃうからね。リリース前に必ず直す。 */}
-        <input type="hidden" id="id" name="id" value={props.restaurant.id}></input>
         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name"
           defaultValue={props.restaurant.name} />
         <div>
