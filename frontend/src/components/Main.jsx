@@ -88,7 +88,8 @@ export const Main = () => {
           id: res.restraunts.id,
           name: res.restraunts.name,
           lat: res.restraunts.lat,
-          lng: res.restraunts.lng
+          lng: res.restraunts.lng,
+          user_name: res.user_name                   
         }]
         setRestraunt(newRestaurants)
         setIsLoading(false);
@@ -110,23 +111,22 @@ export const Main = () => {
 
   const handleReviewSubmit = (event) => {
     event.preventDefault();
-    const { restraunt_id, content } = event.target.elements;
+    const { content } = event.target.elements;
     postReview({
-      restraunt_id: restraunt_id.value,
+      restraunt_id: selectedItem,
       evaluation: evaluation,
       content: content.value
     })
       .then((res) => {
         closeReviewModal();
-        // const newRestaurants = [...restaurants,
-        // {
-        //   id: res.restraunts.id,
-        //   name: res.restraunts.name,
-        //   lat: res.restraunts.lat,
-        //   lng: res.restraunts.lng
-        // }]
-        // setRestraunt(newRestaurants)
-        // setIsLoading(false);
+        const newReviews = [...reviews,
+        {
+          id: selectedItem,
+          evaluation: res.review.evaluation,
+          content: res.review.content,
+          user_name: res.user_name         
+        }]
+        setReview(newReviews)
       })
       .catch((error) => {
         console.log("エラー")
@@ -146,10 +146,10 @@ export const Main = () => {
   const handleUpdateSubmit = (event) => {
 
     event.preventDefault();
-    const { id, name } = event.target.elements;
+    const { name } = event.target.elements;
     setIsLoading(true);
     updateRestraunt({
-      id: id.value,
+      id: selectedItem,
       name: name.value,
     })
       .then((res) => {
@@ -159,7 +159,7 @@ export const Main = () => {
         // UPDATEの参考
         // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
         const updateRestaurants = restaurants.map((restaurant) => {
-          if (Number(restaurant.id) === Number(id.value)) {
+          if (Number(restaurant.id) === Number(selectedItem)) {
             restaurant.name = res.restraunts.name;
             restaurant.lat = res.restraunts.lat;
             restaurant.lng = res.restraunts.lng;
@@ -185,12 +185,12 @@ export const Main = () => {
   }
 
   const handleDeleteSubmit = (index) => {
-
     deleteRestraunt({
-      id: restaurants[index].id
+      id: selectedItem
     })
       .then(() => {
         onCloseDialog();
+        debugger
         const newRestaurants = [...restaurants]
         newRestaurants.splice(index, 1)
         setRestraunt(newRestaurants);
@@ -234,8 +234,6 @@ export const Main = () => {
   }
 
   const OpenReviewModal = () => {
-    setSelectedItem(false);
-
     setIsReviewOpen(true)
   }
   const closeReviewModal = () => {
@@ -379,6 +377,7 @@ export const Main = () => {
                             onCloseDialog={onCloseDialog}
                             OpenReviewModal={OpenReviewModal}
                             restaurant={restaurants[item]}
+                            item={item}
                             reviews={reviews}
                             isLoading={isLoading}
                           />
@@ -399,24 +398,25 @@ export const Main = () => {
                     </Modal>
 
                     {/* レビューモーダル */}
-                    <Modal isOpen={reviewModalIsOpen}
-                      onAfterOpen={afterReviewOpenModal}
-                      onRequestClose={closeReviewModal}
-                      style={customStyles}
-                      contentLabel="Example Modal"
-                    >
-                      <form onSubmit={handleReviewSubmit}>
-                        <CreateReviewModal
-                          ReactStarsRating={ReactStarsRating}
-                          closeReviewModal={closeReviewModal}
-                          evaluation={evaluation}
-                          onChange={onChange}
-                          error={error}
-                          restaurant={restaurants[item]}
-                        />
-                      </form>
-                    </Modal>
-
+                    {reviewModalIsOpen && 
+                      <Modal isOpen={restaurants[item].id === selectedItem}
+                        onAfterOpen={afterReviewOpenModal}
+                        onRequestClose={closeReviewModal}
+                        style={customStyles}
+                        contentLabel="Example Modal"
+                      >
+                        <form onSubmit={handleReviewSubmit}>
+                          <CreateReviewModal
+                            ReactStarsRating={ReactStarsRating}
+                            closeReviewModal={closeReviewModal}
+                            evaluation={evaluation}
+                            onChange={onChange}
+                            error={error}
+                            restaurant={restaurants[item]}
+                          />
+                        </form>
+                      </Modal>
+                    }
                   </>
                 )
               })}
@@ -429,7 +429,6 @@ export const Main = () => {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          {/* todo: */}
           <form onSubmit={handleSubmit}>
             <CreateRestrauntModal
               closeModal={closeModal}
