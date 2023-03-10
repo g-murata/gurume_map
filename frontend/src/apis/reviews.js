@@ -17,3 +17,18 @@ export const fetchShowReview = (params) => {
     })
     .catch((e) => console.error(e))
 };
+
+export const postReview = (params) => {
+  return axios.post(reviews,
+    {
+      evaluation: params.evaluation,
+      content: params.content,
+      restraunt_id: params.restraunt_id
+    }
+  )
+    .then(res => {
+      console.log(res)
+      return res.data
+    })
+    .catch((e) => { throw e; })
+};

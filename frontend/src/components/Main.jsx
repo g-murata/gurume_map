@@ -4,7 +4,7 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
-import { fetchReviews, fetchShowReview } from '../apis/reviews';
+import { fetchShowReview, postReview } from '../apis/reviews';
 import {
   GoogleMap,
   LoadScript,
@@ -92,6 +92,41 @@ export const Main = () => {
         }]
         setRestraunt(newRestaurants)
         setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log("エラー")
+        console.log(error.code);
+        switch (error.code) {
+          case 'ERR_BAD_RESPONSE':
+            setError('不備あり！');
+            break;
+          default:
+            setError('エラーっす！Herokuのデプロイ先どうしようか？');
+            break;
+        }
+        setIsLoading(false);
+      });
+  }
+
+  const handleReviewSubmit = (event) => {
+    event.preventDefault();
+    const { restraunt_id, content } = event.target.elements;
+    postReview({
+      restraunt_id: restraunt_id.value,
+      evaluation: evaluation,
+      content: content.value
+    })
+      .then((res) => {
+        closeReviewModal();
+        // const newRestaurants = [...restaurants,
+        // {
+        //   id: res.restraunts.id,
+        //   name: res.restraunts.name,
+        //   lat: res.restraunts.lat,
+        //   lng: res.restraunts.lng
+        // }]
+        // setRestraunt(newRestaurants)
+        // setIsLoading(false);
       })
       .catch((error) => {
         console.log("エラー")
@@ -362,6 +397,26 @@ export const Main = () => {
                         </>
                       }
                     </Modal>
+
+                    {/* レビューモーダル */}
+                    <Modal isOpen={reviewModalIsOpen}
+                      onAfterOpen={afterReviewOpenModal}
+                      onRequestClose={closeReviewModal}
+                      style={customStyles}
+                      contentLabel="Example Modal"
+                    >
+                      <form onSubmit={handleReviewSubmit}>
+                        <CreateReviewModal
+                          ReactStarsRating={ReactStarsRating}
+                          closeReviewModal={closeReviewModal}
+                          evaluation={evaluation}
+                          onChange={onChange}
+                          error={error}
+                          restaurant={restaurants[item]}
+                        />
+                      </form>
+                    </Modal>
+
                   </>
                 )
               })}
@@ -381,24 +436,6 @@ export const Main = () => {
               error={error}
               coordinateLat={coordinateLat}
               coordinateLng={coordinateLng}
-            />
-          </form>
-        </Modal>
-
-        {/* レビューモーダル */}
-        <Modal isOpen={reviewModalIsOpen}
-          onAfterOpen={afterReviewOpenModal}
-          onRequestClose={closeReviewModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-          <form onSubmit={handleSubmit}>
-            <CreateReviewModal
-              ReactStarsRating={ReactStarsRating}
-              closeReviewModal={closeReviewModal}
-              evaluation={evaluation}
-              onChange={onChange}
-              error={error}
             />
           </form>
         </Modal>

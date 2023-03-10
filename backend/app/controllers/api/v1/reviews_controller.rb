@@ -25,7 +25,16 @@ module Api
 
 
       def create
+        review = Review.new(params.permit(:evaluation, :content, :restraunt_id))
+        review.user_id = Restraunt.find(params[:restraunt_id]).user_id
 
+        if review.save
+          render json: {
+            review: review
+            },status: :ok
+        else
+          render status: review.errors
+        end       
       end
 
 
