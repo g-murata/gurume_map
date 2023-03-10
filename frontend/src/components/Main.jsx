@@ -190,7 +190,6 @@ export const Main = () => {
     })
       .then(() => {
         onCloseDialog();
-        debugger
         const newRestaurants = [...restaurants]
         newRestaurants.splice(index, 1)
         setRestraunt(newRestaurants);
@@ -380,6 +379,7 @@ export const Main = () => {
                             item={item}
                             reviews={reviews}
                             isLoading={isLoading}
+                            error={error}
                           />
 
                         </>

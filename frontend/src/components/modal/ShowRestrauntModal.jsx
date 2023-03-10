@@ -3,6 +3,7 @@ import CreateReViewModal from "./CreateReviewModal";
 export const ShowRestrauntModal = (props) => {
   return (
     <>
+      {/* {props.error && <p style={{ color: 'red' }}>{props.error}</p>}     */}
       <div className="flex place-content-between w-11/12  m-auto">
         <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
         <button className="font-bold" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
