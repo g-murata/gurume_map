@@ -30,7 +30,8 @@ module Api
 
         if review.save
           render json: {
-            review: review
+            review: review,
+            user_name: review.user.name
             },status: :ok
         else
           render status: review.errors

@@ -15,7 +15,8 @@ module Api
 
         if restraunt.save
           render json: {
-            restraunts: restraunt
+            restraunts: restraunt,
+            user_name: restraunt.user.name
             },status: :ok
         else
           render status: restraunt.errors
