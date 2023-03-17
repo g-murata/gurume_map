@@ -40,6 +40,15 @@ module Api
 
 
       def update
+        review = Review.find(params[:id])
+
+        if review.update(params.permit(:evaluation, :content))
+          render json: {
+            restraunts: review
+            },status: :ok
+        else
+          render status: review.errors
+        end       
 
       end
 

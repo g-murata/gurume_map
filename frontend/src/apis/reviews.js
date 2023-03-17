@@ -32,3 +32,31 @@ export const postReview = (params) => {
     })
     .catch((e) => { throw e; })
 };
+
+export const updateReview = (params) => {
+  return axios.patch(`${review(params.id)}`,
+    {
+      evaluation: params.evaluation,
+      content: params.content
+    }
+  )
+    .then(res => {
+      console.log(res)
+      return res.data
+    })
+    .catch((e) => { throw e; })
+};
+
+export const deleteReview = (params) => {
+
+  return axios.delete(`${review(params.id)}`,
+    {
+      id: params.id      
+    }
+  )
+    .then(res => {
+      console.log(res)
+      return res.data
+    })
+    .catch((e) => { throw e; })
+};

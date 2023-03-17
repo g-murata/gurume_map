@@ -371,6 +371,10 @@ export const Main = () => {
                       {!editModalIsOpen ?
                         <>
                           <ShowRestrauntModal
+                            ReactStarsRating={ReactStarsRating}
+                            evaluation={evaluation}
+                            setEvaluation={setEvaluation}
+                            onChange={onChange}
                             onEditDialog={onEditDialog}
                             handleDeleteSubmit={handleDeleteSubmit}
                             onCloseDialog={onCloseDialog}
