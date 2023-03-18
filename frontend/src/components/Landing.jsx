@@ -7,7 +7,7 @@ export const Landing = () => {
           <img src={`${process.env.PUBLIC_URL}/HowToUse.jpg`} className="md:w-2/4" alt="HowToUse" />
         </div>
           <div className="flex items-center flex-col md:flex-row">
-            <img src={`${process.env.PUBLIC_URL}/HowToUse_1.jpg`} className="md:-2/4" alt="HowToUse_1" />
+            <img src={`${process.env.PUBLIC_URL}/HowToUse_1.jpg`} className="md:w-2/4" alt="HowToUse_1" />
             <img src={`${process.env.PUBLIC_URL}/HowToUse_2.jpg`} className="md:w-2/4" alt="HowToUse_2" />
           </div>
       </div>
