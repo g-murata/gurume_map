@@ -5,10 +5,10 @@ export const ShowRestrauntModal = (props) => {
   const [selectedReviewItem, setSelectedReviewItem] = useState('')
   const [editReviewModalIsOpen, setEditReviewModalIsOpen] = useState(false);
 
-  const onReviewShowDialog = (value) => {
-    console.log(value)
-    setSelectedReviewItem(value.id)
-  }
+  // const onReviewShowDialog = (value) => {
+  //   console.log(value)
+  //   setSelectedReviewItem(value.id)
+  // }
   const onReviewEditDialog = (item) => {
     setSelectedReviewItem(item)
     props.setEvaluation(props.reviews[item].evaluation)
