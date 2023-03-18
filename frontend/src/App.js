@@ -7,6 +7,7 @@ import { Blog } from './components/Blog';
 import { HogeHoge } from './components/HogeHoge';
 import { SignUp } from './components/SignUp';
 import { Login } from './components/Login';
+import { Landing } from "./components/Landing";
 import { Post } from './components/blogs/Post';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
@@ -16,21 +17,21 @@ function App() {
     <>
 
       <Router>
-        <AuthProvider>        
+        <AuthProvider>
           <Header />
-          
-          <Routes>            
+
+          <Routes>
             <Route exact path="/" element={<PrivateRoute><Main /></PrivateRoute>} />
             <Route exact path="/about" element={<About />} />
             <Route exact path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<Post />} />
             <Route exact path="/hogehoge" element={<HogeHoge />} />
             <Route exact path="/signup" element={<SignUp />} />
-            <Route exact path="/login" element={<Login />
-            } />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/landing" element={<Landing />} />
           </Routes>
 
-        </AuthProvider>        
+        </AuthProvider>
       </Router>
     </>
   );
