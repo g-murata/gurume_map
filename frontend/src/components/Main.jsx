@@ -121,10 +121,12 @@ export const Main = () => {
         closeReviewModal();
         const newReviews = [...reviews,
         {
-          id: selectedItem,
+          // TODO: idはselectedItemちゃう
+          id: res.review.id,
           evaluation: res.review.evaluation,
           content: res.review.content,
-          user_name: res.user_name
+          user_name: res.user_name,
+          restraunt_id: selectedItem
         }]
         setReview(newReviews)
       })

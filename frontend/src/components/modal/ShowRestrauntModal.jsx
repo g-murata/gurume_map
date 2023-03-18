@@ -71,16 +71,16 @@ export const ShowRestrauntModal = (props) => {
         props.setReview(newReviews);
       })
       .catch((error) => {
-        // console.log("エラー")
-        // console.log(error.code);
-        // switch (error.code) {
-        //   case 'ERR_BAD_RESPONSE':
-        //     setError('不備あり！');
-        //     break;
-        //   default:
-        //     setError('エラーっす！Herokuのデプロイ先どうしようか？');
-        //     break;
-        // }
+        console.log("エラー")
+        console.log(error.code);
+        switch (error.code) {
+          case 'ERR_BAD_RESPONSE':
+            props.setError('不備あり！');
+            break;
+          default:
+            props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
+            break;
+        }
       });
   }
 
