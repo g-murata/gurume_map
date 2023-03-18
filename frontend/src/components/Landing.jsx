@@ -2,10 +2,14 @@ export const Landing = () => {
   return (
     <>
       <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
-        <div className="md:px-3 p-3 ">
-          <h1 className="text-lg bg-green-300">3月中には開発完了見込みです！！</h1>
-          <h1 className="text-lg bg-green-300">8割はできてます。</h1>
+        <div className="flex items-center flex-col"> 
+          <img src={`${process.env.PUBLIC_URL}/GurumeMap.jpg`} className="w-2/4" alt="Logo" />
+          <img src={`${process.env.PUBLIC_URL}/HowToUse.jpg`} className="w-2/4" alt="Logo" />
         </div>
+          <div className="flex items-center flex-col md:flex-row">
+            <img src={`${process.env.PUBLIC_URL}/HowToUse_1.jpg`} className="w-2/4" alt="Logo" />
+            <img src={`${process.env.PUBLIC_URL}/HowToUse_2.jpg`} className="w-2/4" alt="Logo" />
+          </div>
       </div>
     </>
   )
