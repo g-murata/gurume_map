@@ -7,16 +7,29 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 user = User.create(email: "guest@guest.co.jp", password: "uso_no_password")
+user2 = User.create(email: "test@test.co.jp", password: "uso_no_password")
 
 restraunts = Restraunt.create(
   name: "テストレストラン",
-  evaluation: 3.5,
-  review: "hoge\nhogehoge",
   image: "https://2.bp.blogspot.com/-NSxv59ZcJfA/VpjCbp0555I/AAAAAAAA3AM/jVD3WGXyRlU/s800/group_kids.png",
   lat: "35.66587105141782",
   lng: "139.7545815170528",
-  user_id: user.id
+  user_id: user.id,
 )
+
+review = Review.create(
+  evaluation: 3.5,
+  content: "うまーーい。",
+  user_id: user.id,
+  restraunt_id: restraunts.id
+)
+review = Review.create(
+  evaluation: 1,
+  content: "期待外れだね。",
+  user_id: user2.id,
+  restraunt_id: restraunts.id
+)
+
 
 3.times do |n|  
   blogs = Blog.new(

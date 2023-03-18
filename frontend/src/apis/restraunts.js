@@ -13,8 +13,6 @@ export const postRestraunt = (params) => {
   return axios.post(restaurants,
     {
       name: params.name,
-      evaluation: params.evaluation,
-      review: params.review,
       lat: params.lat,
       lng: params.lng,
       email: params.email,
@@ -30,9 +28,7 @@ export const postRestraunt = (params) => {
 export const updateRestraunt = (params) => {
   return axios.patch(`${restaurant(params.id)}`,
     {
-      name: params.name,
-      evaluation: params.evaluation,
-      review: params.review,
+      name: params.name
     }
   )
     .then(res => {

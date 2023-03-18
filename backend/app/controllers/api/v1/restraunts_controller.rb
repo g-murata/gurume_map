@@ -2,8 +2,7 @@ module Api
   module V1
     class RestrauntsController < ApplicationController
       def index
-        restraunts = Restraunt.all
-
+        restraunts = Restraunt.joins(:user).select("restraunts.*, users.name as user_name")
         render json: {
           restraunts: restraunts
         }, status: :ok
@@ -11,12 +10,13 @@ module Api
       end
 
       def create
-        restraunt = Restraunt.new(params.permit(:name, :evaluation, :review, :lat, :lng))
+        restraunt = Restraunt.new(params.permit(:name, :lat, :lng))
         restraunt.user_id = User.where(email: params[:email]).pick(:id)
 
         if restraunt.save
           render json: {
-            restraunts: restraunt
+            restraunts: restraunt,
+            user_name: restraunt.user.name
             },status: :ok
         else
           render status: restraunt.errors
@@ -28,7 +28,7 @@ module Api
       def update
         restraunt = Restraunt.find(params[:id])
 
-        if restraunt.update(name: params[:name], evaluation: params[:evaluation], review: params[:review])
+        if restraunt.update(name: params[:name])
           render json: {
             restraunts: restraunt
             },status: :ok

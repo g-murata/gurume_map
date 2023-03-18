@@ -4,6 +4,8 @@ const DEFAULT_API_LOCALHOST = "http://localhost:3001/api/v1";
 
 export const restaurants = `${DEFAULT_API_LOCALHOST}/restraunts`
 export const restaurant = (restaurantId) => `${DEFAULT_API_LOCALHOST}/restraunts/${restaurantId}`
+export const reviews = `${DEFAULT_API_LOCALHOST}/reviews`
+export const review = (reviewId) => `${DEFAULT_API_LOCALHOST}/reviews/${reviewId}`
 export const blogsIndex = `${DEFAULT_API_LOCALHOST}/blogs`
 export const blogShow = (blogsId) => `${DEFAULT_API_LOCALHOST}/blogs/${blogsId}`
 export const createUser = `${DEFAULT_API_LOCALHOST}/users`

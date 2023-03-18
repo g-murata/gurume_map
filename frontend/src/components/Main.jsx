@@ -4,6 +4,7 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
+import { fetchShowReview, postReview } from '../apis/reviews';
 import {
   GoogleMap,
   LoadScript,
@@ -14,6 +15,10 @@ import {
 import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import Loading from './Loading';
+import CreateRestrauntModal from './modal/CreateRestrauntModal';
+import EditRestrauntModal from './modal/EditRestrauntModal';
+import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
+import CreateReviewModal from './modal/CreateReviewModal';
 
 
 // import Restaurants from './../restaurants.json';
@@ -34,6 +39,7 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
+    overflow: "hidden",
   },
 };
 
@@ -67,12 +73,10 @@ export const Main = () => {
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { name, review, lat, lng } = event.target.elements;
+    const { name, lat, lng } = event.target.elements;
     setIsLoading(true);
     postRestraunt({
       name: name.value,
-      evaluation: evaluation,
-      review: review.value,
       lat: lat.value,
       lng: lng.value,
       email: user.email
@@ -83,10 +87,9 @@ export const Main = () => {
         {
           id: res.restraunts.id,
           name: res.restraunts.name,
-          evaluation: res.restraunts.evaluation,
-          review: res.restraunts.review,
           lat: res.restraunts.lat,
-          lng: res.restraunts.lng
+          lng: res.restraunts.lng,
+          user_name: res.user_name
         }]
         setRestraunt(newRestaurants)
         setIsLoading(false);
@@ -106,16 +109,50 @@ export const Main = () => {
       });
   }
 
+  const handleReviewSubmit = (event) => {
+    event.preventDefault();
+    const { content } = event.target.elements;
+    postReview({
+      restraunt_id: selectedItem,
+      evaluation: evaluation,
+      content: content.value
+    })
+      .then((res) => {
+        closeReviewModal();
+        const newReviews = [...reviews,
+        {
+          // TODO: idはselectedItemちゃう
+          id: res.review.id,
+          evaluation: res.review.evaluation,
+          content: res.review.content,
+          user_name: res.user_name,
+          restraunt_id: selectedItem
+        }]
+        setReview(newReviews)
+      })
+      .catch((error) => {
+        console.log("エラー")
+        console.log(error.code);
+        switch (error.code) {
+          case 'ERR_BAD_RESPONSE':
+            setError('不備あり！');
+            break;
+          default:
+            setError('エラーっす！Herokuのデプロイ先どうしようか？');
+            break;
+        }
+        setIsLoading(false);
+      });
+  }
+
   const handleUpdateSubmit = (event) => {
 
     event.preventDefault();
-    const { id, name, review } = event.target.elements;
+    const { name } = event.target.elements;
     setIsLoading(true);
     updateRestraunt({
-      id: id.value,
+      id: selectedItem,
       name: name.value,
-      evaluation: evaluation,
-      review: review.value,
     })
       .then((res) => {
         setEditModalIsOpen(false);
@@ -124,10 +161,8 @@ export const Main = () => {
         // UPDATEの参考
         // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
         const updateRestaurants = restaurants.map((restaurant) => {
-          if (Number(restaurant.id) === Number(id.value)) {
+          if (Number(restaurant.id) === Number(selectedItem)) {
             restaurant.name = res.restraunts.name;
-            restaurant.evaluation = res.restraunts.evaluation;
-            restaurant.review = res.restraunts.review;
             restaurant.lat = res.restraunts.lat;
             restaurant.lng = res.restraunts.lng;
           }
@@ -152,9 +187,8 @@ export const Main = () => {
   }
 
   const handleDeleteSubmit = (index) => {
-
     deleteRestraunt({
-      id: restaurants[index].id
+      id: selectedItem
     })
       .then(() => {
         onCloseDialog();
@@ -179,19 +213,15 @@ export const Main = () => {
 
 
   const [restaurants, setRestraunt] = useState([])
+  const [reviews, setReview] = useState([])
 
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [editMode, setEditMode] = useState(true);
-
-  const editOnOff = () => {
-    setEditMode(!editMode)
-  }
-
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
 
   const OpenModal = () => {
     setIsOpen(true)
@@ -204,10 +234,20 @@ export const Main = () => {
     setIsOpen(false);
   }
 
+  const OpenReviewModal = () => {
+    setIsReviewOpen(true)
+  }
+  const closeReviewModal = () => {
+    setError('')
+    setIsReviewOpen(false);
+  }
+
+
   useEffect(() => {
     setIsLoading(true);
     fetchRestaurants()
       .then((data) => {
+        console.log(data.restraunts)
         setRestraunt(data.restraunts)
         setIsLoading(false);
       }
@@ -225,12 +265,24 @@ export const Main = () => {
 
   const [selectedItem, setSelectedItem] = useState('')
 
-  const onOpenDialog = (name) => {
-    setSelectedItem(name)
+  const onOpenDialog = (id) => {
+    setSelectedItem(id)
+
+    setIsLoading(true);
+    fetchShowReview(id)
+      .then((data) => {
+        console.log(data.review)
+        setReview(data.review)
+        setIsLoading(false);
+      }
+      )
   }
 
   function afterOpenModal() {
     // subtitle.style.color = '#f00';
+  }
+  function afterReviewOpenModal() {
+
   }
 
   const onCloseDialog = () => {
@@ -243,7 +295,7 @@ export const Main = () => {
     setCoordinateLat(event.latLng.lat());
     setCoordinateLng(event.latLng.lng());
 
-    if (editMode) { OpenModal() }
+    OpenModal()
   };
 
   const [evaluation, setEvaluation] = useState(3);
@@ -286,7 +338,6 @@ export const Main = () => {
                   }} options={infoWindowOptions}>
                     <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}>
                       <h1>{restaurants[item].name}</h1>
-                      <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
                     </div>
                   </InfoWindow>
 
@@ -321,145 +372,81 @@ export const Main = () => {
 
                       {!editModalIsOpen ?
                         <>
-                          <div className="flex place-content-between w-11/12  m-auto">
-                            <div className="text-3xl font-bold mb-2">{restaurants[item].name}</div>
-                            <button className="font-bold" onClick={() => onEditDialog((restaurants[item]))}>編集</button>
-                            <button className="font-bold" onClick={() => handleDeleteSubmit((item))}>削除</button>
-                            <button className="font-bold" onClick={onCloseDialog}>Close</button>
-                          </div>
+                          <ShowRestrauntModal
+                            ReactStarsRating={ReactStarsRating}
+                            evaluation={evaluation}
+                            setEvaluation={setEvaluation}
+                            onChange={onChange}
+                            onEditDialog={onEditDialog}
+                            handleDeleteSubmit={handleDeleteSubmit}
+                            onCloseDialog={onCloseDialog}
+                            OpenReviewModal={OpenReviewModal}
+                            setReview={setReview}
+                            restaurant={restaurants[item]}
+                            item={item}
+                            reviews={reviews}
+                            isLoading={isLoading}
+                            error={error}
+                            setError={setError}
+                          />
 
-                          <p className="text-gray-700 text-base w-11/12 m-auto">
-                            <span>評価：</span>
-                            <span className="star5_rating" data-rate={restaurants[item].evaluation}></span>
-                            {restaurants[item].image == null ?
-                              <div className="flex justify-center ">
-                                <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-2/4" alt="Logo" />
-                              </div>
-                              :
-                              <img
-                                className="w-7/12 m-auto"
-                                src={restaurants[item].image}
-                                alt="ほげほげ画像"
-                              ></img>
-                            }
-
-                            <p className="review">{restaurants[item].review}</p>
-                          </p>
                         </>
                         :
                         <>
                           <form onSubmit={handleUpdateSubmit}>
-                            <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
-                              <div className="text-3xl font-bold text-center">
-                                編集
-                              </div>
-                              {error && <p style={{ color: 'red' }}>{error}</p>}
-                              <div className="text-right">
-                                <button className="font-bold" onClick={onCloseDialog}>Close</button>
-                              </div>
-                              <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
-                                店名
-                              </label>
-                              {/* TODO: hiddenはいくないね～書き換えられちゃうからね。リリース前に必ず直す。 */}
-                              <input type="hidden" id="id" name="id" value={restaurants[item].id}></input>
-                              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name"
-                                defaultValue={restaurants[item].name} />
-                              <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
-                                  評価
-                                </label>
-                                <ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={onChange} value={evaluation} />
-                              </div>
-                              <div>
-                                <label for="review" className="block text-gray-700 text-sm font-bold mb-2">
-                                  感想
-                                </label>
-                                <textarea id="review" name="review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"
-                                  defaultValue={restaurants[item].review}></textarea>
-                              </div>
-                              <div>
-                                {/* <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
-                                  経緯
-                                </label> */}
-                                <input type="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lat}></input>
-                              </div>
-                              <div>
-                                {/* <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
-                                  経度
-                                </label> */}
-                                <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={restaurants[item].lng}></input>
-                              </div>
-                              <div className='flex justify-center '>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">更新</button>
-                              </div>
-                              <div className="text-right">
-                                <button className="font-bold" onClick={onCloseEditDialog}>詳細画面に戻る</button>
-                              </div>
-                            </div>
+                            <EditRestrauntModal
+                              onCloseEditDialog={onCloseEditDialog}
+                              onCloseDialog={onCloseDialog}
+                              error={error}
+                              restaurant={restaurants[item]}
+                            />
                           </form>
                         </>
                       }
                     </Modal>
+
+                    {/* レビューモーダル */}
+                    {reviewModalIsOpen &&
+                      <Modal isOpen={restaurants[item].id === selectedItem}
+                        onAfterOpen={afterReviewOpenModal}
+                        onRequestClose={closeReviewModal}
+                        style={customStyles}
+                        contentLabel="Example Modal"
+                      >
+                        <form onSubmit={handleReviewSubmit}>
+                          <CreateReviewModal
+                            ReactStarsRating={ReactStarsRating}
+                            closeReviewModal={closeReviewModal}
+                            evaluation={evaluation}
+                            onChange={onChange}
+                            error={error}
+                            restaurant={restaurants[item]}
+                          />
+                        </form>
+                      </Modal>
+                    }
                   </>
                 )
               })}
             </div>
           </div>
         </div>
-        <div className="max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-          <button className="font-bold" onClick={editOnOff} style={{ color: 'red' }}>{(editMode === true) ? "編集モード：ON" : "編集モード：OFF"}</button>
-        </div>
-        {/* <button onClick={OpenModal}>Open Modal</button> */}
         <Modal isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
           contentLabel="Example Modal"
         >
-          {/* todo: */}
           <form onSubmit={handleSubmit}>
-            <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
-              <div className="text-3xl font-bold text-center">
-                新規店名登録
-              </div>
-              {error && <p style={{ color: 'red' }}>{error}</p>}
-              <div className="text-right">
-                <button className="font-bold" onClick={closeModal}>Close</button>
-              </div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
-                店名
-              </label>
-              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
-                  評価
-                </label>
-                <ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={onChange} value={evaluation} />
-              </div>
-              <div>
-                <label for="review" className="block text-gray-700 text-sm font-bold mb-2">
-                  感想
-                </label>
-                <textarea id="review" name="review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"></textarea>
-              </div>
-              <div>
-                {/* <label for="lat" className="block text-gray-700 text-sm font-bold mb-2">
-                  経緯
-                </label> */}
-                <input type="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLat}></input>
-              </div>
-              <div>
-                {/* <label for="lng" className="block text-gray-700 text-sm font-bold mb-2">
-                  経度
-                </label> */}
-                <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={coordinateLng}></input>
-              </div>
-              <div className='flex justify-center '>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
-              </div>
-            </div>
+            <CreateRestrauntModal
+              closeModal={closeModal}
+              error={error}
+              coordinateLat={coordinateLat}
+              coordinateLng={coordinateLng}
+            />
           </form>
         </Modal>
+
       </LoadScript >
     </>
   );
