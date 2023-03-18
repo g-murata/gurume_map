@@ -44,7 +44,7 @@ module Api
 
         if review.update(params.permit(:evaluation, :content))
           render json: {
-            restraunts: review
+            reviews: review
             },status: :ok
         else
           render status: review.errors

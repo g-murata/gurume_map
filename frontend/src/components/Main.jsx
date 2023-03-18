@@ -89,7 +89,7 @@ export const Main = () => {
           name: res.restraunts.name,
           lat: res.restraunts.lat,
           lng: res.restraunts.lng,
-          user_name: res.user_name                   
+          user_name: res.user_name
         }]
         setRestraunt(newRestaurants)
         setIsLoading(false);
@@ -124,7 +124,7 @@ export const Main = () => {
           id: selectedItem,
           evaluation: res.review.evaluation,
           content: res.review.content,
-          user_name: res.user_name         
+          user_name: res.user_name
         }]
         setReview(newReviews)
       })
@@ -379,11 +379,13 @@ export const Main = () => {
                             handleDeleteSubmit={handleDeleteSubmit}
                             onCloseDialog={onCloseDialog}
                             OpenReviewModal={OpenReviewModal}
+                            setReview={setReview}
                             restaurant={restaurants[item]}
                             item={item}
                             reviews={reviews}
                             isLoading={isLoading}
                             error={error}
+                            setError={setError}
                           />
 
                         </>
@@ -402,7 +404,7 @@ export const Main = () => {
                     </Modal>
 
                     {/* レビューモーダル */}
-                    {reviewModalIsOpen && 
+                    {reviewModalIsOpen &&
                       <Modal isOpen={restaurants[item].id === selectedItem}
                         onAfterOpen={afterReviewOpenModal}
                         onRequestClose={closeReviewModal}
