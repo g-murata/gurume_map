@@ -18,10 +18,6 @@ export const ShowRestrauntModal = (props) => {
     props.setError('')
     setEditReviewModalIsOpen(false);
   }
-  const handleReviewDeleteSubmit = (value) => {
-    console.log(value)
-    setSelectedReviewItem(value.id)
-  }
 
   const handleReviewUpdateSubmit = (event) => {
 
@@ -61,6 +57,30 @@ export const ShowRestrauntModal = (props) => {
             break;
         }
         // setIsLoading(false);
+      });
+  }
+
+
+  const handleReviewDeleteSubmit = (index) => {
+    deleteReview({
+      id: props.reviews[index].id
+    })
+      .then(() => {
+        const newReviews = [...props.reviews]
+        newReviews.splice(index, 1)
+        props.setReview(newReviews);
+      })
+      .catch((error) => {
+        // console.log("エラー")
+        // console.log(error.code);
+        // switch (error.code) {
+        //   case 'ERR_BAD_RESPONSE':
+        //     setError('不備あり！');
+        //     break;
+        //   default:
+        //     setError('エラーっす！Herokuのデプロイ先どうしようか？');
+        //     break;
+        // }
       });
   }
 
@@ -153,7 +173,7 @@ export const ShowRestrauntModal = (props) => {
                               <div class="flex justify-end">
                                 {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
                                 <button className="font-bold mx-8" onClick={() => onReviewEditDialog((review_item))}>編集</button>
-                                <button className="font-bold mx-8" onClick={() => handleReviewDeleteSubmit((props.reviews[review_item]))}>削除</button>
+                                <button className="font-bold mx-8" onClick={() => handleReviewDeleteSubmit((review_item))}>削除</button>
                               </div>
                             </div>
                           </>

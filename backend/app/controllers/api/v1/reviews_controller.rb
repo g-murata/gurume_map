@@ -53,6 +53,15 @@ module Api
       end
 
       def destroy
+        review = Review.find(params[:id])
+
+        if review.destroy
+          render json: {
+            reviewｓ: review
+            },status: :ok
+        else
+          render status: review.errors
+        end       
 
       end
 
