@@ -7,6 +7,21 @@ import { postCreateUser } from '../apis/users';
 export const SignUp = () => {
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [checkPassword, SetCheckPassword] = useState(false);
+  const [password, setPassword] = useState('');
+
+  const handlePasswordCheckSubmit = (event) => {
+    event.preventDefault();
+    if (password === process.env.REACT_APP_SIGN_UP) {
+      SetCheckPassword(true);
+    } else {
+      alert("パスワードが間違ってます。")
+    }
+  }
+
+  const handleChange = (event) => {
+    setPassword(event.target.value);
+  }
 
   const handleSubmit = (event) => {
 
@@ -47,32 +62,49 @@ export const SignUp = () => {
   };
 
   return (
-    <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
-            ニックネーム（10文字以内）
-          </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="ニックネーム" name="name" />
+    <>
+      {checkPassword ? (
+        <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
+                ニックネーム（10文字以内）
+              </label>
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="ニックネーム" name="name" />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
+                メールアドレス
+              </label>
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" placeholder="メールアドレス" name="email" />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" for="password">
+                パスワード
+              </label>
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" placeholder="パスワード" name="password" />
+            </div>
+            <div>
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+            </div>
+          </form>
         </div>
-        <div>
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
-            メールアドレス
-          </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" placeholder="メールアドレス" name="email" />
-        </div>
-        <div>
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="password">
-            パスワード
-          </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" placeholder="パスワード" name="password" />
-        </div>
-        <div>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
-        </div>
-      </form>
-    </div>
+      )
+        :
+        (
+          <div className="bg-pink-100 max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+            <form onSubmit={handlePasswordCheckSubmit}>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                この先の画面に進むためには暗証番号が必要です。
+                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" value={password} onChange={handleChange} />
+              </label>
+              <input className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full" type="submit" value="送信" />
+            </form>
+          </ div>
+        )}
+    </>
+
   );
 };
 
