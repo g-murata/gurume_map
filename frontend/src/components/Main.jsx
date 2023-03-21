@@ -187,27 +187,29 @@ export const Main = () => {
   }
 
   const handleDeleteSubmit = (index) => {
-    deleteRestraunt({
-      id: selectedItem
-    })
-      .then(() => {
-        onCloseDialog();
-        const newRestaurants = [...restaurants]
-        newRestaurants.splice(index, 1)
-        setRestraunt(newRestaurants);
+    if (window.confirm("本当に削除してもよろしいですか？")) {
+      deleteRestraunt({
+        id: selectedItem
       })
-      .catch((error) => {
-        console.log("エラー")
-        console.log(error.code);
-        switch (error.code) {
-          case 'ERR_BAD_RESPONSE':
-            setError('不備あり！');
-            break;
-          default:
-            setError('エラーっす！Herokuのデプロイ先どうしようか？');
-            break;
-        }
-      });
+        .then(() => {
+          onCloseDialog();
+          const newRestaurants = [...restaurants]
+          newRestaurants.splice(index, 1)
+          setRestraunt(newRestaurants);
+        })
+        .catch((error) => {
+          console.log("エラー")
+          console.log(error.code);
+          switch (error.code) {
+            case 'ERR_BAD_RESPONSE':
+              setError('不備あり！');
+              break;
+            default:
+              setError('エラーっす！Herokuのデプロイ先どうしようか？');
+              break;
+          }
+        });
+    }
   }
 
 

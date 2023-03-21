@@ -62,26 +62,28 @@ export const ShowRestrauntModal = (props) => {
 
 
   const handleReviewDeleteSubmit = (index) => {
-    deleteReview({
-      id: props.reviews[index].id
-    })
-      .then(() => {
-        const newReviews = [...props.reviews]
-        newReviews.splice(index, 1)
-        props.setReview(newReviews);
+    if (window.confirm("本当にレビューを削除してもよろしいですか？")) {
+      deleteReview({
+        id: props.reviews[index].id
       })
-      .catch((error) => {
-        console.log("エラー")
-        console.log(error.code);
-        switch (error.code) {
-          case 'ERR_BAD_RESPONSE':
-            props.setError('不備あり！');
-            break;
-          default:
-            props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
-            break;
-        }
-      });
+        .then(() => {
+          const newReviews = [...props.reviews]
+          newReviews.splice(index, 1)
+          props.setReview(newReviews);
+        })
+        .catch((error) => {
+          console.log("エラー")
+          console.log(error.code);
+          switch (error.code) {
+            case 'ERR_BAD_RESPONSE':
+              props.setError('不備あり！');
+              break;
+            default:
+              props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
+              break;
+          }
+        });
+    }
   }
 
 
