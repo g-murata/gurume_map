@@ -187,7 +187,7 @@ export const Main = () => {
   }
 
   const handleDeleteSubmit = (index) => {
-    if (window.confirm("本当に削除してもよろしいですか？")) {
+    if (window.confirm("本当に削除してもよろしいですか？\n※このお店に登録されているレビューも全て削除されます。")) {
       deleteRestraunt({
         id: selectedItem
       })
