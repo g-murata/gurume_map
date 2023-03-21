@@ -12,6 +12,7 @@ export const SignUp = () => {
 
   const handlePasswordCheckSubmit = (event) => {
     event.preventDefault();
+    alert(process.env.REACT_APP_SIGN_UP)
     if (password === process.env.REACT_APP_SIGN_UP) {
       SetCheckPassword(true);
     } else {
