@@ -126,69 +126,75 @@ export const ShowRestrauntModal = (props) => {
         </form>
         :
         <>
-          <div className="flex place-content-between w-11/12  m-auto">
-            <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
-            <button className="font-bold" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
-            <button className="font-bold" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
-            <button className="font-bold" onClick={props.onCloseDialog}>Close</button>
-          </div>
-
-          <p className="text-gray-700 text-base w-11/12 m-auto">
-            {/* TODO:平均評価を計算する */}
-            {/* <span>平均評価：</span>
-                              <span className="star5_rating" data-rate={restaurants[item].evaluation}></span> */}
-            {props.restaurant.image == null ?
-              <div className="flex justify-center ">
-                <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-2/4" alt="Logo" />
+          <div className="md:flex">
+            <div className="md:px-8 md:w-9/12">
+              <div className="flex place-content-between w-11/12  m-auto">
+                <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
+                <button className="font-bold" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
+                <button className="font-bold" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
+                <button className="font-bold" onClick={props.onCloseDialog}>Close</button>
               </div>
-              :
-              <img
-                className="w-7/12 m-auto"
-                src={props.restaurant.image}
-                alt="ほげほげ画像"
-              ></img>
-            }
-            <span>このお店を登録した人：</span>
-            <p className="user_name">{props.restaurant.user_name}</p>
-            <div className='flex justify-center'>
-              <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
-                className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
-              </button>
+
+              <p className="text-gray-700 text-base w-11/12 m-auto">
+                {/* TODO:平均評価を計算する */}
+                {/* <span>平均評価：</span>
+                              <span className="star5_rating" data-rate={restaurants[item].evaluation}></span> */}
+                {props.restaurant.image == null ?
+                  <div className="flex justify-center ">
+                    <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-2/4" alt="Logo" />
+                  </div>
+                  :
+                  <img
+                    className="w-7/12 m-auto"
+                    src={props.restaurant.image}
+                    alt="ほげほげ画像"
+                  ></img>
+                }
+                <span>このお店を登録した人：</span>
+                <p className="user_name">{props.restaurant.user_name}</p>
+                <div className='flex justify-center'>
+                  <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
+                    className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
+                  </button>
+                </div>
+              </p>
             </div>
             <>
               {props.isLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> :
                 <>
-                  {props.reviews.length > 0 ?
-                    <div className='overflow-auto h-56'>
-                      {Object.keys(props.reviews).map(review_item => {
-                        return (
-                          <>
-                            {console.log(props.reviews[review_item])}
-                            <div class="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
-                              <span>レビューした人：</span>
-                              <p className="user_name">{props.reviews[review_item].user_name}</p>
-                              <span>評価：</span>
-                              <span className="star5_rating" data-rate={props.reviews[review_item].evaluation}></span>
-                              <p>感想：</p>
-                              <p className="review">{props.reviews[review_item].content}</p>
-                              {/* TODO: */}
-                              <div class="flex justify-end">
-                                {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
-                                <button className="font-bold mx-8" onClick={() => onReviewEditDialog((review_item))}>編集</button>
-                                <button className="font-bold mx-8" onClick={() => handleReviewDeleteSubmit((review_item))}>削除</button>
+                  <div className="md:px-8 md:w-full">
+                    {props.reviews.length > 0 ?
+                      <div className='h-4/5 overflow-auto'>
+                        {Object.keys(props.reviews).map(review_item => {
+                          return (
+                            <>
+                              {console.log(props.reviews[review_item])}
+                              <div class="bg-slate-100 rounded-xl py-8 dark:bg-slate-800 mb-5">
+                                <span>レビューした人：</span>
+                                <p className="user_name">{props.reviews[review_item].user_name}</p>
+                                <span>評価：</span>
+                                <span className="star5_rating" data-rate={props.reviews[review_item].evaluation}></span>
+                                <p>感想：</p>
+                                <p className="review">{props.reviews[review_item].content}</p>
+                                {/* TODO: */}
+                                <div class="flex justify-end">
+                                  {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
+                                  <button className="font-bold mx-8" onClick={() => onReviewEditDialog((review_item))}>編集</button>
+                                  <button className="font-bold mx-8" onClick={() => handleReviewDeleteSubmit((review_item))}>削除</button>
+                                </div>
                               </div>
-                            </div>
-                          </>
-                        )
-                      })}
-                    </div>
-                    :
-                    <div style={{ color: 'red' }}>まだこのお店のレビューをした人はいないみたいです。</div>
-                  }
+                            </>
+                          )
+                        })}
+                      </div>
+                      :
+                      <div style={{ color: 'red' }}>まだこのお店のレビューをした人はいないみたいです。</div>
+                    }
+                  </div>
                 </>
               }
             </>
-          </p>
+          </div>
         </>
       }
     </>

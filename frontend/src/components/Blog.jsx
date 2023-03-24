@@ -24,12 +24,12 @@ export const Blog = () => {
     <>
       {/* TODO: ローディング画面を作ったら消す。 */}
       {isLoading && <Loading />}
-      <div className="flex items-center flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:flex-row md:space-x-8">
+      <div className="flex flex-col px-4 md:px-8 md:flex-row md:flex-wrap">
         <>
           {Object.keys(blogs).map(item => (
             <>
-              <Link to={`/blog/${blogs[item].id}`}>
-                <div className="max-w-sm rounded overflow-hidden shadow-lg 
+              <Link className="p-3" to={`/blog/${blogs[item].id}`}>
+                <div className="border-2 max-w-sm rounded overflow-hidden shadow-lg 
                     transform hover:scale-110 transition-transform cursor-pointer">
                   <img
                     className="w-full"
