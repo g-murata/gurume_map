@@ -169,7 +169,7 @@ export const ShowRestrauntModal = (props) => {
                           return (
                             <>
                               {console.log(props.reviews[review_item])}
-                              <div class="bg-slate-100 rounded-xl py-8 dark:bg-slate-800 mb-5">
+                              <div class="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
                                 <span>レビューした人：</span>
                                 <p className="user_name">{props.reviews[review_item].user_name}</p>
                                 <span>評価：</span>
