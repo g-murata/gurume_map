@@ -126,7 +126,7 @@ export const ShowRestrauntModal = (props) => {
         </form>
         :
         <>
-          <div className="md:flex">
+          <div className="md:flex md:h-full">
             <div className="md:px-8 md:w-9/12">
               <div className="flex place-content-between w-11/12  m-auto">
                 <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
@@ -164,11 +164,10 @@ export const ShowRestrauntModal = (props) => {
                 <>
                   <div className="md:px-8 md:w-full">
                     {props.reviews.length > 0 ?
-                      <div className='h-4/5 overflow-auto'>
+                      <div className='h-full overflow-auto'>
                         {Object.keys(props.reviews).map(review_item => {
                           return (
                             <>
-                              {console.log(props.reviews[review_item])}
                               <div class="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
                                 <span>レビューした人：</span>
                                 <p className="user_name">{props.reviews[review_item].user_name}</p>
