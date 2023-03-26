@@ -8,7 +8,11 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :restraunts
-      resources :reviews      
+      resources :reviews do
+        collection do
+          get 'already_registered_review'
+        end
+      end
       resources :blogs      
       resources :users, only: :create            
     end 

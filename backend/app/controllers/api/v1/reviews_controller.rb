@@ -14,7 +14,7 @@ module Api
 
       def show
         review = Review.where(restraunt_id: params[:id]).joins(:user).
-                      select(:id, :content, :evaluation, "users.name as user_name")  
+                      select(:id, :content, :evaluation, "users.id as user_id, users.name as user_name, users.email")  
 
 
         render json: {
@@ -26,7 +26,7 @@ module Api
 
       def create
         review = Review.new(params.permit(:evaluation, :content, :restraunt_id))
-        review.user_id = Restraunt.find(params[:restraunt_id]).user_id
+        review.user_id = User.where(email: params[:email]).pick(:id)
 
         if review.save
           render json: {
@@ -63,6 +63,15 @@ module Api
           render status: review.errors
         end       
 
+      end
+
+      def already_registered_review
+        user_id = User.find_by(email: params[:email]).id
+        review = Restraunt.find(params[:restraunt_id]).reviews.where(user_id: user_id).exists?
+        # review = Review.where(restraunt_id: params[:id]).joins(:user).where("user.id = #{params[:user_id]}")
+        render json: {
+          review: review
+        }, status: :ok
       end
 
     end

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { reviews, review } from '../urls/index'
+import { reviews, review, already_registered_review } from '../urls/index'
 
 export const fetchReviews = () => {
   return axios.get(reviews)
@@ -23,7 +23,8 @@ export const postReview = (params) => {
     {
       evaluation: params.evaluation,
       content: params.content,
-      restraunt_id: params.restraunt_id
+      restraunt_id: params.restraunt_id,
+      email: params.email
     }
   )
     .then(res => {
@@ -51,7 +52,7 @@ export const deleteReview = (params) => {
 
   return axios.delete(`${review(params.id)}`,
     {
-      id: params.id      
+      id: params.id
     }
   )
     .then(res => {
@@ -59,4 +60,18 @@ export const deleteReview = (params) => {
       return res.data
     })
     .catch((e) => { throw e; })
+};
+
+export const alreadyRegisteredReview = (params) => {
+  return axios.get(already_registered_review, {
+    params: {
+      restraunt_id: params.restraunt_id,
+      email: params.email
+    }
+  })
+    .then(res => {
+      console.log(res)
+      return res.data
+    })
+    .catch((e) => console.error(e))
 };

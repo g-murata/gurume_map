@@ -1,3 +1,4 @@
+import { auth } from '../../firebase';
 import { useState } from "react"
 import { updateReview, deleteReview } from '../../apis/reviews';
 
@@ -70,6 +71,8 @@ export const ShowRestrauntModal = (props) => {
           const newReviews = [...props.reviews]
           newReviews.splice(index, 1)
           props.setReview(newReviews);
+
+          props.setAlreadyRegistered(false);
         })
         .catch((error) => {
           console.log("エラー")
@@ -153,9 +156,11 @@ export const ShowRestrauntModal = (props) => {
                 <span>このお店を登録した人：</span>
                 <p className="user_name">{props.restaurant.user_name}</p>
                 <div className='flex justify-center'>
-                  <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
-                    className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
-                  </button>
+                  {!props.alreadyRegistered &&
+                    <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
+                      className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
+                    </button>
+                  }
                 </div>
               </p>
             </div>
@@ -178,8 +183,12 @@ export const ShowRestrauntModal = (props) => {
                                 {/* TODO: */}
                                 <div class="flex justify-end">
                                   {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
-                                  <button className="font-bold mx-8" onClick={() => onReviewEditDialog((review_item))}>編集</button>
-                                  <button className="font-bold mx-8" onClick={() => handleReviewDeleteSubmit((review_item))}>削除</button>
+                                  {props.reviews[review_item].email == auth.currentUser.email &&
+                                    <>
+                                      <button className="font-bold mx-8" onClick={() => onReviewEditDialog((review_item))}>編集</button>
+                                      <button className="font-bold mx-8" onClick={() => handleReviewDeleteSubmit((review_item))}>削除</button>
+                                    </>
+                                  }
                                 </div>
                               </div>
                             </>

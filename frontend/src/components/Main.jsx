@@ -4,7 +4,7 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, postReview } from '../apis/reviews';
+import { fetchShowReview, postReview, alreadyRegisteredReview } from '../apis/reviews';
 import {
   GoogleMap,
   LoadScript,
@@ -69,6 +69,8 @@ const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
 export const Main = () => {
   const user = auth.currentUser;
+  console.log("======")
+  console.log(user.email)
 
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
@@ -115,7 +117,8 @@ export const Main = () => {
     postReview({
       restraunt_id: selectedItem,
       evaluation: evaluation,
-      content: content.value
+      content: content.value,
+      email: user.email
     })
       .then((res) => {
         closeReviewModal();
@@ -126,7 +129,8 @@ export const Main = () => {
           evaluation: res.review.evaluation,
           content: res.review.content,
           user_name: res.user_name,
-          restraunt_id: selectedItem
+          restraunt_id: selectedItem,
+          email: user.email
         }]
         setReview(newReviews)
       })
@@ -143,6 +147,8 @@ export const Main = () => {
         }
         setIsLoading(false);
       });
+
+    setAlreadyRegistered(true)
   }
 
   const handleUpdateSubmit = (event) => {
@@ -267,15 +273,25 @@ export const Main = () => {
 
   const [selectedItem, setSelectedItem] = useState('')
 
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+
   const onOpenDialog = (id) => {
     setSelectedItem(id)
-
     setIsLoading(true);
     fetchShowReview(id)
       .then((data) => {
         console.log(data.review)
         setReview(data.review)
         setIsLoading(false);
+      }
+      )
+
+    alreadyRegisteredReview({
+      restraunt_id: id,
+      email: auth.currentUser.email
+    })
+      .then((result) => {
+        setAlreadyRegistered(result.review);
       }
       )
   }
@@ -387,6 +403,8 @@ export const Main = () => {
                             restaurant={restaurants[item]}
                             item={item}
                             reviews={reviews}
+                            alreadyRegistered={alreadyRegistered}
+                            setAlreadyRegistered={setAlreadyRegistered}
                             isLoading={isLoading}
                             error={error}
                             setError={setError}
