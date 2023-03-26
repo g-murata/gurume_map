@@ -6,8 +6,8 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-user = User.create(email: "guest@guest.co.jp", password: "uso_no_password")
-user2 = User.create(email: "test@test.co.jp", password: "uso_no_password")
+user = User.create(name: "ゲスト太郎", email: "guest@guest.co.jp", password: "uso_no_password")
+user2 = User.create(name: "テスト太郎", email: "testuser@test.co.jp", password: "uso_no_password")
 
 restraunts = Restraunt.create(
   name: "テストレストラン",
