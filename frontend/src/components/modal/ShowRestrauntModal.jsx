@@ -183,7 +183,7 @@ export const ShowRestrauntModal = (props) => {
                                 {/* TODO: */}
                                 <div class="flex justify-end">
                                   {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
-                                  {props.reviews[review_item].email == auth.currentUser.email &&
+                                  {props.reviews[review_item].email === auth.currentUser.email &&
                                     <>
                                       <button className="font-bold mx-8" onClick={() => onReviewEditDialog((review_item))}>編集</button>
                                       <button className="font-bold mx-8" onClick={() => handleReviewDeleteSubmit((review_item))}>削除</button>
