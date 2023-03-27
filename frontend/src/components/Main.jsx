@@ -232,7 +232,9 @@ export const Main = () => {
   const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
 
   const OpenModal = () => {
-    setIsOpen(true)
+    {auth.currentUser.email != "guest@guest.co.jp" &&
+      setIsOpen(true)
+    }
   }
   const closeModal = () => {
     // todo:エラーの消し方これでいいんかな？

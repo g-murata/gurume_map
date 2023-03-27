@@ -133,8 +133,13 @@ export const ShowRestrauntModal = (props) => {
             <div className="md:px-8 md:w-9/12">
               <div className="flex place-content-between w-11/12  m-auto">
                 <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
-                <button className="font-bold" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
-                <button className="font-bold" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
+                {/* TODO: レストランを登録したユーザのみ表示させること。↓の条件は仮条件。 */}
+                {(auth.currentUser.email != "guest@guest.co.jp") && 
+                  <>
+                    <button className="font-bold" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
+                    <button className="font-bold" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
+                  </>
+                }
                 <button className="font-bold" onClick={props.onCloseDialog}>Close</button>
               </div>
 
@@ -156,7 +161,7 @@ export const ShowRestrauntModal = (props) => {
                 <span>このお店を登録した人：</span>
                 <p className="user_name">{props.restaurant.user_name}</p>
                 <div className='flex justify-center'>
-                  {!props.alreadyRegistered &&
+                  {(!props.alreadyRegistered && auth.currentUser.email != "guest@guest.co.jp") && 
                     <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
                       className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
                     </button>
