@@ -50,6 +50,10 @@ export const Header = (props) => {
 
         {user
           ? <>
+            {/* TODO:　メールアドレスではなくユーザ名表示 */}
+            <li className='p-8 border-b-2 list-none md:border-none'>
+              <span className="text-gray-500 active:text-yellow-700 text-lg font-semibold block">ログインユーザ：{user.email}</span>
+            </li>            
             <li className='p-8 border-b-2 list-none md:border-none'>
               <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>
             </li>
