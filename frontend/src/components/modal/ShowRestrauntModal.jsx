@@ -177,7 +177,7 @@ export const ShowRestrauntModal = (props) => {
                         {Object.keys(props.reviews).map(review_item => {
                           return (
                             <>
-                              <div class="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
+                              <div className="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
                                 <span>レビューした人：</span>
                                 <p className="user_name">{props.reviews[review_item].user_name}</p>
                                 <span>評価：</span>
@@ -185,7 +185,7 @@ export const ShowRestrauntModal = (props) => {
                                 <p>感想：</p>
                                 <p className="review">{props.reviews[review_item].content}</p>
                                 {/* TODO: */}
-                                <div class="flex justify-end">
+                                <div className="flex justify-end">
                                   {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
                                   {props.reviews[review_item].email === auth.currentUser.email &&
                                     <>
