@@ -1,8 +1,19 @@
 import axios from 'axios';
-import { createUser } from '../urls/index'
+import { get_user, createUser } from '../urls/index'
+
+
+export const fetchShowUser = (params) => {
+  return axios.get(get_user, {
+    params: {
+      email: params
+    }
+  }).then(res => {
+      return res.data
+    })
+    .catch((e) => console.error(e))
+};
 
 export const postCreateUser = (params) => {
-  console.log(params)
   return axios.post(createUser,
     {
       name: params.name,

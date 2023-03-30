@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi"
 
 import { Link } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { useAuthContext } from '../context/AuthContext';
+import { fetchShowUser } from '../apis/users';
 
 export const Header = (props) => {
   const { user } = useAuthContext();
@@ -13,6 +14,15 @@ export const Header = (props) => {
     signOut(auth);
   };
 
+
+  const [userInfo, setUserInfo] = useState(false);
+
+  useEffect(() => {
+    fetchShowUser(auth.currentUser.email)
+    .then((data) => {
+      setUserInfo(data.user)
+    })
+  }, [])
 
   const [openMenu, setOpenMenu] = useState(false);
   console.log(openMenu);
@@ -50,9 +60,8 @@ export const Header = (props) => {
 
         {user
           ? <>
-            {/* TODO:　メールアドレスではなくユーザ名表示 */}
             <li className='p-8 border-b-2 list-none md:border-none'>
-              <span className="text-gray-500 active:text-yellow-700 text-lg font-semibold block">ログインユーザ：{user.email}</span>
+              <span className="text-gray-500 active:text-yellow-700 text-lg font-semibold block">ログインユーザ：{userInfo.name}</span>
             </li>            
             <li className='p-8 border-b-2 list-none md:border-none'>
               <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>

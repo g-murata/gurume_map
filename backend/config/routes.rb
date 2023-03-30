@@ -14,7 +14,11 @@ Rails.application.routes.draw do
         end
       end
       resources :blogs      
-      resources :users, only: :create            
+      resources :users  do
+        collection do
+          get 'get_user'
+        end
+      end      
     end 
   end   
 end

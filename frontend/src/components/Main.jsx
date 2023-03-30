@@ -69,9 +69,6 @@ const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
 export const Main = () => {
   const user = auth.currentUser;
-  console.log("======")
-  console.log(user.email)
-
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -124,7 +121,6 @@ export const Main = () => {
         closeReviewModal();
         const newReviews = [...reviews,
         {
-          // TODO: idはselectedItemちゃう
           id: res.review.id,
           evaluation: res.review.evaluation,
           content: res.review.content,

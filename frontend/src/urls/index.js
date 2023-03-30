@@ -9,6 +9,7 @@ export const review = (reviewId) => `${DEFAULT_API_LOCALHOST}/reviews/${reviewId
 export const already_registered_review = `${DEFAULT_API_LOCALHOST}/reviews/already_registered_review`
 export const blogsIndex = `${DEFAULT_API_LOCALHOST}/blogs`
 export const blogShow = (blogsId) => `${DEFAULT_API_LOCALHOST}/blogs/${blogsId}`
+export const get_user = `${DEFAULT_API_LOCALHOST}/users/get_user`
 export const createUser = `${DEFAULT_API_LOCALHOST}/users`
 
 // export const blogShow = `${DEFAULT_API_LOCALHOST}/blogs/1`
