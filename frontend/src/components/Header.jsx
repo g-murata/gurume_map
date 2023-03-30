@@ -18,10 +18,13 @@ export const Header = (props) => {
   const [userInfo, setUserInfo] = useState(false);
 
   useEffect(() => {
-    fetchShowUser(auth.currentUser.email)
-    .then((data) => {
-      setUserInfo(data.user)
-    })
+    if (auth.currentUser !== null ) {
+      fetchShowUser(auth.currentUser.email)
+      .then((data) => {
+        console.log(auth.currentUser)
+        setUserInfo(data.user)
+      })
+    }
   }, [])
 
   const [openMenu, setOpenMenu] = useState(false);
