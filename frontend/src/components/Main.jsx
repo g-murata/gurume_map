@@ -253,7 +253,6 @@ export const Main = () => {
     setIsLoading(true);
     fetchRestaurants()
       .then((data) => {
-        console.log(data.restraunts)
         setRestraunt(data.restraunts)
         setIsLoading(false);
       }

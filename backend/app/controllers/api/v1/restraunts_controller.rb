@@ -2,7 +2,7 @@ module Api
   module V1
     class RestrauntsController < ApplicationController
       def index
-        restraunts = Restraunt.joins(:user).select("restraunts.*, users.name as user_name")
+        restraunts = Restraunt.joins(:user).select("restraunts.*, users.name as user_name, users.email as user_email")
         render json: {
           restraunts: restraunts
         }, status: :ok

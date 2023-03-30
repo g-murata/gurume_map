@@ -133,8 +133,7 @@ export const ShowRestrauntModal = (props) => {
             <div className="md:px-8 md:w-9/12">
               <div className="flex place-content-between w-11/12  m-auto">
                 <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
-                {/* TODO: レストランを登録したユーザのみ表示させること。↓の条件は仮条件。 */}
-                {(auth.currentUser.email != "guest@guest.co.jp") && 
+                {(auth.currentUser.email === props.restaurant.user_email) && 
                   <>
                     <button className="font-bold" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
                     <button className="font-bold" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
