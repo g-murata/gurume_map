@@ -228,7 +228,7 @@ export const Main = () => {
   const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
 
   const OpenModal = () => {
-    {auth.currentUser.email != "guest@guest.co.jp" &&
+    if(auth.currentUser.email !== "guest@guest.co.jp"){
       setIsOpen(true)
     }
   }
