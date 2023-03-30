@@ -88,7 +88,8 @@ export const Main = () => {
           name: res.restraunts.name,
           lat: res.restraunts.lat,
           lng: res.restraunts.lng,
-          user_name: res.user_name
+          user_name: res.user_name,
+          user_email: user.email
         }]
         setRestraunt(newRestaurants)
         setIsLoading(false);
