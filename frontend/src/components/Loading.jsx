@@ -1,5 +1,6 @@
 const customStyles = {
-    backgroundColor: "rgba(0,0,0,0.10)"
+    backgroundColor: "rgba(0,0,0,0.30)",
+    position: "fixed"
 }
 
 function Loading() {

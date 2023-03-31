@@ -112,6 +112,7 @@ export const Main = () => {
   const handleReviewSubmit = (event) => {
     event.preventDefault();
     const { content } = event.target.elements;
+    setIsLoading(true);    
     postReview({
       restraunt_id: selectedItem,
       evaluation: evaluation,
@@ -130,6 +131,7 @@ export const Main = () => {
           email: user.email
         }]
         setReview(newReviews)
+        setIsLoading(false);        
       })
       .catch((error) => {
         console.log("エラー")
@@ -224,6 +226,7 @@ export const Main = () => {
   const [coordinateLng, setCoordinateLng] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isReviewLoading, setIsReviewLoading] = useState(false);
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
@@ -256,8 +259,14 @@ export const Main = () => {
       .then((data) => {
         setRestraunt(data.restraunts)
         setIsLoading(false);
-      }
-      )
+      })
+      .catch((error) => 
+        {
+          console.log("エラー")
+          console.log(error.code);
+          setIsLoading(false);
+        }
+      )            
   }, [])
 
 
@@ -275,12 +284,13 @@ export const Main = () => {
 
   const onOpenDialog = (id) => {
     setSelectedItem(id)
-    setIsLoading(true);
+    setIsReviewLoading(true)
+
     fetchShowReview(id)
       .then((data) => {
         console.log(data.review)
         setReview(data.review)
-        setIsLoading(false);
+        setIsReviewLoading(false)        
       }
       )
 
@@ -334,12 +344,12 @@ export const Main = () => {
 
   return (
     <>
+      {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
           <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17} onClick={getLatLng}>
             <Marker position={positionIshiBill} button onClick={() => alert('開発中！')} />
             {/* <Marker icon={'https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png'} position={positionIshiBill} button onClick={() => alert('自社です')}/> */}
-
             {Object.keys(restaurants).map(item => {
               return (
                 <>
@@ -369,86 +379,92 @@ export const Main = () => {
               )
             })}
           </GoogleMap>
-          <div className="h-48 md:w-2/5 md:h-128">
-            <div className="max-h-full flex flex-col md:mx-8 overflow-auto md:h-3/5 ">
-              {Object.keys(restaurants).map(item => {
-                return (
-                  <>
-                    <button className="p-2 border-b-2 list-none " onClick={() => onOpenDialog(restaurants[item].id)}>{restaurants[item].name}
-                    </button>
-                    {/* 吹き出しが何個も出る件について。ここに置いたらなんかうまくいったけど、新規登録すると相変わらず出るし、原因を調べる。TODO: */}
-                    {/* {isLoading && <Loading />} */}
-                    <Modal
-                      isOpen={restaurants[item].id === selectedItem}
-                      onAfterOpen={afterOpenModal}
-                      onRequestClose={onCloseDialog}
-                      style={customStyles}
-                      contentLabel="Example Modal"
-                    >
+        </div>
+        <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
+          <div className="grid grid-cols-2 md:grid-cols-4">
+            {Object.keys(restaurants).map(item => {
+              return (
+                <>
+                <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(restaurants[item].id)}>
+                  <image className="w-full" src="https://source.unsplash.com/random/800x600" alt="Card Image"></image>
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">{restaurants[item].name}</div>
+                    <p className="text-gray-700 text-base">{restaurants[item].evaluation}</p>
+                  </div>
+                  <div className="px-6 pt-4 pb-2">
+                  </div>
+                </div>
+                  <Modal
+                    isOpen={restaurants[item].id === selectedItem}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={onCloseDialog}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                  >
 
-                      {!editModalIsOpen ?
-                        <>
-                          <ShowRestrauntModal
-                            ReactStarsRating={ReactStarsRating}
-                            evaluation={evaluation}
-                            setEvaluation={setEvaluation}
-                            onChange={onChange}
-                            onEditDialog={onEditDialog}
-                            handleDeleteSubmit={handleDeleteSubmit}
+                    {!editModalIsOpen ?
+                      <>
+                        <ShowRestrauntModal
+                          ReactStarsRating={ReactStarsRating}
+                          evaluation={evaluation}
+                          setEvaluation={setEvaluation}
+                          onChange={onChange}
+                          onEditDialog={onEditDialog}
+                          handleDeleteSubmit={handleDeleteSubmit}
+                          onCloseDialog={onCloseDialog}
+                          OpenReviewModal={OpenReviewModal}
+                          setReview={setReview}
+                          restaurant={restaurants[item]}
+                          item={item}
+                          reviews={reviews}
+                          alreadyRegistered={alreadyRegistered}
+                          setAlreadyRegistered={setAlreadyRegistered}
+                          isLoading={isLoading}
+                          isReviewLoading={isReviewLoading}                          
+                          error={error}
+                          setError={setError}
+                        />
+
+                      </>
+                      :
+                      <>
+                        <form onSubmit={handleUpdateSubmit}>
+                          <EditRestrauntModal
+                            onCloseEditDialog={onCloseEditDialog}
                             onCloseDialog={onCloseDialog}
-                            OpenReviewModal={OpenReviewModal}
-                            setReview={setReview}
-                            restaurant={restaurants[item]}
-                            item={item}
-                            reviews={reviews}
-                            alreadyRegistered={alreadyRegistered}
-                            setAlreadyRegistered={setAlreadyRegistered}
-                            isLoading={isLoading}
-                            error={error}
-                            setError={setError}
-                          />
-
-                        </>
-                        :
-                        <>
-                          <form onSubmit={handleUpdateSubmit}>
-                            <EditRestrauntModal
-                              onCloseEditDialog={onCloseEditDialog}
-                              onCloseDialog={onCloseDialog}
-                              error={error}
-                              restaurant={restaurants[item]}
-                            />
-                          </form>
-                        </>
-                      }
-                    </Modal>
-
-                    {/* レビューモーダル */}
-                    {reviewModalIsOpen &&
-                      <Modal isOpen={restaurants[item].id === selectedItem}
-                        onAfterOpen={afterReviewOpenModal}
-                        onRequestClose={closeReviewModal}
-                        style={customStyles}
-                        contentLabel="Example Modal"
-                      >
-                        <form onSubmit={handleReviewSubmit}>
-                          <CreateReviewModal
-                            ReactStarsRating={ReactStarsRating}
-                            closeReviewModal={closeReviewModal}
-                            evaluation={evaluation}
-                            onChange={onChange}
                             error={error}
                             restaurant={restaurants[item]}
                           />
                         </form>
-                      </Modal>
+                      </>
                     }
-                  </>
-                )
-              })}
-            </div>
+                  </Modal>
+
+                  {/* レビューモーダル */}
+                  {reviewModalIsOpen &&
+                    <Modal isOpen={restaurants[item].id === selectedItem}
+                      onAfterOpen={afterReviewOpenModal}
+                      onRequestClose={closeReviewModal}
+                      style={customStyles}
+                      contentLabel="Example Modal"
+                    >
+                      <form onSubmit={handleReviewSubmit}>
+                        <CreateReviewModal
+                          ReactStarsRating={ReactStarsRating}
+                          closeReviewModal={closeReviewModal}
+                          evaluation={evaluation}
+                          onChange={onChange}
+                          error={error}
+                          restaurant={restaurants[item]}
+                        />
+                      </form>
+                    </Modal>
+                  }
+                </>
+              )
+            })}
           </div>
-        </div>
+        </div>        
         <Modal isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}

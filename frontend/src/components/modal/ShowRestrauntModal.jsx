@@ -169,7 +169,7 @@ export const ShowRestrauntModal = (props) => {
               </p>
             </div>
             <>
-              {props.isLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> :
+              {props.isReviewLoading ? <h1 className="text-blue-600">レビューを読み込み中........</h1> :
                 <>
                   <div className="md:px-8 md:w-full">
                     {props.reviews.length > 0 ?
