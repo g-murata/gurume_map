@@ -386,7 +386,7 @@ export const Main = () => {
               return (
                 <>
                 <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(restaurants[item].id)}>
-                  <image className="w-full" src="https://source.unsplash.com/random/800x600" alt="Card Image"></image>
+                  <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
                   <div className="px-6 py-4">
                     <div className="font-bold text-xl mb-2">{restaurants[item].name}</div>
                     <p className="text-gray-700 text-base">{restaurants[item].evaluation}</p>
