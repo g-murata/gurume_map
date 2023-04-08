@@ -2,17 +2,25 @@ import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { fetchShowUser } from '../apis/users';
 
 export const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [userInfo, setUserInfo] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const { email, password } = event.target.elements;
     signInWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
-        navigate('/');
+        if (auth.currentUser !== null) {
+          fetchShowUser(auth.currentUser.email)
+            .then((data) => {
+              setUserInfo(data.user)
+            })
+          navigate('/');
+        }
       })
       .catch((error) => {
         switch (error.code) {
@@ -64,10 +72,11 @@ export const Login = () => {
         </div>
       </form >
       {process.env.NODE_ENV === "development" ?
-      <button className="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
-      :
-      <h1 className="font-bold" style={{color: 'red'}}>開発中です！しばし待たれよ！(2023.01.07)</h1>
-    }
+        <button className="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
+        :
+        // TODO:削除する
+        <></>
+      }
     </div >
 
   );
