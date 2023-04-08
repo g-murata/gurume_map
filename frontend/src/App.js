@@ -21,14 +21,14 @@ function App() {
   const [userInfo, setUserInfo] = useState(false);
 
   useEffect(() => {
+    // TODO: ここらの理解がよくできてないので、要宿題
     // Firebase Authenticationのログイン状態が変化した場合に呼び出されるコールバック関数
-    console.log("コールバック")
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log("ログイン状態確認")
       if (user) {
         fetchShowUser(auth.currentUser.email)
           .then((data) => {
             console.log("ユーザ取得")
-            console.log(data.user)
             setUserInfo(data.user)
           })
       }
