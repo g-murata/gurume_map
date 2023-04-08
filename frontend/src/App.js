@@ -12,13 +12,36 @@ import { Post } from './components/blogs/Post';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 
+import { useState, useEffect } from "react";
+import { auth } from './firebase';
+import { fetchShowUser } from './apis/users';
+
 function App() {
+
+  const [userInfo, setUserInfo] = useState(false);
+
+  useEffect(() => {
+    // Firebase Authenticationのログイン状態が変化した場合に呼び出されるコールバック関数
+    console.log("コールバック")
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        fetchShowUser(auth.currentUser.email)
+          .then((data) => {
+            console.log("ユーザ取得")
+            setUserInfo(data.user)
+          })
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <>
 
       <Router>
         <AuthProvider>
-          <Header />
+          <Header userInfo={userInfo} />
 
           <Routes>
             <Route exact path="/" element={<PrivateRoute><Main /></PrivateRoute>} />
