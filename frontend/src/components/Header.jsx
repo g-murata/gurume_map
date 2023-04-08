@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi"
 
 import { Link } from 'react-router-dom';
