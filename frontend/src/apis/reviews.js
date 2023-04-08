@@ -28,7 +28,6 @@ export const postReview = (params) => {
     }
   )
     .then(res => {
-      console.log(res)
       return res.data
     })
     .catch((e) => { throw e; })
@@ -42,7 +41,6 @@ export const updateReview = (params) => {
     }
   )
     .then(res => {
-      console.log(res)
       return res.data
     })
     .catch((e) => { throw e; })
@@ -56,7 +54,6 @@ export const deleteReview = (params) => {
     }
   )
     .then(res => {
-      console.log(res)
       return res.data
     })
     .catch((e) => { throw e; })
@@ -70,7 +67,6 @@ export const alreadyRegisteredReview = (params) => {
     }
   })
     .then(res => {
-      console.log(res)
       return res.data
     })
     .catch((e) => console.error(e))

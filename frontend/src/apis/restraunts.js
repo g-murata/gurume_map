@@ -19,7 +19,6 @@ export const postRestraunt = (params) => {
     }
   )
     .then(res => {
-      console.log(res)
       return res.data
     })
     .catch((e) => { throw e; })
@@ -32,7 +31,6 @@ export const updateRestraunt = (params) => {
     }
   )
     .then(res => {
-      console.log(res)
       return res.data
     })
     .catch((e) => { throw e; })
@@ -42,11 +40,10 @@ export const deleteRestraunt = (params) => {
 
   return axios.delete(`${restaurant(params.id)}`,
     {
-      id: params.id      
+      id: params.id
     }
   )
     .then(res => {
-      console.log(res)
       return res.data
     })
     .catch((e) => { throw e; })

@@ -15,7 +15,6 @@ export const Blog = () => {
         setBlog(data.blogs)
         setIsLoading(false)
       }).catch((error) => {
-        console.log(error);
         setIsLoading(false);
       })
   }, [])

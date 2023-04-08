@@ -4,7 +4,6 @@ import Modal from 'react-modal';
 import Restaurants from './../restaurants.json';
 
 const restaurants = Restaurants.data;
-console.log(restaurants)
 
 // const descriptionText = Data.data.header.text;
 
@@ -36,7 +35,6 @@ export const GurumeModal = () => {
   const [selectedItem, setSelectedItem] = useState('')
 
   const onOpenDialog = (name) => {
-    console.log(name)
     setSelectedItem(name)
   }
 

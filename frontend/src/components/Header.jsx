@@ -14,18 +14,13 @@ export const Header = (props) => {
   };
 
   const [openMenu, setOpenMenu] = useState(false);
-  console.log(openMenu);
   const data = props.list;
-  console.log(data);
 
   const menuFunction = () => {
     setOpenMenu(!openMenu);
   };
 
   const testFunction = (e, setter) => {
-    console.log(e)
-    console.log(e.target)
-    console.log(e.currentTarget)
 
     if (e.target === e.currentTarget) {
       //メニューの外側をクリックしたときだけメニューを閉じる
@@ -49,7 +44,6 @@ export const Header = (props) => {
 
         {user
           ? <>
-            {console.log(props.userInfo)}
             <li className='p-8 border-b-2 list-none md:border-none'>
               <span className="text-gray-500 active:text-yellow-700 text-lg font-semibold block">ログインユーザ：{props.userInfo ? props.userInfo.name : "名無しさん"}</span>
             </li>

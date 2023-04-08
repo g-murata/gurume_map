@@ -43,7 +43,6 @@ export const SignUp = () => {
 
       })
       .catch((error) => {
-        console.log(error.code);
         switch (error.code) {
           case 'auth/invalid-email':
             setError('正しいメールアドレスの形式で入力してください。');

@@ -7,7 +7,6 @@ export const ShowRestrauntModal = (props) => {
   const [editReviewModalIsOpen, setEditReviewModalIsOpen] = useState(false);
 
   // const onReviewShowDialog = (value) => {
-  //   console.log(value)
   //   setSelectedReviewItem(value.id)
   // }
   const onReviewEditDialog = (item) => {
@@ -47,8 +46,6 @@ export const ShowRestrauntModal = (props) => {
         // setIsLoading(false);
       })
       .catch((error) => {
-        console.log("エラー")
-        console.log(error.code);
         switch (error.code) {
           case 'ERR_BAD_RESPONSE':
             props.setError('不備あり！');
@@ -75,8 +72,6 @@ export const ShowRestrauntModal = (props) => {
           props.setAlreadyRegistered(false);
         })
         .catch((error) => {
-          console.log("エラー")
-          console.log(error.code);
           switch (error.code) {
             case 'ERR_BAD_RESPONSE':
               props.setError('不備あり！');
@@ -133,7 +128,7 @@ export const ShowRestrauntModal = (props) => {
             <div className="md:px-8 md:w-9/12">
               <div className="flex place-content-between w-11/12  m-auto">
                 <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
-                {(auth.currentUser.email === props.restaurant.user_email) && 
+                {(auth.currentUser.email === props.restaurant.user_email) &&
                   <>
                     <button className="font-bold" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
                     <button className="font-bold" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
@@ -160,7 +155,7 @@ export const ShowRestrauntModal = (props) => {
                 <span>このお店を登録した人：</span>
                 <p className="user_name">{props.restaurant.user_name}</p>
                 <div className='flex justify-center'>
-                  {(!props.alreadyRegistered && auth.currentUser.email !== "guest@guest.co.jp") && 
+                  {(!props.alreadyRegistered && auth.currentUser.email !== "guest@guest.co.jp") &&
                     <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
                       className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
                     </button>

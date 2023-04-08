@@ -28,6 +28,7 @@ function App() {
         fetchShowUser(auth.currentUser.email)
           .then((data) => {
             console.log("ユーザ取得")
+            console.log(data.user)
             setUserInfo(data.user)
           })
       }

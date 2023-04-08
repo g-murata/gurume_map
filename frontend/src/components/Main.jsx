@@ -95,8 +95,6 @@ export const Main = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log("エラー")
-        console.log(error.code);
         switch (error.code) {
           case 'ERR_BAD_RESPONSE':
             setError('不備あり！');
@@ -112,7 +110,7 @@ export const Main = () => {
   const handleReviewSubmit = (event) => {
     event.preventDefault();
     const { content } = event.target.elements;
-    setIsLoading(true);    
+    setIsLoading(true);
     postReview({
       restraunt_id: selectedItem,
       evaluation: evaluation,
@@ -131,11 +129,9 @@ export const Main = () => {
           email: user.email
         }]
         setReview(newReviews)
-        setIsLoading(false);        
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.log("エラー")
-        console.log(error.code);
         switch (error.code) {
           case 'ERR_BAD_RESPONSE':
             setError('不備あり！');
@@ -177,8 +173,6 @@ export const Main = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log("エラー")
-        console.log(error.code);
         switch (error.code) {
           case 'ERR_BAD_RESPONSE':
             setError('不備あり！');
@@ -203,8 +197,6 @@ export const Main = () => {
           setRestraunt(newRestaurants);
         })
         .catch((error) => {
-          console.log("エラー")
-          console.log(error.code);
           switch (error.code) {
             case 'ERR_BAD_RESPONSE':
               setError('不備あり！');
@@ -232,7 +224,7 @@ export const Main = () => {
   const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
 
   const OpenModal = () => {
-    if(auth.currentUser.email !== "guest@guest.co.jp"){
+    if (auth.currentUser.email !== "guest@guest.co.jp") {
       setIsOpen(true)
     }
   }
@@ -260,13 +252,10 @@ export const Main = () => {
         setRestraunt(data.restraunts)
         setIsLoading(false);
       })
-      .catch((error) => 
-        {
-          console.log("エラー")
-          console.log(error.code);
-          setIsLoading(false);
-        }
-      )            
+      .catch((error) => {
+        setIsLoading(false);
+      }
+      )
   }, [])
 
 
@@ -288,9 +277,8 @@ export const Main = () => {
 
     fetchShowReview(id)
       .then((data) => {
-        console.log(data.review)
         setReview(data.review)
-        setIsReviewLoading(false)        
+        setIsReviewLoading(false)
       }
       )
 
@@ -385,15 +373,15 @@ export const Main = () => {
             {Object.keys(restaurants).map(item => {
               return (
                 <>
-                <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(restaurants[item].id)}>
-                  <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
-                  <div className="px-6 py-4">
-                    <div className="font-bold text-xl mb-2">{restaurants[item].name}</div>
-                    <p className="text-gray-700 text-base">{restaurants[item].evaluation}</p>
+                  <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(restaurants[item].id)}>
+                    <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
+                    <div className="px-6 py-4">
+                      <div className="font-bold text-xl mb-2">{restaurants[item].name}</div>
+                      <p className="text-gray-700 text-base">{restaurants[item].evaluation}</p>
+                    </div>
+                    <div className="px-6 pt-4 pb-2">
+                    </div>
                   </div>
-                  <div className="px-6 pt-4 pb-2">
-                  </div>
-                </div>
                   <Modal
                     isOpen={restaurants[item].id === selectedItem}
                     onAfterOpen={afterOpenModal}
@@ -420,7 +408,7 @@ export const Main = () => {
                           alreadyRegistered={alreadyRegistered}
                           setAlreadyRegistered={setAlreadyRegistered}
                           isLoading={isLoading}
-                          isReviewLoading={isReviewLoading}                          
+                          isReviewLoading={isReviewLoading}
                           error={error}
                           setError={setError}
                         />
@@ -464,7 +452,7 @@ export const Main = () => {
               )
             })}
           </div>
-        </div>        
+        </div>
         <Modal isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
