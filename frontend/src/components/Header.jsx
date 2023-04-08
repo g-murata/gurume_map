@@ -14,7 +14,6 @@ export const Header = (props) => {
   };
 
   const [openMenu, setOpenMenu] = useState(false);
-  const data = props.list;
 
   const menuFunction = () => {
     setOpenMenu(!openMenu);
