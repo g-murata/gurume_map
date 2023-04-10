@@ -6,6 +6,10 @@ module.exports = {
     extend: {
       height: {
         '128': '32rem',
+        '10vh': '10vh',
+        '20vh': '20vh',
+        '80vh': '80vh',
+        '90vh': '90vh'        
       }
     },
   },
