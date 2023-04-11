@@ -332,6 +332,7 @@ export const Main = () => {
 
   return (
     <>
+      {/* ログイン成功メッセージを出す。 */}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
