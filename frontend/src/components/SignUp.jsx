@@ -27,6 +27,10 @@ export const SignUp = () => {
 
     event.preventDefault();
     const { name, email, password } = event.target.elements;
+    if (!name.value) {
+      setError('ニックネームは必須です！');
+      return;
+    }
     if (name.value.length > 10) {
       setError('ニックネームは10文字以内でお願いします！');
       return;
