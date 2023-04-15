@@ -68,8 +68,7 @@ export const ShowRestrauntModal = (props) => {
           const newReviews = [...props.reviews]
           newReviews.splice(index, 1)
           props.setReview(newReviews);
-
-          props.setAlreadyRegistered(false);
+          props.setCheckUsersWithoutReviews(true);
         })
         .catch((error) => {
           switch (error.code) {
@@ -155,10 +154,14 @@ export const ShowRestrauntModal = (props) => {
                 <span>このお店を登録した人：</span>
                 <p className="user_name">{props.restaurant.user_name}</p>
                 <div className='flex justify-center'>
-                  {(!props.alreadyRegistered && auth.currentUser.email !== "guest@guest.co.jp") &&
-                    <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
-                      className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
-                    </button>
+                  {props.isCheckUserReviewLoading ? <h1 className="text-blue-600">Loadingなう...</h1> :
+                    <>
+                      {(props.checkUsersWithoutReviews && auth.currentUser.email !== "guest@guest.co.jp") &&
+                        <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
+                          className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
+                        </button>
+                      }
+                    </>
                   }
                 </div>
               </p>

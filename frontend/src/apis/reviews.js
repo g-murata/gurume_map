@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { reviews, review, already_registered_review } from '../urls/index'
+import { reviews, review, check_users_without_review } from '../urls/index'
 
 export const fetchReviews = () => {
   return axios.get(reviews)
@@ -59,8 +59,8 @@ export const deleteReview = (params) => {
     .catch((e) => { throw e; })
 };
 
-export const alreadyRegisteredReview = (params) => {
-  return axios.get(already_registered_review, {
+export const CheckUsersWithoutReviews = (params) => {
+  return axios.get(check_users_without_review, {
     params: {
       restraunt_id: params.restraunt_id,
       email: params.email

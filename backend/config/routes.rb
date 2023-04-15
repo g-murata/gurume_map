@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       resources :restraunts
       resources :reviews do
         collection do
-          get 'already_registered_review'
+          get 'check_users_without_review'
         end
       end
       resources :blogs      

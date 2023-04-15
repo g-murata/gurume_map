@@ -4,7 +4,7 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, postReview, alreadyRegisteredReview } from '../apis/reviews';
+import { fetchShowReview, postReview, CheckUsersWithoutReviews } from '../apis/reviews';
 import {
   GoogleMap,
   LoadScript,
@@ -143,7 +143,7 @@ export const Main = () => {
         setIsLoading(false);
       });
 
-    setAlreadyRegistered(true)
+    setCheckUsersWithoutReviews(false)
   }
 
   const handleUpdateSubmit = (event) => {
@@ -219,6 +219,7 @@ export const Main = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isReviewLoading, setIsReviewLoading] = useState(false);
+  const [isCheckUserReviewLoading, setIsCheckUserReviewLoading] = useState(false);
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
@@ -269,11 +270,12 @@ export const Main = () => {
 
   const [selectedItem, setSelectedItem] = useState('')
 
-  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+  const [checkUsersWithoutReviews, setCheckUsersWithoutReviews] = useState(false);
 
   const onOpenDialog = (id) => {
     setSelectedItem(id)
     setIsReviewLoading(true)
+    setIsCheckUserReviewLoading(true)
 
     fetchShowReview(id)
       .then((data) => {
@@ -282,12 +284,13 @@ export const Main = () => {
       }
       )
 
-    alreadyRegisteredReview({
+    CheckUsersWithoutReviews({
       restraunt_id: id,
       email: auth.currentUser.email
     })
       .then((result) => {
-        setAlreadyRegistered(result.review);
+        setCheckUsersWithoutReviews(result.review);
+        setIsCheckUserReviewLoading(false)
       }
       )
   }
@@ -406,10 +409,11 @@ export const Main = () => {
                           restaurant={restaurants[item]}
                           item={item}
                           reviews={reviews}
-                          alreadyRegistered={alreadyRegistered}
-                          setAlreadyRegistered={setAlreadyRegistered}
+                          checkUsersWithoutReviews={checkUsersWithoutReviews}
+                          setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
                           isLoading={isLoading}
                           isReviewLoading={isReviewLoading}
+                          isCheckUserReviewLoading={isCheckUserReviewLoading}
                           error={error}
                           setError={setError}
                         />

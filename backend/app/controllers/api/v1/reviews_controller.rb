@@ -65,10 +65,9 @@ module Api
 
       end
 
-      def already_registered_review
+      def check_users_without_review
         user_id = User.find_by(email: params[:email]).id
-        review = Restraunt.find(params[:restraunt_id]).reviews.where(user_id: user_id).exists?
-        # review = Review.where(restraunt_id: params[:id]).joins(:user).where("user.id = #{params[:user_id]}")
+        review = Restraunt.find(params[:restraunt_id]).reviews.where(user_id: user_id).blank?
         render json: {
           review: review
         }, status: :ok
