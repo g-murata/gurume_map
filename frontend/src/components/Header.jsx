@@ -33,31 +33,31 @@ export const Header = (props) => {
   const HeaderLink = () => {
     return (
       <>
-        <li className='p-8 border-b-2 list-none md:border-none'>
+        <li className='px-8 border-b-2 list-none md:border-none'>
           <Link to="/about" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >GurumeMapとは</Link>
         </li>
-        <li className='p-8 border-b-2 list-none md:border-none'>
+        <li className='px-8 border-b-2 list-none md:border-none'>
           <Link to="/blog" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
           <div className="text-red-400 text-xs md:text-right"></div>
         </li>
 
         {user
           ? <>
-            <li className='p-8 border-b-2 list-none md:border-none'>
+            <li className='px-8 border-b-2 list-none md:border-none'>
               <span className="text-gray-500 active:text-yellow-700 text-lg font-semibold block">ログインユーザ：{props.userInfo ? props.userInfo.name : "名無しさん"}</span>
             </li>
-            <li className='p-8 border-b-2 list-none md:border-none'>
+            <li className='px-8 border-b-2 list-none md:border-none'>
               <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>
             </li>
           </>
           :
           <>
             <>
-              <li className='p-8 border-b-2 list-none md:border-none'>
+              <li className='px-8 border-b-2 list-none md:border-none'>
                 <Link to="/signup" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >新規会員登録</Link>
               </li>
             </>
-            <li className='p-8 border-b-2 list-none md:border-none'>
+            <li className='px-8 border-b-2 list-none md:border-none'>
               <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >ログイン</Link>
             </li>
           </>
@@ -72,7 +72,7 @@ export const Header = (props) => {
 
   return (
     <>
-      <div className="h-10vh bg-white md:h-20vh md:pb-12">
+      <div className="h-10vh bg-white md:h-20vh">
         <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
           <header className="flex justify-between items-center py-4 md:py-8">
             <Link to="/" className="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
