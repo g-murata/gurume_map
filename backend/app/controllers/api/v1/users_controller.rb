@@ -2,6 +2,15 @@ module Api
   module V1
     class UsersController < ApplicationController
 
+      def index
+        users = User.all  
+
+        render json: {
+          users: users
+        }, status: :ok
+
+      end
+
       def create
         user = User.new(params.permit(:name, :email, :password))
 
