@@ -154,7 +154,7 @@ export const ShowRestrauntModal = (props) => {
                 <span>このお店を登録した人：</span>
                 <p className="user_name">{props.restaurant.user_name}</p>
                 <div className='flex justify-center'>
-                  {props.isCheckUserReviewLoading ? <h1 className="text-blue-600">Loadingなう...</h1> :
+                  {props.isCheckUserReviewLoading ? <h1>・・・</h1> :
                     <>
                       {(props.checkUsersWithoutReviews && auth.currentUser.email !== "guest@guest.co.jp") &&
                         <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
