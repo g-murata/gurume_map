@@ -291,8 +291,13 @@ export const Main = () => {
       .then((result) => {
         setCheckUsersWithoutReviews(result.review);
         setIsCheckUserReviewLoading(false)
-      }
-      )
+
+      })
+      .catch((error) => {
+        console.log("レビュー投稿可否チェックでエラー起きとるで★")
+        console.log(error)
+        setIsCheckUserReviewLoading(false)
+      });
   }
 
   function afterOpenModal() {
@@ -331,7 +336,17 @@ export const Main = () => {
   const onCloseEditDialog = () => {
     setEditModalIsOpen(false);
   }
-
+  // const TOKYO_CENTER = { lat: 35.664035, lng: 139.698212 };
+  // const TOKYO_BOUNDS = {
+  //   // north: 35.675538,
+  //   // south: 35.650430,
+  //   // west: 139.732006,
+  //   // east: 139.686423,
+  //   north: 35.673944,
+  //   south: 35.666994,
+  //   west: 139.750737,
+  //   east: 139.767149,
+  // };
 
   return (
     <>
@@ -339,7 +354,18 @@ export const Main = () => {
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17} onClick={getLatLng}>
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={17}
+            // options={{
+            //   restriction: {
+            //     latLngBounds: TOKYO_BOUNDS,
+            //     strictBounds: false,
+            //   },
+            // }}
+            onClick={getLatLng}
+          >
             <Marker position={positionIshiBill} button onClick={() => alert('開発中！')} />
             {/* <Marker icon={'https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png'} position={positionIshiBill} button onClick={() => alert('自社です')}/> */}
             {Object.keys(restaurants).map(item => {
