@@ -33,31 +33,31 @@ export const Header = (props) => {
   const HeaderLink = () => {
     return (
       <>
-        <li className='px-8 border-b-2 list-none md:border-none'>
+        <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
           <Link to="/about" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >GurumeMapとは</Link>
         </li>
-        <li className='px-8 border-b-2 list-none md:border-none'>
+        <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
           <Link to="/blog" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
           <div className="text-red-400 text-xs md:text-right"></div>
         </li>
 
         {user
           ? <>
-            <li className='px-8 border-b-2 list-none md:border-none'>
+            <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
               <span className="text-gray-500 active:text-yellow-700 text-lg font-semibold block">ログインユーザ：{props.userInfo ? props.userInfo.name : "名無しさん"}</span>
             </li>
-            <li className='px-8 border-b-2 list-none md:border-none'>
+            <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
               <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>
             </li>
           </>
           :
           <>
             <>
-              <li className='px-8 border-b-2 list-none md:border-none'>
+              <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
                 <Link to="/signup" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >新規会員登録</Link>
               </li>
             </>
-            <li className='px-8 border-b-2 list-none md:border-none'>
+            <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
               <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >ログイン</Link>
             </li>
           </>
