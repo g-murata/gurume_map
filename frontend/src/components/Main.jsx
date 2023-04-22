@@ -384,15 +384,6 @@ export const Main = () => {
                       <h1>{restaurants[item].name}</h1>
                     </div>
                   </InfoWindow>
-
-                  <Modal
-                    isOpen={restaurants[item].id === selectedItem}
-                    onAfterOpen={afterOpenModal}
-                    onRequestClose={onCloseDialog}
-                    style={customStyles}
-                    contentLabel="Example Modal"
-                  >
-                  </Modal>
                 </>
               )
             })}
