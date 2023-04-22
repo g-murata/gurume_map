@@ -20,13 +20,13 @@ export const Login = () => {
             setError('正しいメールアドレスの形式で入力してください。');
             break;
           case 'auth/user-not-found':
-            setError('メールアドレスかパスワードに誤りがあります。');
+            setError('入力されたメールアドレスは存在しないみたいです。');
             break;
           case 'auth/wrong-password':
-            setError('メールアドレスかパスワードに誤りがあります。');
+            setError('パスワードに誤りがあります。');
             break;
           default:
-            setError('メールアドレスかパスワードに誤りがあります。');
+            setError('おそらくfirebase authに関するエラー。PCはネット繋がってる？？');
             break;
         }
       }
@@ -64,10 +64,10 @@ export const Login = () => {
         </div>
       </form >
       {process.env.NODE_ENV === "development" ?
-      <button className="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
-      :
-      <h1 className="font-bold" style={{color: 'red'}}>開発中です！しばし待たれよ！(2023.01.07)</h1>
-    }
+        <button className="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
+        :
+        <h1 className="font-bold" style={{ color: 'red' }}>開発中です！しばし待たれよ！(2023.01.07)</h1>
+      }
     </div >
 
   );
