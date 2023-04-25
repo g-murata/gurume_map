@@ -47,7 +47,7 @@ export const Header = (props) => {
               <span className="text-gray-500 active:text-yellow-700 text-lg font-semibold block">ログインユーザ：{props.userInfo ? props.userInfo.name : "名無しさん"}</span>
             </li>
             <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
-              <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>
+              <Link to="/landing" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>
             </li>
           </>
           :
