@@ -371,7 +371,9 @@ export const Main = () => {
             {Object.keys(restaurants).map(item => {
               return (
                 <>
-                  <Marker position={{
+                  <Marker
+                   className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}
+                   position={{
                     lat: restaurants[item].lat,
                     lng: restaurants[item].lng,
                   }} />
