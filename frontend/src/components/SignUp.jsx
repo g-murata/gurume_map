@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { postCreateUser } from '../apis/users';
+import { Link } from 'react-router-dom';
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -99,15 +100,20 @@ export const SignUp = () => {
       )
         :
         (
-          <div className="bg-pink-100 max-w-lg px-8 mx-auto md:px-8 md:flex-row">
-            <form onSubmit={handlePasswordCheckSubmit}>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                この先の画面に進むためには暗証番号が必要です。
-                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" value={password} onChange={handleChange} />
-              </label>
-              <input className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full" type="submit" value="送信" />
-            </form>
-          </ div>
+          <>
+            <div className="bg-pink-100 max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+              <form onSubmit={handlePasswordCheckSubmit}>
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  この先の画面に進むためには暗証番号が必要です。
+                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" value={password} onChange={handleChange} />
+                </label>
+                <input className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full" type="submit" value="送信" />
+              </form>
+            </ div>
+            <div className="text-center max-w-lg px-8 mx-auto md:px-8 md:flex-row">
+             <Link to="/" className="text-blue-700 hover:text-blue-500 active:text-blue-300 text-lg font-semibold block" >戻る</Link>            
+            </div>
+          </>
         )}
     </>
 
