@@ -80,7 +80,7 @@ export const SignUp = () => {
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
-                  メールアドレス
+                  メールアドレス ※ログインに使うだけなので本当のアドレスを入れなくてもOKです。
                 </label>
                 <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" placeholder="メールアドレス" name="email" />
               </div>
