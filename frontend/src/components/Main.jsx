@@ -336,18 +336,13 @@ export const Main = () => {
   const onCloseEditDialog = () => {
     setEditModalIsOpen(false);
   }
-  // const TOKYO_CENTER = { lat: 35.664035, lng: 139.698212 };
-  // const TOKYO_BOUNDS = {
-  //   // north: 35.675538,
-  //   // south: 35.650430,
-  //   // west: 139.732006,
-  //   // east: 139.686423,
-  //   north: 35.673944,
-  //   south: 35.666994,
-  //   west: 139.750737,
-  //   east: 139.767149,
-  // };
-
+  // 北は千代田区、東は江戸川区、南は港区、西は渋谷区
+  const TOKYO_BOUNDS = {
+    north: 35.701007,
+    south: 35.613797,
+    west: 139.653936,
+    east: 139.88256,
+  };  
   return (
     <>
       {/* ログイン成功メッセージを出す。 */}
@@ -358,12 +353,12 @@ export const Main = () => {
             mapContainerStyle={containerStyle}
             center={center}
             zoom={17}
-            // options={{
-            //   restriction: {
-            //     latLngBounds: TOKYO_BOUNDS,
-            //     strictBounds: false,
-            //   },
-            // }}
+            options={{
+              restriction: {
+                latLngBounds: TOKYO_BOUNDS,
+                strictBounds: true,
+              },
+            }}
             onClick={getLatLng}
           >
             <Marker position={positionIshiBill} button onClick={() => alert('開発中！')} />
@@ -371,7 +366,9 @@ export const Main = () => {
             {Object.keys(restaurants).map(item => {
               return (
                 <>
-                  <Marker position={{
+                  <Marker
+                   className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}
+                   position={{
                     lat: restaurants[item].lat,
                     lng: restaurants[item].lng,
                   }} />
