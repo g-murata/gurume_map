@@ -342,7 +342,7 @@ export const Main = () => {
     south: 35.613797,
     west: 139.653936,
     east: 139.88256,
-  };  
+  };
   return (
     <>
       {/* ログイン成功メッセージを出す。 */}
@@ -351,7 +351,7 @@ export const Main = () => {
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
           <GoogleMap
             mapContainerStyle={containerStyle}
-            center={center}
+            center={positionIshiBill}
             zoom={17}
             options={{
               restriction: {
@@ -361,17 +361,15 @@ export const Main = () => {
             }}
             onClick={getLatLng}
           >
-            <Marker position={positionIshiBill} button onClick={() => alert('開発中！')} />
-            {/* <Marker icon={'https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png'} position={positionIshiBill} button onClick={() => alert('自社です')}/> */}
             {Object.keys(restaurants).map(item => {
               return (
                 <>
                   <Marker
-                   className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}
-                   position={{
-                    lat: restaurants[item].lat,
-                    lng: restaurants[item].lng,
-                  }} />
+                    className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}
+                    position={{
+                      lat: restaurants[item].lat,
+                      lng: restaurants[item].lng,
+                    }} />
 
                   <InfoWindow position={{
                     lat: restaurants[item].lat,
@@ -384,6 +382,10 @@ export const Main = () => {
                 </>
               )
             })}
+
+            <Marker icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' }}
+              position={positionIshiBill} button onClick={() => alert('石井ビル')} />
+
           </GoogleMap>
         </div>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">

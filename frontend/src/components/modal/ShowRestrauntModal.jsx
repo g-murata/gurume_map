@@ -110,7 +110,7 @@ export const ShowRestrauntModal = (props) => {
               <label for="content" className="block text-gray-700 text-sm font-bold mb-2">
                 感想
               </label>
-              <textarea id="content" name="content" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"
+              <textarea id="content" name="content" rows="4" className="h-60 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"
                 defaultValue={props.reviews[selectedReviewItem].content}></textarea>
             </div>
             <div className='flex justify-center '>
