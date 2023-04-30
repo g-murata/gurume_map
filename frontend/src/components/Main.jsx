@@ -383,7 +383,7 @@ export const Main = () => {
               )
             })}
 
-            <Marker icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' }}
+            <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
               position={positionIshiBill} button onClick={() => alert('石井ビル')} />
 
           </GoogleMap>
