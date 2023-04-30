@@ -351,7 +351,7 @@ export const Main = () => {
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
           <GoogleMap
             mapContainerStyle={containerStyle}
-            center={center}
+            center={positionIshiBill}
             zoom={17}
             options={{
               restriction: {
@@ -361,8 +361,6 @@ export const Main = () => {
             }}
             onClick={getLatLng}
           >
-            <Marker icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' }}
-              position={positionIshiBill} button onClick={() => alert('石井ビル')} />
             {Object.keys(restaurants).map(item => {
               return (
                 <>
@@ -384,6 +382,10 @@ export const Main = () => {
                 </>
               )
             })}
+
+            <Marker icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' }}
+              position={positionIshiBill} button onClick={() => alert('石井ビル')} />
+
           </GoogleMap>
         </div>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
