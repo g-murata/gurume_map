@@ -18,6 +18,7 @@ import { fetchShowUser } from './apis/users';
 function App() {
 
   const [userInfo, setUserInfo] = useState(false);
+  const [userRegistered, setUserRegistered] = useState(false);
 
   useEffect(() => {
     // TODO: ここらの理解がよくできてないので、要宿題
@@ -44,11 +45,11 @@ function App() {
           <Header userInfo={userInfo} />
 
           <Routes>
-            <Route exact path="/" element={<PrivateRoute><Main /></PrivateRoute>} />
+            <Route exact path="/" element={<PrivateRoute><Main userRegistered={userRegistered} /></PrivateRoute>} />
             <Route exact path="/about" element={<About />} />
             <Route exact path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<Post />} />
-            <Route exact path="/signup" element={<SignUp setUserInfo={setUserInfo} />} />
+            <Route exact path="/signup" element={<SignUp setUserInfo={setUserInfo} setUserRegistered={setUserRegistered} />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/landing" element={<Landing />} />
           </Routes>

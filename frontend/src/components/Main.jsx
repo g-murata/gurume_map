@@ -67,7 +67,7 @@ const divStyle = {
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
 
-export const Main = () => {
+export const Main = (props) => {
   const user = auth.currentUser;
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
@@ -345,7 +345,7 @@ export const Main = () => {
   };
   return (
     <>
-      {/* ログイン成功メッセージを出す。 */}
+      {props.userRegistered && <h1 className="md:px-8 mx-auto md:items-left md:flex-row">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">

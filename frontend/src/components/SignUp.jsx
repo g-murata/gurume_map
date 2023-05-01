@@ -44,6 +44,7 @@ export const SignUp = (props) => {
           password: password.value
         }).then((user) => {
           props.setUserInfo(user)
+          props.setUserRegistered(true)
         })
         navigate('/');
 
