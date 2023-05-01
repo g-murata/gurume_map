@@ -42,7 +42,10 @@ function App() {
 
       <Router>
         <AuthProvider>
-          <Header userInfo={userInfo} />
+          <Header
+            userInfo={userInfo}
+            setUserRegistered={setUserRegistered}
+          />
 
           <Routes>
             <Route exact path="/" element={<PrivateRoute><Main userRegistered={userRegistered} /></PrivateRoute>} />
