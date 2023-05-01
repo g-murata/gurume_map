@@ -345,7 +345,7 @@ export const Main = (props) => {
   };
   return (
     <>
-      {props.userRegistered && <h1 className="md:px-8 mx-auto md:items-left md:flex-row">ユーザ登録完了！</h1>}
+      {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
