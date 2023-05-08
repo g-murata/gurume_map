@@ -67,7 +67,7 @@ const divStyle = {
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 
 
-export const Main = () => {
+export const Main = (props) => {
   const user = auth.currentUser;
   const [error, setError] = useState('');
   const handleSubmit = (event) => {
@@ -342,16 +342,16 @@ export const Main = () => {
     south: 35.613797,
     west: 139.653936,
     east: 139.88256,
-  };  
+  };
   return (
     <>
-      {/* ログイン成功メッセージを出す。 */}
+      {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
           <GoogleMap
             mapContainerStyle={containerStyle}
-            center={center}
+            center={positionIshiBill}
             zoom={17}
             options={{
               restriction: {
@@ -361,17 +361,15 @@ export const Main = () => {
             }}
             onClick={getLatLng}
           >
-            <Marker position={positionIshiBill} button onClick={() => alert('開発中！')} />
-            {/* <Marker icon={'https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png'} position={positionIshiBill} button onClick={() => alert('自社です')}/> */}
             {Object.keys(restaurants).map(item => {
               return (
                 <>
                   <Marker
-                   className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}
-                   position={{
-                    lat: restaurants[item].lat,
-                    lng: restaurants[item].lng,
-                  }} />
+                    className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}
+                    position={{
+                      lat: restaurants[item].lat,
+                      lng: restaurants[item].lng,
+                    }} />
 
                   <InfoWindow position={{
                     lat: restaurants[item].lat,
@@ -384,6 +382,10 @@ export const Main = () => {
                 </>
               )
             })}
+
+            <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
+              position={positionIshiBill} button onClick={() => alert('石井ビル')} />
+
           </GoogleMap>
         </div>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">

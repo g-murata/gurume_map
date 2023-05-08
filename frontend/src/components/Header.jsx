@@ -11,6 +11,8 @@ export const Header = (props) => {
 
   const handleLogout = () => {
     signOut(auth);
+    menuFunction();
+    props.setUserRegistered(false)
   };
 
   const [openMenu, setOpenMenu] = useState(false);
