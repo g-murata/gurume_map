@@ -1,6 +1,6 @@
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 
 export const Login = () => {
@@ -26,7 +26,7 @@ export const Login = () => {
             setError('パスワードに誤りがあります。');
             break;
           default:
-            setError('おそらくfirebase authに関するエラー。PCはネット繋がってる？？');
+            setError('エラー！！');
             break;
         }
       }
@@ -64,6 +64,10 @@ export const Login = () => {
         </div>
       </form >
       <button className="text-yellow-500 active:text-yellow-700 text-lg font-semibold block" onClick={guestLogin}>ゲストユーザでログイン</button>
+      <div className="text-center py-8">
+        <Link to="/" className="text-blue-700 hover:text-blue-500 active:text-blue-300 text-lg font-semibold block" >戻る</Link>            
+      </div>
+
     </div >
 
   );
