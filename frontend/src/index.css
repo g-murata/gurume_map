@@ -127,3 +127,9 @@
 }
 
 /* 星0 */
+
+
+/* GoogleMapsAPIの吹き出し右上の❎ボタンを非表示にする。 */
+.gm-ui-hover-effect {
+    display: none !important;
+}
