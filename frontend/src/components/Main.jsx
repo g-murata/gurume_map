@@ -346,9 +346,7 @@ export const Main = (props) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const handleChange = (event) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-    restaurants.filter((restaurant) => restaurant.name.includes(value));
+    setSearchTerm(event.target.value);
   };
 
   const filteredRestaurants = restaurants.filter((restaurant) =>
