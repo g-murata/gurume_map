@@ -70,6 +70,7 @@ const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 export const Main = (props) => {
   const user = auth.currentUser;
   const [error, setError] = useState('');
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const { name, lat, lng } = event.target.elements;
@@ -92,6 +93,7 @@ export const Main = (props) => {
           user_email: user.email
         }]
         setRestraunt(newRestaurants)
+        setSearchTerm("");
         setIsLoading(false);
       })
       .catch((error) => {
@@ -170,6 +172,7 @@ export const Main = (props) => {
           return restaurant;
         })
         setRestraunt(updateRestaurants);
+        setSearchTerm("");
         setIsLoading(false);
       })
       .catch((error) => {
