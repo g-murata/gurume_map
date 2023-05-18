@@ -129,8 +129,3 @@
 /* 星0 */
 
 
-/* TODO:buildしないとレイアウトが崩れる件。コメントアウトも何故か効かない。npm run startで作業するときは削除しよう。（仕方ないので） */
-/* GoogleMapsAPIの吹き出し右上の❎ボタンを非表示にする。 */
-.gm-ui-hover-effect {
-    display: none !important;
-}
