@@ -70,6 +70,7 @@ const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 export const Main = (props) => {
   const user = auth.currentUser;
   const [error, setError] = useState('');
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const { name, lat, lng } = event.target.elements;
@@ -92,6 +93,7 @@ export const Main = (props) => {
           user_email: user.email
         }]
         setRestraunt(newRestaurants)
+        setSearchTerm("");
         setIsLoading(false);
       })
       .catch((error) => {
@@ -170,6 +172,7 @@ export const Main = (props) => {
           return restaurant;
         })
         setRestraunt(updateRestaurants);
+        setSearchTerm("");
         setIsLoading(false);
       })
       .catch((error) => {
@@ -343,8 +346,32 @@ export const Main = (props) => {
     west: 139.653936,
     east: 139.88256,
   };
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredRestaurants = restaurants.filter((restaurant) =>
+    restaurant.name.includes(searchTerm)
+  );
+
   return (
     <>
+      <div class="flex items-center justify-center">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg aria-hidden="true" class="w-5 h-5 pb-1 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <input
+            className="shadow appearance-none border pl-10 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text" autoFocus
+            placeholder="店名検索"
+            value={searchTerm}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
@@ -361,22 +388,22 @@ export const Main = (props) => {
             }}
             onClick={getLatLng}
           >
-            {Object.keys(restaurants).map(item => {
+            {Object.keys(filteredRestaurants).map(item => {
               return (
                 <>
                   <Marker
-                    className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}
+                    className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}
                     position={{
-                      lat: restaurants[item].lat,
-                      lng: restaurants[item].lng,
+                      lat: filteredRestaurants[item].lat,
+                      lng: filteredRestaurants[item].lng,
                     }} />
 
                   <InfoWindow position={{
-                    lat: restaurants[item].lat,
-                    lng: restaurants[item].lng,
+                    lat: filteredRestaurants[item].lat,
+                    lng: filteredRestaurants[item].lng,
                   }} options={infoWindowOptions}>
-                    <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(restaurants[item].id)}>
-                      <h1>{restaurants[item].name}</h1>
+                    <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}>
+                      <h1>{filteredRestaurants[item].name}</h1>
                     </div>
                   </InfoWindow>
                 </>
@@ -390,20 +417,20 @@ export const Main = (props) => {
         </div>
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
           <div className="grid grid-cols-2 md:grid-cols-4">
-            {Object.keys(restaurants).map(item => {
+            {Object.keys(filteredRestaurants).map(item => {
               return (
                 <>
-                  <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(restaurants[item].id)}>
+                  <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(filteredRestaurants[item].id)}>
                     <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
                     <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{restaurants[item].name}</div>
-                      <p className="text-gray-700 text-base">{restaurants[item].evaluation}</p>
+                      <div className="font-bold text-xl mb-2">{filteredRestaurants[item].name}</div>
+                      <p className="text-gray-700 text-base">{filteredRestaurants[item].evaluation}</p>
                     </div>
                     <div className="px-6 pt-4 pb-2">
                     </div>
                   </div>
                   <Modal
-                    isOpen={restaurants[item].id === selectedItem}
+                    isOpen={filteredRestaurants[item].id === selectedItem}
                     onAfterOpen={afterOpenModal}
                     onRequestClose={onCloseDialog}
                     style={customStyles}
@@ -422,7 +449,7 @@ export const Main = (props) => {
                           onCloseDialog={onCloseDialog}
                           OpenReviewModal={OpenReviewModal}
                           setReview={setReview}
-                          restaurant={restaurants[item]}
+                          restaurant={filteredRestaurants[item]}
                           item={item}
                           reviews={reviews}
                           checkUsersWithoutReviews={checkUsersWithoutReviews}
@@ -442,7 +469,7 @@ export const Main = (props) => {
                             onCloseEditDialog={onCloseEditDialog}
                             onCloseDialog={onCloseDialog}
                             error={error}
-                            restaurant={restaurants[item]}
+                            restaurant={filteredRestaurants[item]}
                           />
                         </form>
                       </>
@@ -451,7 +478,7 @@ export const Main = (props) => {
 
                   {/* レビューモーダル */}
                   {reviewModalIsOpen &&
-                    <Modal isOpen={restaurants[item].id === selectedItem}
+                    <Modal isOpen={filteredRestaurants[item].id === selectedItem}
                       onAfterOpen={afterReviewOpenModal}
                       onRequestClose={closeReviewModal}
                       style={customStyles}
@@ -464,7 +491,7 @@ export const Main = (props) => {
                           evaluation={evaluation}
                           onChange={onChange}
                           error={error}
-                          restaurant={restaurants[item]}
+                          restaurant={filteredRestaurants[item]}
                         />
                       </form>
                     </Modal>
