@@ -110,7 +110,7 @@ export const ShowRestrauntModal = (props) => {
               <label for="content" className="block text-gray-700 text-sm font-bold mb-2">
                 感想
               </label>
-              <textarea id="content" name="content" rows="4" className="h-60 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="感想"
+              <textarea id="content" name="content" rows="4" className="h-60 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="感想"
                 defaultValue={props.reviews[selectedReviewItem].content}></textarea>
             </div>
             <div className='flex justify-center '>
@@ -175,7 +175,7 @@ export const ShowRestrauntModal = (props) => {
                         {Object.keys(props.reviews).map(review_item => {
                           return (
                             <>
-                              <div className="bg-slate-100 rounded-xl p-8 dark:bg-slate-800 mb-5">
+                              <div className="bg-slate-100 rounded-xl p-8 mb-5">
                                 <span>レビューした人：</span>
                                 <p className="user_name">{props.reviews[review_item].user_name}</p>
                                 <span>評価：</span>
