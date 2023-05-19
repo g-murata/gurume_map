@@ -36,7 +36,7 @@ export const Header = (props) => {
     return (
       <>
         <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
-          <Link to="/about" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >GurumeMapとは</Link>
+          <Link to="/about" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >使い方（How to Use）</Link>
         </li>
         <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
           <Link to="/blog" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
