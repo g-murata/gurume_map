@@ -254,6 +254,7 @@ export const Main = (props) => {
     fetchRestaurants()
       .then((data) => {
         setRestraunt(data.restraunts)
+        setFilteredRestaurants(data.restraunts)
         setIsLoading(false);
       })
       .catch((error) => {
@@ -352,7 +353,7 @@ export const Main = (props) => {
     setSearchTerm(event.target.value);
   };
 
-  const [filteredRestaurants, setFilteredRestaurants] = useState(restaurants)
+  const [filteredRestaurants, setFilteredRestaurants] = useState([])
 
   const handleSearch = () => {
     setFilteredRestaurants(restaurants.filter((restaurant) => restaurant.name.includes(searchTerm)))
