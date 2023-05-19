@@ -352,25 +352,41 @@ export const Main = (props) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredRestaurants = restaurants.filter((restaurant) =>
-    restaurant.name.includes(searchTerm)
-  );
+  const [filteredRestaurants, setFilteredRestaurants] = useState(restaurants)
+
+  const handleSearch = () => {
+    setFilteredRestaurants(restaurants.filter((restaurant) => restaurant.name.includes(searchTerm)))
+  };
+
+  const handleClear = () => {
+    setSearchTerm(''); 
+    setFilteredRestaurants(restaurants)
+  };
+  
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // デフォルトのエンターキーの動作を防止する
+      handleSearch();
+    }
+  };
 
   return (
     <>
       <div class="flex items-center justify-center">
         <div class="relative">
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg aria-hidden="true" class="w-5 h-5 pb-1 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <svg aria-hidden="true" class="w-5 h-5 pb-1 text-gray-500 " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </div>
           <input
             className="shadow appearance-none border pl-10 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text" autoFocus
             placeholder="店名検索"
             value={searchTerm}
-            onChange={handleChange}
+            onChange={handleChange}       
+            onKeyDown={handleKeyDown}     
           />
-          <label>←作成中！</label>
+          <button onClick={() => handleSearch()} class="mx-2 px-2 bg-green-400 text-white font-semibold rounded hover:bg-green-500">検索</button>
+          <button onClick={() => handleClear()} class="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
         </div>
       </div>
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
