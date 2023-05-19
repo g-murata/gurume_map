@@ -370,6 +370,7 @@ export const Main = (props) => {
             value={searchTerm}
             onChange={handleChange}
           />
+          <label>←作成中。</label>
         </div>
       </div>
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
