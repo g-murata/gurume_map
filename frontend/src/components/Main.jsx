@@ -70,7 +70,7 @@ const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 export const Main = (props) => {
   const user = auth.currentUser;
   const [error, setError] = useState('');
-  
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const { name, lat, lng } = event.target.elements;
@@ -360,10 +360,10 @@ export const Main = (props) => {
   };
 
   const handleClear = () => {
-    setSearchTerm(''); 
+    setSearchTerm('');
     setFilteredRestaurants(restaurants)
   };
-  
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault(); // デフォルトのエンターキーの動作を防止する
@@ -380,11 +380,11 @@ export const Main = (props) => {
           </div>
           <input
             className="shadow appearance-none border pl-10 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text" autoFocus
+            type="text"
             placeholder="店名検索"
             value={searchTerm}
-            onChange={handleChange}       
-            onKeyDown={handleKeyDown}     
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
           />
           <button onClick={() => handleSearch()} class="mx-2 px-2 bg-green-400 text-white font-semibold rounded hover:bg-green-500">検索</button>
           <button onClick={() => handleClear()} class="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
