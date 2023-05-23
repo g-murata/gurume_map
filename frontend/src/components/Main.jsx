@@ -164,6 +164,7 @@ export const Main = (props) => {
         setError('')
 
         // TODO: これ見直さないと駄目かも。なんでfilteredの方まで更新されるのかわからん。
+        // TODO:　たぶんこれ非推奨なんじゃないかな。setStateで更新してあげないと。
         // UPDATEの参考
         // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
         const updateRestaurants = restaurants.map((restaurant) => {
@@ -198,11 +199,11 @@ export const Main = (props) => {
       })
         .then(() => {
           onCloseDialog();
-          // 暫定対応
+          // 暫定対応　spliceは非推奨のようだ。まぁ確かにsetStateの意味がないものな？
           const newRestaurants = [...restaurants]
           const restaurantsIndex = restaurants.findIndex(r => r.id == selectedItem)
-          const filteredRestaurantsIndex = filteredRestaurants.findIndex(r => r.id == selectedItem)
           const newFilteredRestaurants = [...filteredRestaurants]
+          const filteredRestaurantsIndex = filteredRestaurants.findIndex(r => r.id == selectedItem)
 
           newRestaurants.splice(restaurantsIndex, 1)
           setRestraunt(newRestaurants);
