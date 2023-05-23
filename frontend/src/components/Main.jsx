@@ -198,11 +198,18 @@ export const Main = (props) => {
       })
         .then(() => {
           onCloseDialog();
+          // 暫定対応
           const newRestaurants = [...restaurants]
-          newRestaurants.splice(index, 1)
+          const restaurantsIndex = restaurants.findIndex(r => r.id == selectedItem)
+          const filteredRestaurantsIndex = filteredRestaurants.findIndex(r => r.id == selectedItem)
+          const newFilteredRestaurants = [...filteredRestaurants]
+
+          newRestaurants.splice(restaurantsIndex, 1)
           setRestraunt(newRestaurants);
+
           // TODO:暫定対応　リファクタする。useEffectでどうにかできそうか。
-          setFilteredRestaurants(newRestaurants)        
+          newFilteredRestaurants.splice(filteredRestaurantsIndex, 1)
+          setFilteredRestaurants(newFilteredRestaurants)          
         })
         .catch((error) => {
           switch (error.code) {
