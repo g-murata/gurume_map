@@ -93,6 +93,8 @@ export const Main = (props) => {
           user_email: user.email
         }]
         setRestraunt(newRestaurants)
+        // TODO:暫定対応　リファクタする。useEffectでどうにかできそうか。
+        setFilteredRestaurants(newRestaurants)        
         setSearchTerm("");
         setIsLoading(false);
       })
@@ -161,6 +163,7 @@ export const Main = (props) => {
         setEditModalIsOpen(false);
         setError('')
 
+        // TODO: これ見直さないと駄目かも。なんでfilteredの方まで更新されるのかわからん。
         // UPDATEの参考
         // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
         const updateRestaurants = restaurants.map((restaurant) => {
@@ -198,6 +201,8 @@ export const Main = (props) => {
           const newRestaurants = [...restaurants]
           newRestaurants.splice(index, 1)
           setRestraunt(newRestaurants);
+          // TODO:暫定対応　リファクタする。useEffectでどうにかできそうか。
+          setFilteredRestaurants(newRestaurants)        
         })
         .catch((error) => {
           switch (error.code) {
