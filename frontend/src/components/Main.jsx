@@ -199,8 +199,8 @@ export const Main = (props) => {
       })
         .then(() => {
           onCloseDialog();
-          const restaurantsIndex = restaurants.findIndex(r => r.id == selectedItem)
-          const filteredRestaurantsIndex = filteredRestaurants.findIndex(r => r.id == selectedItem)
+          const restaurantsIndex = restaurants.findIndex(r => r.id === selectedItem)
+          const filteredRestaurantsIndex = filteredRestaurants.findIndex(r => r.id === selectedItem)
 
           const newRestaurants = restaurants.slice(0, restaurantsIndex).concat(restaurants.slice(restaurantsIndex + 1));
           const newFilteredRestaurants = filteredRestaurants.slice(0, filteredRestaurantsIndex).concat(filteredRestaurants.slice(filteredRestaurantsIndex + 1));
