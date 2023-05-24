@@ -199,17 +199,14 @@ export const Main = (props) => {
       })
         .then(() => {
           onCloseDialog();
-          // 暫定対応　spliceは非推奨のようだ。まぁ確かにsetStateの意味がないものな？
-          const newRestaurants = [...restaurants]
           const restaurantsIndex = restaurants.findIndex(r => r.id == selectedItem)
-          const newFilteredRestaurants = [...filteredRestaurants]
           const filteredRestaurantsIndex = filteredRestaurants.findIndex(r => r.id == selectedItem)
 
-          newRestaurants.splice(restaurantsIndex, 1)
-          setRestraunt(newRestaurants);
+          const newRestaurants = restaurants.slice(0, restaurantsIndex).concat(restaurants.slice(restaurantsIndex + 1));
+          const newFilteredRestaurants = filteredRestaurants.slice(0, filteredRestaurantsIndex).concat(filteredRestaurants.slice(filteredRestaurantsIndex + 1));
 
+          setRestraunt(newRestaurants);
           // TODO:暫定対応　リファクタする。useEffectでどうにかできそうか。
-          newFilteredRestaurants.splice(filteredRestaurantsIndex, 1)
           setFilteredRestaurants(newFilteredRestaurants)          
         })
         .catch((error) => {
