@@ -27,14 +27,16 @@ export const Blog = () => {
         <>
           {Object.keys(blogs).map(item => (
             <>
-              <Link className="p-3" to={`/blog/${blogs[item].id}`}>
-                <div className="border-2 max-w-sm rounded overflow-hidden shadow-lg 
+              <Link className="p-3 md:w-1/3" to={`/blog/${blogs[item].id}`}>
+                <div className="border-red-700 max-w-sm rounded overflow-hidden shadow-lg 
                     transform hover:scale-110 transition-transform cursor-pointer">
-                  <img
-                    className="w-full"
-                    src={blogs[item].image}
-                    alt="ほげほげ画像"
-                  ></img>
+                  <div className="flex justify-center">
+                    <img
+                      className="h-32 "
+                      src={blogs[item].image}
+                      alt="ほげほげ画像"
+                    ></img>
+                  </div>
                   <div className="px-6 py-4">
                     <div className="font-bold text-xl mb-2">{blogs[item].title}</div>
                     <p className="text-gray-700 text-base">
