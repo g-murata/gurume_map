@@ -275,8 +275,8 @@ export const Main = (props) => {
       GetLatestReviews()
       .then((data) => {
         setGetLatestReviews(data.review)
-        // うまいこと渡す。
-        // setSelectedItem(data.restraunts.id)
+        console.log(data.restraunt)
+        setGetLatestReviewsRestraunt(data.restraunt)
       })
       .catch((error) => {
 
@@ -298,6 +298,7 @@ export const Main = (props) => {
 
   const [checkUsersWithoutReviews, setCheckUsersWithoutReviews] = useState(false);
   const [getLatestReviews, setGetLatestReviews] = useState("");
+  const [getLatestReviewsRestraunt, setGetLatestReviewsRestraunt] = useState("");
 
   const onOpenDialog = (id) => {
     setSelectedItem(id)
@@ -398,10 +399,10 @@ export const Main = (props) => {
   return (
     <>
       <div class="flex items-center justify-center">
-        <div>
+        {console.log(getLatestReviewsRestraunt)}
+        <div button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}>
           <label>最新レビュー：{getLatestReviews.content}</label>
           <label>投稿日時：{getLatestReviews.created_at}　</label>
-          <label>{getLatestReviews.content}</label>
         </div>
 
         <div class="relative">
