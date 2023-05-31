@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :reviews do
         collection do
           get 'check_users_without_review'
+          get 'get_latest_reviews'
         end
       end
       resources :blogs      

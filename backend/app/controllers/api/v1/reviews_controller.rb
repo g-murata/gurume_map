@@ -73,6 +73,15 @@ module Api
         }, status: :ok
       end
 
+      def get_latest_reviews
+        review = Review.order(created_at: :desc).first
+
+        render json: {
+          review: review,
+          restraunt: review.restraunt,
+        }, status: :ok
+      end
+
     end
   end 
 end

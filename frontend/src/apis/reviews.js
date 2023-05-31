@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { reviews, review, check_users_without_review } from '../urls/index'
+import { reviews, review, check_users_without_review, get_latest_reviews } from '../urls/index'
 
 export const fetchReviews = () => {
   return axios.get(reviews)
@@ -66,6 +66,14 @@ export const CheckUsersWithoutReviews = (params) => {
       email: params.email
     }
   })
+    .then(res => {
+      return res.data
+    })
+    .catch((e) => console.error(e))
+};
+
+export const GetLatestReviews = (params) => {
+  return axios.get(get_latest_reviews)
     .then(res => {
       return res.data
     })
