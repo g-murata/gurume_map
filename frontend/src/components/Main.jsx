@@ -395,14 +395,36 @@ export const Main = (props) => {
     }
   };
 
-  // debugger
   return (
     <>
-      <div class="flex items-center justify-center">
-        {console.log(getLatestReviewsRestraunt)}
-        <div button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}>
-          <label>最新レビュー：{getLatestReviews.content}</label>
-          <label>投稿日時：{getLatestReviews.created_at}　</label>
+      {console.log("getLatestReviews.content")}
+      {console.log(getLatestReviews.content)}
+      <div class="flex flex-col items-center justify-center">
+        <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}>
+          <h1>お店：{getLatestReviewsRestraunt.name ? getLatestReviewsRestraunt.name.slice(0, 8) + "..." : ""}</h1>
+          <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1>
+          {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
+        </div>
+
+        <div className="my-2">
+          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+          麺類(2)
+          </button>
+          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+          ランチ(8)
+          </button>
+          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+          居酒屋(3)
+          </button>
+          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+          ガッツリ(7)
+          </button>
+          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+          リーズナブル(3)
+          </button>
+          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+          その他(1)
+          </button>
         </div>
 
         <div class="relative">
