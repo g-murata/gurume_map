@@ -4,7 +4,7 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews } from '../apis/reviews';
+import { fetchShowReview, postReview, CheckUsersWithoutReviews } from '../apis/reviews';
 import {
   GoogleMap,
   LoadScript,
@@ -93,8 +93,6 @@ export const Main = (props) => {
           user_email: user.email
         }]
         setRestraunt(newRestaurants)
-        // TODO:暫定対応　リファクタする。useEffectでどうにかできそうか。
-        setFilteredRestaurants(newRestaurants)        
         setSearchTerm("");
         setIsLoading(false);
       })
@@ -206,8 +204,6 @@ export const Main = (props) => {
           const newFilteredRestaurants = filteredRestaurants.slice(0, filteredRestaurantsIndex).concat(filteredRestaurants.slice(filteredRestaurantsIndex + 1));
 
           setRestraunt(newRestaurants);
-          // TODO:暫定対応　リファクタする。useEffectでどうにかできそうか。
-          setFilteredRestaurants(newFilteredRestaurants)          
         })
         .catch((error) => {
           switch (error.code) {
@@ -264,25 +260,12 @@ export const Main = (props) => {
     fetchRestaurants()
       .then((data) => {
         setRestraunt(data.restraunts)
-        setFilteredRestaurants(data.restraunts)
         setIsLoading(false);
       })
       .catch((error) => {
         setIsLoading(false);
-      }      
-      )
-      
-      GetLatestReviews()
-      .then((data) => {
-        setGetLatestReviews(data.review)
-        console.log(data.restraunt)
-        setGetLatestReviewsRestraunt(data.restraunt)
-      })
-      .catch((error) => {
-
       }
       )
-
   }, [])
 
 
@@ -297,8 +280,6 @@ export const Main = (props) => {
   const [selectedItem, setSelectedItem] = useState('')
 
   const [checkUsersWithoutReviews, setCheckUsersWithoutReviews] = useState(false);
-  const [getLatestReviews, setGetLatestReviews] = useState("");
-  const [getLatestReviewsRestraunt, setGetLatestReviewsRestraunt] = useState("");
 
   const onOpenDialog = (id) => {
     setSelectedItem(id)
@@ -377,115 +358,90 @@ export const Main = (props) => {
     setSearchTerm(event.target.value);
   };
 
-  const [filteredRestaurants, setFilteredRestaurants] = useState([])
-
-  const handleSearch = () => {
-    setFilteredRestaurants(restaurants.filter((restaurant) => restaurant.name.includes(searchTerm)))
-  };
-
   const handleClear = () => {
     setSearchTerm('');
-    setFilteredRestaurants(restaurants)
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // デフォルトのエンターキーの動作を防止する
-      handleSearch();
-    }
-  };
+  const [showMap, setShowMap] = useState(true);
+
+  const toggleMapDisplay = () => {
+    setShowMap(!showMap)
+  }
+
+  const filteredRestaurants = Object.values(restaurants).filter((restaurant) => {
+    const nameFilter = restaurant.name.includes(searchTerm)
+    return nameFilter
+  })
+
+
 
   return (
     <>
-      {console.log("getLatestReviews.content")}
-      {console.log(getLatestReviews.content)}
-      <div class="flex flex-col items-center justify-center">
-        <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}>
-          <h1>お店：{getLatestReviewsRestraunt.name ? getLatestReviewsRestraunt.name.slice(0, 8) + "..." : ""}</h1>
-          <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1>
-          {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
-        </div>
-
-        <div className="my-2">
-          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-          麺類(2)
-          </button>
-          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-          ランチ(8)
-          </button>
-          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-          居酒屋(3)
-          </button>
-          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-          ガッツリ(7)
-          </button>
-          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-          リーズナブル(3)
-          </button>
-          <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-          その他(1)
-          </button>
-        </div>
-
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg aria-hidden="true" class="w-5 h-5 pb-1 text-gray-500 " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-          </div>
-          <input
-            className="shadow appearance-none border pl-10 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="店名検索"
-            value={searchTerm}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-          <button onClick={() => handleSearch()} class="mx-2 px-2 bg-green-400 text-white font-semibold rounded hover:bg-green-500">検索</button>
-          <button onClick={() => handleClear()} class="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
-        </div>
-      </div>
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
-        <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={positionIshiBill}
-            zoom={17}
-            options={{
-              restriction: {
-                latLngBounds: TOKYO_BOUNDS,
-                strictBounds: true,
-              },
-            }}
-            onClick={getLatLng}
-          >
-            {Object.keys(filteredRestaurants).map(item => {
-              return (
-                <>
-                  <Marker
-                    className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}
-                    position={{
+        <div className="max-w-screen-2xl px-4 md:px-8 mx-auto cursor-pointer" button onClick={() => toggleMapDisplay()}>{showMap ? "マップ非表示" : "マップ表示"}</div>
+        {showMap &&
+          <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={positionIshiBill}
+              zoom={17}
+              options={{
+                restriction: {
+                  latLngBounds: TOKYO_BOUNDS,
+                  strictBounds: true,
+                },
+              }}
+              onClick={getLatLng}
+            >
+              {Object.keys(filteredRestaurants).map(item => {
+                return (
+                  <>
+                    <Marker
+                      className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}
+                      position={{
+                        lat: filteredRestaurants[item].lat,
+                        lng: filteredRestaurants[item].lng,
+                      }} />
+
+                    <InfoWindow position={{
                       lat: filteredRestaurants[item].lat,
                       lng: filteredRestaurants[item].lng,
-                    }} />
+                    }} options={infoWindowOptions}>
+                      <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}>
+                        <h1>{filteredRestaurants[item].name}</h1>
+                      </div>
+                    </InfoWindow>
+                  </>
+                )
+              })}
 
-                  <InfoWindow position={{
-                    lat: filteredRestaurants[item].lat,
-                    lng: filteredRestaurants[item].lng,
-                  }} options={infoWindowOptions}>
-                    <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}>
-                      <h1>{filteredRestaurants[item].name}</h1>
-                    </div>
-                  </InfoWindow>
-                </>
-              )
-            })}
+              <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
+                position={positionIshiBill} button onClick={() => alert('石井ビル')} />
 
-            <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
-              position={positionIshiBill} button onClick={() => alert('石井ビル')} />
+            </GoogleMap>
+          </div>
+        }
 
-          </GoogleMap>
-        </div>
+        {!showMap &&
+          <div class="flex flex-col items-center justify-center">
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg aria-hidden="true" class="w-5 h-5 pb-1 text-gray-500 " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </div>
+              <input
+                className="shadow appearance-none border pl-10 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                placeholder="店名検索"
+                value={searchTerm}
+                onChange={handleChange}
+              />
+            </div>
+            <button onClick={() => handleClear()} class="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
+          </div>
+        }
+
         <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
           <div className="grid grid-cols-2 md:grid-cols-4">
             {Object.keys(filteredRestaurants).map(item => {
