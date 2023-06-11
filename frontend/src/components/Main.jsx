@@ -4,7 +4,7 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, postReview, CheckUsersWithoutReviews } from '../apis/reviews';
+import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews } from '../apis/reviews';
 import {
   GoogleMap,
   LoadScript,
@@ -266,6 +266,18 @@ export const Main = (props) => {
         setIsLoading(false);
       }
       )
+
+    GetLatestReviews()
+      .then((data) => {
+        setGetLatestReviews(data.review)
+        console.log(data.restraunt)
+        setGetLatestReviewsRestraunt(data.restraunt)
+      })
+      .catch((error) => {
+
+      }
+      )
+
   }, [])
 
 
@@ -280,6 +292,8 @@ export const Main = (props) => {
   const [selectedItem, setSelectedItem] = useState('')
 
   const [checkUsersWithoutReviews, setCheckUsersWithoutReviews] = useState(false);
+  const [getLatestReviews, setGetLatestReviews] = useState("");
+  const [getLatestReviewsRestraunt, setGetLatestReviewsRestraunt] = useState("");
 
   const onOpenDialog = (id) => {
     setSelectedItem(id)
@@ -380,6 +394,35 @@ export const Main = (props) => {
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
+        <div class="flex flex-col items-center justify-center">
+          <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}>
+            <h1>お店：{getLatestReviewsRestraunt.name ? getLatestReviewsRestraunt.name.slice(0, 8) + "..." : ""}</h1>
+            <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1>
+            {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
+          </div>
+
+          <div className="my-2">
+            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+              麺類(2)
+            </button>
+            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+              ランチ(8)
+            </button>
+            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+              居酒屋(3)
+            </button>
+            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+              ガッツリ(7)
+            </button>
+            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+              リーズナブル(3)
+            </button>
+            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
+              その他(1)
+            </button>
+          </div>
+        </div>
+
         <div className="max-w-screen-2xl px-4 md:px-8 mx-auto cursor-pointer" button onClick={() => toggleMapDisplay()}>{showMap ? "マップ非表示" : "マップ表示"}</div>
         {showMap &&
           <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
