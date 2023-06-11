@@ -4,7 +4,8 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews } from '../apis/reviews';
+import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
+import { fetchTags} from '../apis/tags';
 import {
   GoogleMap,
   LoadScript,
@@ -198,10 +199,7 @@ export const Main = (props) => {
         .then(() => {
           onCloseDialog();
           const restaurantsIndex = restaurants.findIndex(r => r.id === selectedItem)
-          const filteredRestaurantsIndex = filteredRestaurants.findIndex(r => r.id === selectedItem)
-
           const newRestaurants = restaurants.slice(0, restaurantsIndex).concat(restaurants.slice(restaurantsIndex + 1));
-          const newFilteredRestaurants = filteredRestaurants.slice(0, filteredRestaurantsIndex).concat(filteredRestaurants.slice(filteredRestaurantsIndex + 1));
 
           setRestraunt(newRestaurants);
         })
@@ -259,6 +257,7 @@ export const Main = (props) => {
     setIsLoading(true);
     fetchRestaurants()
       .then((data) => {
+        console.log(data.restraunts)
         setRestraunt(data.restraunts)
         setIsLoading(false);
       })
@@ -266,6 +265,18 @@ export const Main = (props) => {
         setIsLoading(false);
       }
       )
+
+    fetchTags()      
+    .then((data) => {
+      console.log("tag")      
+      console.log(data.tags)
+      setTags(data.tags)
+      // setIsLoading(false);
+    })
+    .catch((error) => {
+      setIsLoading(false);
+    }
+    )
 
     GetLatestReviews()
       .then((data) => {
@@ -382,9 +393,26 @@ export const Main = (props) => {
     setShowMap(!showMap)
   }
 
+  const [tags, setTags] = useState([]);  
+  const [isSelected, setIsSelected] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const handleTagClick = () => {
+    console.log("クリック")
+    // setIsSelected(!isSelected);
+    // handleClick(tag, !isSelected);
+  };
+
   const filteredRestaurants = Object.values(restaurants).filter((restaurant) => {
-    const nameFilter = restaurant.name.includes(searchTerm)
-    return nameFilter
+    const nameFilter = restaurant.restaurant.name.includes(searchTerm)
+    const tagFilter = restaurant.tags_tagged_items.some(tags_tagged_item => selectedTags.includes(tags_tagged_item.tag_id))
+
+    // TODO: 仮
+    if (selectedTags.length > 0) {
+      return nameFilter && tagFilter
+    } else {
+      return nameFilter
+    }
   })
 
 
@@ -396,31 +424,26 @@ export const Main = (props) => {
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div class="flex flex-col items-center justify-center">
           <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}>
-            <h1>お店：{getLatestReviewsRestraunt.name ? getLatestReviewsRestraunt.name.slice(0, 8) + "..." : ""}</h1>
+            <h1>お店：{getLatestReviewsRestraunt.name && getLatestReviewsRestraunt.name}</h1>
             <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1>
             {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
           </div>
 
-          <div className="my-2">
-            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-              麺類(2)
-            </button>
-            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-              ランチ(8)
-            </button>
-            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-              居酒屋(3)
-            </button>
-            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-              ガッツリ(7)
-            </button>
-            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-              リーズナブル(3)
-            </button>
-            <button class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded">
-              その他(1)
-            </button>
+          <div className="my-2">                           
+            {Object.keys(tags).map(item => {
+                  return (
+                    <>
+                      <button 
+                      class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded ${isSelected ? 'bg-red-700' : ''}`"
+                      onClick={handleTagClick}
+                      >
+                        {tags[item].name}
+                      </button>
+                    </>
+                  )
+            })}
           </div>
+
         </div>
 
         <div className="max-w-screen-2xl px-4 md:px-8 mx-auto cursor-pointer" button onClick={() => toggleMapDisplay()}>{showMap ? "マップ非表示" : "マップ表示"}</div>
@@ -442,18 +465,18 @@ export const Main = (props) => {
                 return (
                   <>
                     <Marker
-                      className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}
+                      className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}
                       position={{
-                        lat: filteredRestaurants[item].lat,
-                        lng: filteredRestaurants[item].lng,
+                        lat: filteredRestaurants[item].restaurant.lat,
+                        lng: filteredRestaurants[item].restaurant.lng,
                       }} />
 
                     <InfoWindow position={{
-                      lat: filteredRestaurants[item].lat,
-                      lng: filteredRestaurants[item].lng,
+                      lat: filteredRestaurants[item].restaurant.lat,
+                      lng: filteredRestaurants[item].restaurant.lng,
                     }} options={infoWindowOptions}>
-                      <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}>
-                        <h1>{filteredRestaurants[item].name}</h1>
+                      <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}>
+                        <h1>{filteredRestaurants[item].restaurant.name}</h1>
                       </div>
                     </InfoWindow>
                   </>
@@ -490,17 +513,17 @@ export const Main = (props) => {
             {Object.keys(filteredRestaurants).map(item => {
               return (
                 <>
-                  <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(filteredRestaurants[item].id)}>
+                  <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}>
                     <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
                     <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{filteredRestaurants[item].name}</div>
-                      <p className="text-gray-700 text-base">{filteredRestaurants[item].evaluation}</p>
+                      <div className="font-bold text-xl mb-2">{filteredRestaurants[item].restaurant.name}</div>
+                      <p className="text-gray-700 text-base">{filteredRestaurants[item].restaurant.evaluation}</p>
                     </div>
                     <div className="px-6 pt-4 pb-2">
                     </div>
                   </div>
                   <Modal
-                    isOpen={filteredRestaurants[item].id === selectedItem}
+                    isOpen={filteredRestaurants[item].restaurant.id === selectedItem}
                     onAfterOpen={afterOpenModal}
                     onRequestClose={onCloseDialog}
                     style={customStyles}
@@ -519,7 +542,7 @@ export const Main = (props) => {
                           onCloseDialog={onCloseDialog}
                           OpenReviewModal={OpenReviewModal}
                           setReview={setReview}
-                          restaurant={filteredRestaurants[item]}
+                          restaurant={filteredRestaurants[item].restaurant}
                           item={item}
                           reviews={reviews}
                           checkUsersWithoutReviews={checkUsersWithoutReviews}
@@ -539,7 +562,7 @@ export const Main = (props) => {
                             onCloseEditDialog={onCloseEditDialog}
                             onCloseDialog={onCloseDialog}
                             error={error}
-                            restaurant={filteredRestaurants[item]}
+                            restaurant={filteredRestaurants[item].restaurant}
                           />
                         </form>
                       </>
@@ -548,7 +571,7 @@ export const Main = (props) => {
 
                   {/* レビューモーダル */}
                   {reviewModalIsOpen &&
-                    <Modal isOpen={filteredRestaurants[item].id === selectedItem}
+                    <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem}
                       onAfterOpen={afterReviewOpenModal}
                       onRequestClose={closeReviewModal}
                       style={customStyles}
@@ -561,7 +584,7 @@ export const Main = (props) => {
                           evaluation={evaluation}
                           onChange={onChange}
                           error={error}
-                          restaurant={filteredRestaurants[item]}
+                          restaurant={filteredRestaurants[item].restaurant}
                         />
                       </form>
                     </Modal>

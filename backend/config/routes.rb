@@ -19,7 +19,8 @@ Rails.application.routes.draw do
         collection do
           get 'get_user'
         end
-      end      
+      end  
+      resources :tags, only: [:index]                
     end 
   end   
 end

@@ -11,6 +11,7 @@ export const blogsIndex = `${DEFAULT_API_LOCALHOST}/blogs`
 export const blogShow = (blogsId) => `${DEFAULT_API_LOCALHOST}/blogs/${blogsId}`
 export const get_user = `${DEFAULT_API_LOCALHOST}/users/get_user`
 export const createUser = `${DEFAULT_API_LOCALHOST}/users`
+export const tags = `${DEFAULT_API_LOCALHOST}/tags`
 
 // export const blogShow = `${DEFAULT_API_LOCALHOST}/blogs/1`
 // export const foodsIndex = (restaurantId) =>

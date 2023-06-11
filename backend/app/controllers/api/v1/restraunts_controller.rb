@@ -2,11 +2,20 @@ module Api
   module V1
     class RestrauntsController < ApplicationController
       def index
-        restraunts = Restraunt.joins(:user).select("restraunts.*, users.name as user_name, users.email as user_email")
-        render json: {
-          restraunts: restraunts
-        }, status: :ok
+        restraunts = Restraunt.includes(:tags_tagged_items).joins(:user).select("restraunts.*, users.name as user_name, users.email as user_email")
+        # render json: {
+        #   restraunts: restraunts
+        # }, status: :ok
 
+        render json: {
+          restraunts: restraunts.map do |restaurant|
+            {
+              restaurant: restaurant,
+              tags_tagged_items: restaurant.tags_tagged_items
+            }
+          end
+        }, status: :ok
+        
       end
 
       def create
