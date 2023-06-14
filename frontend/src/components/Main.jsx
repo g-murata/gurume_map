@@ -394,25 +394,51 @@ export const Main = (props) => {
   }
 
   const [tags, setTags] = useState([]);  
-  const [isSelected, setIsSelected] = useState(false);
+
+  const TagButton = ({ tag, handleClick }) => {
+    const [isSelected, setIsSelected] = useState(false);
+  
+    const handleTagClick = () => {
+      setIsSelected(!isSelected);
+      handleClick(tag, !isSelected);
+    };
+  
+    return (
+      <>
+        <button
+          className={`bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded ${isSelected ? 'bg-red-700' : ''}`}
+          onClick={handleTagClick}
+        >
+          {tag.name}
+        </button>
+      </>
+    );
+  };
+
   const [selectedTags, setSelectedTags] = useState([]);
 
-  const handleTagClick = () => {
-    console.log("クリック")
-    // setIsSelected(!isSelected);
-    // handleClick(tag, !isSelected);
+  const handleTagClick = (tag, isSelected) => {
+    setSelectedTags(prevState => {
+      if (isSelected) {
+        debugger
+        // タグが選択された場合にselectedTagsに追加する
+        return { ...prevState, [tag.id]: tag };
+      } else {
+        // タグが選択解除された場合にselectedTagsから削除する
+        const { [tag.id]: removedTag, ...restTags } = prevState;
+        return restTags;
+      }
+    });
   };
 
   const filteredRestaurants = Object.values(restaurants).filter((restaurant) => {
     const nameFilter = restaurant.restaurant.name.includes(searchTerm)
-    const tagFilter = restaurant.tags_tagged_items.some(tags_tagged_item => selectedTags.includes(tags_tagged_item.tag_id))
+    // TODO:　考える★
+    const tagFilter = restaurant.tags_tagged_items.every(item => Object.values(selectedTags).some(tag => tag.id === item.tag_id))
+    debugger
 
     // TODO: 仮
-    if (selectedTags.length > 0) {
-      return nameFilter && tagFilter
-    } else {
-      return nameFilter
-    }
+    return nameFilter && tagFilter
   })
 
 
@@ -433,12 +459,13 @@ export const Main = (props) => {
             {Object.keys(tags).map(item => {
                   return (
                     <>
-                      <button 
+                      <TagButton key={tags[item].id} tag={tags[item]} handleClick={handleTagClick} />
+                      {/* <button 
                       class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded ${isSelected ? 'bg-red-700' : ''}`"
                       onClick={handleTagClick}
                       >
                         {tags[item].name}
-                      </button>
+                      </button> */}
                     </>
                   )
             })}
