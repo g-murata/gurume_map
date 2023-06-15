@@ -406,7 +406,7 @@ export const Main = (props) => {
     return (
       <>
         <button
-          className={`bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded ${isSelected ? 'bg-red-700' : ''}`}
+          className={`bg-blue-400 text-white font-bold mx-2 px-2 rounded ${isSelected ? 'bg-red-700' : ''}`}
           onClick={handleTagClick}
         >
           {tag.name}
@@ -415,30 +415,48 @@ export const Main = (props) => {
     );
   };
 
-  const [selectedTags, setSelectedTags] = useState([]);
+  const TagList = () => {
+    const [selectedTags, setSelectedTags] = useState({});
 
-  const handleTagClick = (tag, isSelected) => {
-    setSelectedTags(prevState => {
-      if (isSelected) {
-        debugger
-        // タグが選択された場合にselectedTagsに追加する
-        return { ...prevState, [tag.id]: tag };
-      } else {
-        // タグが選択解除された場合にselectedTagsから削除する
-        const { [tag.id]: removedTag, ...restTags } = prevState;
-        return restTags;
-      }
-    });
-  };
+    const handleTagClick = (tag, isSelected) => {
+      setSelectedTags(prevState => {
+        if (isSelected) {
+          // タグが選択された場合にselectedTagsに追加する
+          return { ...prevState, [tag.id]: tag };
+        } else {
+          // タグが選択解除された場合にselectedTagsから削除する
+          const { [tag.id]: removedTag, ...restTags } = prevState;
+          return restTags;
+        }
+      });
+    };
+
+    return(
+      <>
+        <div className="my-2">                           
+          {Object.keys(tags).map(item => {
+            return (
+              <>
+                <TagButton key={tags[item].id} tag={tags[item]} handleClick={handleTagClick} />
+              </>
+            )}
+            )
+          }
+        </div>
+      </>
+    )
+  }
+
 
   const filteredRestaurants = Object.values(restaurants).filter((restaurant) => {
-    const nameFilter = restaurant.restaurant.name.includes(searchTerm)
-    // TODO:　考える★
-    const tagFilter = restaurant.tags_tagged_items.every(item => Object.values(selectedTags).some(tag => tag.id === item.tag_id))
     debugger
+    const nameFilter = restaurant.restaurant.name.includes(searchTerm)
+    // // TODO:　考える★
+    // const tagFilter = Object.keys(selectedTags).length > 0 ? restaurant.tags_tagged_items.every(item => Object.values(selectedTags).some(tag => tag.id === item.tag_id)) : true
 
-    // TODO: 仮
-    return nameFilter && tagFilter
+    // // TODO: 仮
+    // return nameFilter && tagFilter
+    return nameFilter
   })
 
 
@@ -454,23 +472,7 @@ export const Main = (props) => {
             <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1>
             {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
           </div>
-
-          <div className="my-2">                           
-            {Object.keys(tags).map(item => {
-                  return (
-                    <>
-                      <TagButton key={tags[item].id} tag={tags[item]} handleClick={handleTagClick} />
-                      {/* <button 
-                      class="bg-blue-400 hover:bg-red-700 text-white font-bold mx-2 px-2 rounded ${isSelected ? 'bg-red-700' : ''}`"
-                      onClick={handleTagClick}
-                      >
-                        {tags[item].name}
-                      </button> */}
-                    </>
-                  )
-            })}
-          </div>
-
+          <TagList />
         </div>
 
         <div className="max-w-screen-2xl px-4 md:px-8 mx-auto cursor-pointer" button onClick={() => toggleMapDisplay()}>{showMap ? "マップ非表示" : "マップ表示"}</div>
