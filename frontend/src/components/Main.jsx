@@ -262,26 +262,24 @@ export const Main = (props) => {
 
   useEffect(() => {
     setIsLoading(true);
+
     fetchRestaurants()
       .then((data) => {
-        console.log(data.restraunts)
         setRestraunt(data.restraunts)
-        setIsLoading(false);
+        setIsLoading(false);        
       })
       .catch((error) => {
-        setIsLoading(false);
+        console.log(error)
+        setIsLoading(false);        
       }
       )
 
     fetchTags()      
     .then((data) => {
-      console.log("tag")      
-      console.log(data.tags)
       setTags(data.tags)
-      // setIsLoading(false);
     })
     .catch((error) => {
-      setIsLoading(false);
+      console.log(error)
     }
     )
 
@@ -291,9 +289,9 @@ export const Main = (props) => {
         setGetLatestReviewsRestraunt(data.restraunt)
       })
       .catch((error) => {
-
+        console.log(error)
       }
-      )
+      )    
 
   }, [])
 
@@ -419,6 +417,7 @@ export const Main = (props) => {
 
     const tagIds = restaurant.tags_tagged_items.map(item => item.tag_id)
     const isTagSelected = Object.keys(selectedTags).length > 0 ? tagIds.some(tagId => selectedTags.includes(tagId)) : true; // 選択されたタグが含まれているかチェック
+
     return nameFilter && isTagSelected
   })
 
@@ -441,12 +440,11 @@ export const Main = (props) => {
               return (
                 <>
                   <button 
-                  className={`bg-blue-400 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(tags[item].id) ? 'bg-red-700' : ''}`} 
-                  key={tags[item].id} 
-                  tag={tags[item]} 
-                  onClick={() => handleTagClick(tags[item].id)}
+                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(tags[item].id) ? 'bg-red-500' : ''}`} 
+                    key={tags[item].id} 
+                    onClick={() => handleTagClick(tags[item].id)}
                   >
-                  {tags[item].name}
+                    {tags[item].name}
                   </button >  
                 </>
               )}

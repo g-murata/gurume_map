@@ -78,7 +78,7 @@ module Api
 
         render json: {
           review: review,
-          restraunt: review.restraunt,
+          restraunt: review&.restraunt,
         }, status: :ok
       end
 
