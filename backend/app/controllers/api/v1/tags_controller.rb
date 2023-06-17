@@ -2,7 +2,7 @@ module Api
   module V1
     class TagsController < ApplicationController
       def index
-        tags = Tag.all.order(created_at: "DESC")
+        tags = Tag.category_restaurant.order(id: "ASC")
 
         render json: {
           tags: tags

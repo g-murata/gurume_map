@@ -43,32 +43,32 @@ end
 
 tag1 = Tag.create(
   name: "ラーメン",
-  category: "Restraunt"
+  category: "レストラン"
 )
 
 tag2 = Tag.create(
   name: "うどん",
-  category: "Restraunt"
+  category: "レストラン"
 )
 
 tag3 = Tag.create(
   name: "魚介",
-  category: "Restraunt"
+  category: "レストラン"
 )
 
 tag4 = Tag.create(
   name: "居酒屋",
-  category: "Restraunt"
+  category: "レストラン"
 )
 
 tag5 = Tag.create(
   name: "肉",
-  category: "Restraunt"
+  category: "レストラン"
 )
 
 tag6 = Tag.create(
   name: "パスタ",
-  category: "Restraunt"
+  category: "レストラン"
 )
 
 

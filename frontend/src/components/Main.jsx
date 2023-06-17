@@ -417,10 +417,8 @@ export const Main = (props) => {
   const filteredRestaurants = Object.values(restaurants).filter((restaurant) => {
     const nameFilter = restaurant.restaurant.name.includes(searchTerm)
 
-    // TODO: 新規登録した際のエラー対処考える
     const tagIds = restaurant.tags_tagged_items.map(item => item.tag_id)
     const isTagSelected = Object.keys(selectedTags).length > 0 ? tagIds.some(tagId => selectedTags.includes(tagId)) : true; // 選択されたタグが含まれているかチェック
-    // const tagFilter = Object.keys(selectedTags).length > 0 ? restaurant.tags_tagged_items.every(item => Object.values(selectedTags).every(tag => tag.id === item.tag_id)) : true
     return nameFilter && isTagSelected
   })
 
