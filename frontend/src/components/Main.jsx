@@ -96,14 +96,12 @@ export const Main = (props) => {
             user_email: user.email
           }
           // TODO:
-          // ,
-          // tags_tagged_items: {
-
-          // }
+          ,
+          tags_tagged_items: []          
         }]
 
         setRestraunt(newRestaurants)
-        setSearchTerm("");
+        handleClear();
         setIsLoading(false);
       })
       .catch((error) => {
@@ -184,7 +182,7 @@ export const Main = (props) => {
           return restaurant;
         })
         setRestraunt(updateRestaurants);
-        setSearchTerm("");
+        handleClear();
         setIsLoading(false);
       })
       .catch((error) => {
@@ -290,7 +288,6 @@ export const Main = (props) => {
     GetLatestReviews()
       .then((data) => {
         setGetLatestReviews(data.review)
-        console.log(data.restraunt)
         setGetLatestReviewsRestraunt(data.restraunt)
       })
       .catch((error) => {
@@ -435,11 +432,11 @@ export const Main = (props) => {
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div class="flex flex-col items-center justify-center">
-          <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}>
-            <h1>お店：{getLatestReviewsRestraunt.name && getLatestReviewsRestraunt.name}</h1>
-            <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1>
+          {/* <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}> */}
+            {/* <h1>お店：{getLatestReviewsRestraunt.name && getLatestReviewsRestraunt.name}</h1> */}
+            {/* <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1> */}
             {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
-          </div>
+          {/* </div> */}
 
           <div className="my-2">                           
             {Object.keys(tags).map(item => {
