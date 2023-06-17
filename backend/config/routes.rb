@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :reviews do
         collection do
           get 'check_users_without_review'
+          get 'get_latest_reviews'
         end
       end
       resources :blogs      
@@ -18,7 +19,8 @@ Rails.application.routes.draw do
         collection do
           get 'get_user'
         end
-      end      
+      end  
+      resources :tags, only: [:index]                
     end 
   end   
 end

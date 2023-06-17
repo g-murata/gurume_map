@@ -4,7 +4,8 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, postReview, CheckUsersWithoutReviews } from '../apis/reviews';
+import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
+import { fetchTags} from '../apis/tags';
 import {
   GoogleMap,
   LoadScript,
@@ -83,17 +84,24 @@ export const Main = (props) => {
     })
       .then((res) => {
         closeModal();
-        const newRestaurants = [...restaurants,
+        const newRestaurants = [
+        ...restaurants,
         {
-          id: res.restraunts.id,
-          name: res.restraunts.name,
-          lat: res.restraunts.lat,
-          lng: res.restraunts.lng,
-          user_name: res.user_name,
-          user_email: user.email
+          restaurant: {
+            id: res.restraunts.id,
+            name: res.restraunts.name,
+            lat: res.restraunts.lat,
+            lng: res.restraunts.lng,
+            user_name: res.user_name,
+            user_email: user.email
+          }
+          // TODO:
+          ,
+          tags_tagged_items: []          
         }]
+
         setRestraunt(newRestaurants)
-        setSearchTerm("");
+        handleClear();
         setIsLoading(false);
       })
       .catch((error) => {
@@ -166,15 +174,15 @@ export const Main = (props) => {
         // UPDATEの参考
         // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
         const updateRestaurants = restaurants.map((restaurant) => {
-          if (Number(restaurant.id) === Number(selectedItem)) {
-            restaurant.name = res.restraunts.name;
-            restaurant.lat = res.restraunts.lat;
-            restaurant.lng = res.restraunts.lng;
+          if (Number(restaurant.restaurant.id) === Number(selectedItem)) {
+            restaurant.restaurant.name = res.restraunts.name;
+            restaurant.restaurant.lat = res.restraunts.lat;
+            restaurant.restaurant.lng = res.restraunts.lng;
           }
           return restaurant;
         })
         setRestraunt(updateRestaurants);
-        setSearchTerm("");
+        handleClear();
         setIsLoading(false);
       })
       .catch((error) => {
@@ -197,11 +205,8 @@ export const Main = (props) => {
       })
         .then(() => {
           onCloseDialog();
-          const restaurantsIndex = restaurants.findIndex(r => r.id === selectedItem)
-          const filteredRestaurantsIndex = filteredRestaurants.findIndex(r => r.id === selectedItem)
-
+          const restaurantsIndex = restaurants.findIndex(r => r.restaurant.id === selectedItem)
           const newRestaurants = restaurants.slice(0, restaurantsIndex).concat(restaurants.slice(restaurantsIndex + 1));
-          const newFilteredRestaurants = filteredRestaurants.slice(0, filteredRestaurantsIndex).concat(filteredRestaurants.slice(filteredRestaurantsIndex + 1));
 
           setRestraunt(newRestaurants);
         })
@@ -257,15 +262,37 @@ export const Main = (props) => {
 
   useEffect(() => {
     setIsLoading(true);
+
     fetchRestaurants()
       .then((data) => {
         setRestraunt(data.restraunts)
-        setIsLoading(false);
+        setIsLoading(false);        
       })
       .catch((error) => {
-        setIsLoading(false);
+        console.log(error)
+        setIsLoading(false);        
       }
       )
+
+    fetchTags()      
+    .then((data) => {
+      setTags(data.tags)
+    })
+    .catch((error) => {
+      console.log(error)
+    }
+    )
+
+    GetLatestReviews()
+      .then((data) => {
+        setGetLatestReviews(data.review)
+        setGetLatestReviewsRestraunt(data.restraunt)
+      })
+      .catch((error) => {
+        console.log(error)
+      }
+      )    
+
   }, [])
 
 
@@ -280,6 +307,8 @@ export const Main = (props) => {
   const [selectedItem, setSelectedItem] = useState('')
 
   const [checkUsersWithoutReviews, setCheckUsersWithoutReviews] = useState(false);
+  const [getLatestReviews, setGetLatestReviews] = useState("");
+  const [getLatestReviewsRestraunt, setGetLatestReviewsRestraunt] = useState("");
 
   const onOpenDialog = (id) => {
     setSelectedItem(id)
@@ -360,6 +389,7 @@ export const Main = (props) => {
 
   const handleClear = () => {
     setSearchTerm('');
+    setSelectedTags([])
   };
 
   const [showMap, setShowMap] = useState(true);
@@ -368,9 +398,27 @@ export const Main = (props) => {
     setShowMap(!showMap)
   }
 
+  const [tags, setTags] = useState([]);  
+  const [isSelected, setIsSelected] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const handleTagClick = (tagId) => {
+    // 選択されたタグを追加または削除する処理
+    setIsSelected(!isSelected)
+    if (selectedTags.includes(tagId)) {
+      setSelectedTags(selectedTags.filter((id) => id !== tagId));
+    } else {
+      setSelectedTags([...selectedTags, tagId]);
+    }
+  };
+
   const filteredRestaurants = Object.values(restaurants).filter((restaurant) => {
-    const nameFilter = restaurant.name.includes(searchTerm)
-    return nameFilter
+    const nameFilter = restaurant.restaurant.name.includes(searchTerm)
+
+    const tagIds = restaurant.tags_tagged_items.map(item => item.tag_id)
+    const isTagSelected = Object.keys(selectedTags).length > 0 ? tagIds.some(tagId => selectedTags.includes(tagId)) : true; // 選択されたタグが含まれているかチェック
+
+    return nameFilter && isTagSelected
   })
 
 
@@ -380,6 +428,33 @@ export const Main = (props) => {
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
+        <div class="flex flex-col items-center justify-center">
+          {/* <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}> */}
+            {/* <h1>お店：{getLatestReviewsRestraunt.name && getLatestReviewsRestraunt.name}</h1> */}
+            {/* <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1> */}
+            {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
+          {/* </div> */}
+
+          <div className="my-2">                           
+            {Object.keys(tags).map(item => {
+              return (
+                <>
+                  <button 
+                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(tags[item].id) ? 'bg-red-500' : ''}`} 
+                    key={tags[item].id} 
+                    onClick={() => handleTagClick(tags[item].id)}
+                  >
+                    {tags[item].name}
+                  </button >  
+                </>
+              )}
+              )
+            }
+          </div>
+          <button onClick={() => handleClear()} class="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
+
+        </div>
+
         <div className="max-w-screen-2xl px-4 md:px-8 mx-auto cursor-pointer" button onClick={() => toggleMapDisplay()}>{showMap ? "マップ非表示" : "マップ表示"}</div>
         {showMap &&
           <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
@@ -399,18 +474,18 @@ export const Main = (props) => {
                 return (
                   <>
                     <Marker
-                      className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}
+                      className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}
                       position={{
-                        lat: filteredRestaurants[item].lat,
-                        lng: filteredRestaurants[item].lng,
+                        lat: filteredRestaurants[item].restaurant.lat,
+                        lng: filteredRestaurants[item].restaurant.lng,
                       }} />
 
                     <InfoWindow position={{
-                      lat: filteredRestaurants[item].lat,
-                      lng: filteredRestaurants[item].lng,
+                      lat: filteredRestaurants[item].restaurant.lat,
+                      lng: filteredRestaurants[item].restaurant.lng,
                     }} options={infoWindowOptions}>
-                      <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].id)}>
-                        <h1>{filteredRestaurants[item].name}</h1>
+                      <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}>
+                        <h1>{filteredRestaurants[item].restaurant.name}</h1>
                       </div>
                     </InfoWindow>
                   </>
@@ -438,7 +513,6 @@ export const Main = (props) => {
                 onChange={handleChange}
               />
             </div>
-            <button onClick={() => handleClear()} class="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
           </div>
         }
 
@@ -447,17 +521,17 @@ export const Main = (props) => {
             {Object.keys(filteredRestaurants).map(item => {
               return (
                 <>
-                  <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(filteredRestaurants[item].id)}>
+                  <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}>
                     <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
                     <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{filteredRestaurants[item].name}</div>
-                      <p className="text-gray-700 text-base">{filteredRestaurants[item].evaluation}</p>
+                      <div className="font-bold text-xl mb-2">{filteredRestaurants[item].restaurant.name}</div>
+                      <p className="text-gray-700 text-base">{filteredRestaurants[item].restaurant.evaluation}</p>
                     </div>
                     <div className="px-6 pt-4 pb-2">
                     </div>
                   </div>
                   <Modal
-                    isOpen={filteredRestaurants[item].id === selectedItem}
+                    isOpen={filteredRestaurants[item].restaurant.id === selectedItem}
                     onAfterOpen={afterOpenModal}
                     onRequestClose={onCloseDialog}
                     style={customStyles}
@@ -476,7 +550,7 @@ export const Main = (props) => {
                           onCloseDialog={onCloseDialog}
                           OpenReviewModal={OpenReviewModal}
                           setReview={setReview}
-                          restaurant={filteredRestaurants[item]}
+                          restaurant={filteredRestaurants[item].restaurant}
                           item={item}
                           reviews={reviews}
                           checkUsersWithoutReviews={checkUsersWithoutReviews}
@@ -496,7 +570,7 @@ export const Main = (props) => {
                             onCloseEditDialog={onCloseEditDialog}
                             onCloseDialog={onCloseDialog}
                             error={error}
-                            restaurant={filteredRestaurants[item]}
+                            restaurant={filteredRestaurants[item].restaurant}
                           />
                         </form>
                       </>
@@ -505,7 +579,7 @@ export const Main = (props) => {
 
                   {/* レビューモーダル */}
                   {reviewModalIsOpen &&
-                    <Modal isOpen={filteredRestaurants[item].id === selectedItem}
+                    <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem}
                       onAfterOpen={afterReviewOpenModal}
                       onRequestClose={closeReviewModal}
                       style={customStyles}
@@ -518,7 +592,7 @@ export const Main = (props) => {
                           evaluation={evaluation}
                           onChange={onChange}
                           error={error}
-                          restaurant={filteredRestaurants[item]}
+                          restaurant={filteredRestaurants[item].restaurant}
                         />
                       </form>
                     </Modal>

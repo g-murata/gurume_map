@@ -38,6 +38,48 @@ review = Review.create(
     content: "サンプル_#{n}",
     image: "https://2.bp.blogspot.com/-NSxv59ZcJfA/VpjCbp0555I/AAAAAAAA3AM/jVD3WGXyRlU/s800/group_kids.png"
   )
-  blogs.save!
-  
+  blogs.save!  
 end
+
+tag1 = Tag.create(
+  name: "ラーメン",
+  category: "レストラン"
+)
+
+tag2 = Tag.create(
+  name: "うどん",
+  category: "レストラン"
+)
+
+tag3 = Tag.create(
+  name: "魚介",
+  category: "レストラン"
+)
+
+tag4 = Tag.create(
+  name: "居酒屋",
+  category: "レストラン"
+)
+
+tag5 = Tag.create(
+  name: "肉",
+  category: "レストラン"
+)
+
+tag6 = Tag.create(
+  name: "パスタ",
+  category: "レストラン"
+)
+
+
+tags_tagged_item1 = TagsTaggedItem.create(
+  tagged_item_type: "Restraunt",
+  tagged_item_id: restraunts.id,
+  tag_id: tag1.id
+)
+
+tags_tagged_item2 = TagsTaggedItem.create(
+  tagged_item_type: "Restraunt",
+  tagged_item_id: restraunts.id,
+  tag_id: tag3.id
+)
