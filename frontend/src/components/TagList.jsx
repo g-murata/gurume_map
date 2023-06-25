@@ -2,7 +2,6 @@
 export const TagList = (props) => {
   return (
     <>
-      <h1>TagListだよ</h1>
       {(Object.keys(props.tags_tagged_items)).map(key => {
           return(
           <>

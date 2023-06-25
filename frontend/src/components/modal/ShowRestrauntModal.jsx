@@ -2,6 +2,8 @@ import { auth } from '../../firebase';
 import { useState } from "react"
 import { updateReview, deleteReview } from '../../apis/reviews';
 
+import {TagList} from '../TagList';
+
 export const ShowRestrauntModal = (props) => {
   const [selectedReviewItem, setSelectedReviewItem] = useState('')
   const [editReviewModalIsOpen, setEditReviewModalIsOpen] = useState(false);
@@ -153,6 +155,11 @@ export const ShowRestrauntModal = (props) => {
                 }
                 <span>このお店を登録した人：</span>
                 <p className="user_name">{props.restaurant.user_name}</p>
+                <TagList 
+                  tags_tagged_items={props.tags_tagged_items}
+                  tags={props.tags}
+                />
+
                 <div className='flex justify-center'>
                   {props.isCheckUserReviewLoading ? <h1>・・・</h1> :
                     <>
@@ -204,7 +211,7 @@ export const ShowRestrauntModal = (props) => {
                 </>
               }
             </>
-          </div>
+          </div> 
         </>
       }
     </>

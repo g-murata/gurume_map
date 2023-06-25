@@ -556,6 +556,8 @@ export const Main = (props) => {
                           setReview={setReview}
                           restaurant={filteredRestaurants[item].restaurant}
                           item={item}
+                          tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                          tags={tags}                          
                           reviews={reviews}
                           checkUsersWithoutReviews={checkUsersWithoutReviews}
                           setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
