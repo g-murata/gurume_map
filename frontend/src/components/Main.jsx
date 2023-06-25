@@ -20,6 +20,7 @@ import CreateRestrauntModal from './modal/CreateRestrauntModal';
 import EditRestrauntModal from './modal/EditRestrauntModal';
 import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
 import CreateReviewModal from './modal/CreateReviewModal';
+import {TagList} from './TagList';
 
 
 // import Restaurants from './../restaurants.json';
@@ -525,7 +526,10 @@ export const Main = (props) => {
                     <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
                     <div className="px-6 py-4">
                       <div className="font-bold text-xl mb-2">{filteredRestaurants[item].restaurant.name}</div>
-                      <p className="text-gray-700 text-base">{filteredRestaurants[item].restaurant.evaluation}</p>
+                      <TagList 
+                        tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                        tags={tags}
+                      />
                     </div>
                     <div className="px-6 pt-4 pb-2">
                     </div>
@@ -552,6 +556,8 @@ export const Main = (props) => {
                           setReview={setReview}
                           restaurant={filteredRestaurants[item].restaurant}
                           item={item}
+                          tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                          tags={tags}                          
                           reviews={reviews}
                           checkUsersWithoutReviews={checkUsersWithoutReviews}
                           setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
