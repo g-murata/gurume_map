@@ -526,20 +526,10 @@ export const Main = (props) => {
                     <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
                     <div className="px-6 py-4">
                       <div className="font-bold text-xl mb-2">{filteredRestaurants[item].restaurant.name}</div>
-                      <TagList />
-                      {Object.keys(filteredRestaurants[item].tags_tagged_items).map(key => {
-                          return(
-                          <>
-                            {tags[filteredRestaurants[item].tags_tagged_items[key].tag_id] != undefined && 
-                              <div className="bg-gray-100 font-bold py-2 px-4 m-1 rounded-full inline-block">
-                                <p className="text-gray-600">
-                                  {tags.find(tag => tag.id === filteredRestaurants[item].tags_tagged_items[key].tag_id).name}
-                                </p>
-                              </div>
-                            }
-                          </>
-                        )
-                      })}
+                      <TagList 
+                        tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                        tags={tags}
+                      />
                     </div>
                     <div className="px-6 pt-4 pb-2">
                     </div>
