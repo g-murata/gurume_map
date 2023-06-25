@@ -95,8 +95,9 @@ export const ShowRestrauntModal = (props) => {
             <div className="text-3xl font-bold text-center">
               レビュー編集
             </div>
+            {/* TODO:モーダルを閉じたい。 */}
             <div className="text-right">
-              <button className="font-bold" onClick={() => props.closeReviewModal()}>Close</button>
+              <button className="font-bold" onClick={() => closeReviewEditModal()}>Close</button>
             </div>
             <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
               店名
