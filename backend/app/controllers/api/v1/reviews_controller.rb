@@ -3,8 +3,8 @@ module Api
     class ReviewsController < ApplicationController
 
       def index
-        reviews = Review.joins(:user).joins(:restraunt).order(updated_at: :DESC).
-                        select(:id, :content, :evaluation, "users.name as user_name, restraunts.id as restraunt_id")  
+        reviews = Review.joins(:user).joins(:restraunt).order(created_at: :DESC).
+                        select(:id, :content, :evaluation, :created_at, :updated_at, "users.name as user_name, restraunts.id as restraunt_id")  
 
         render json: {
           reviews: reviews
@@ -13,8 +13,8 @@ module Api
       end
 
       def show
-        review = Review.where(restraunt_id: params[:id]).joins(:user).
-                      select(:id, :content, :evaluation, "users.id as user_id, users.name as user_name, users.email")  
+        review = Review.where(restraunt_id: params[:id]).joins(:user).order(created_at: :DESC).
+                      select(:id, :content, :evaluation, :created_at, :updated_at, "users.id as user_id, users.name as user_name, users.email")  
 
 
         render json: {
