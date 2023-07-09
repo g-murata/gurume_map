@@ -195,6 +195,12 @@ export const ShowRestrauntModal = (props) => {
                                 <span className="star5_rating" data-rate={props.reviews[review_item].evaluation}></span>
                                 <p>感想：</p>
                                 <p className="review">{props.reviews[review_item].content}</p>
+                                <br />
+                                <h1>投稿日時：</h1>
+                                <DateTimeConverter 
+                                  created_at={props.reviews[review_item].created_at}
+                                />
+
                                 {/* TODO: */}
                                 <div className="flex justify-end">
                                   {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
