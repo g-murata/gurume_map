@@ -495,15 +495,6 @@ export const Main = (props) => {
                         <h1>{filteredRestaurants[item].restaurant.name}</h1>
                         {/* TODO: タグ表示 */}
 
-                        <div className="text-gray-500">
-                          <h1>投稿日時：</h1>   
-                          <div className="flex">                             
-                            <DateTimeConverter 
-                              created_at={filteredRestaurants[item].restaurant.created_at}
-                            />
-                          </div>
-                        </div>
-
                       </div>
                     </InfoWindow>
                   </>
