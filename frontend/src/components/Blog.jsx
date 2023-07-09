@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { fetchBlogs } from '../apis/blogs';
 import { Link } from 'react-router-dom';
 import Loading from './Loading';
+import {DateTimeConverter} from './DateTimeConverter'
 
 export const Blog = () => {
   const [blogs, setBlog] = useState([])
@@ -40,7 +41,11 @@ export const Blog = () => {
                   <div className="px-6 py-4">
                     <div className="font-bold text-xl mb-2">{blogs[item].title}</div>
                     <p className="text-gray-700 text-base">
-                      <p className="text-gray-500 text-base">{blogs[item].created_at}</p>
+                      <p className="text-gray-500 text-base">
+                        <DateTimeConverter 
+                          created_at= {blogs[item].created_at}
+                        />
+                        </p>
                     </p>
                   </div>
                 </div>

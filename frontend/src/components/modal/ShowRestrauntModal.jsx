@@ -3,6 +3,7 @@ import { useState } from "react"
 import { updateReview, deleteReview } from '../../apis/reviews';
 
 import {TagList} from '../TagList';
+import {DateTimeConverter} from '../DateTimeConverter'
 
 export const ShowRestrauntModal = (props) => {
   const [selectedReviewItem, setSelectedReviewItem] = useState('')
@@ -37,6 +38,7 @@ export const ShowRestrauntModal = (props) => {
           if (Number(review.id) === Number(props.reviews[selectedReviewItem].id)) {
             review.evaluation = res.reviews.evaluation;
             review.content = res.reviews.content;
+            review.updated_at = res.reviews.updated_at;
           }
           return review;
         })
@@ -160,7 +162,15 @@ export const ShowRestrauntModal = (props) => {
                   tags_tagged_items={props.tags_tagged_items}
                   tags={props.tags}
                 />
-
+                <div className="text-gray-500">
+                  <h1>投稿日時：</h1>   
+                  <div className="flex">                             
+                    <DateTimeConverter 
+                      created_at={props.restaurant.created_at}
+                    />
+                    {props.restaurant.created_at !== props.restaurant.updated_at && <label>[編集済]</label>}
+                  </div>                  
+                </div>                
                 <div className='flex justify-center'>
                   {props.isCheckUserReviewLoading ? <h1>・・・</h1> :
                     <>
@@ -190,6 +200,17 @@ export const ShowRestrauntModal = (props) => {
                                 <span className="star5_rating" data-rate={props.reviews[review_item].evaluation}></span>
                                 <p>感想：</p>
                                 <p className="review">{props.reviews[review_item].content}</p>
+                                <br />
+                                <div className="text-gray-500">
+                                  <h1>投稿日時：</h1>         
+                                  <div className="flex">                       
+                                    <DateTimeConverter 
+                                      created_at={props.reviews[review_item].created_at}
+                                    />
+                                    {props.reviews[review_item].created_at !== props.reviews[review_item].updated_at && <label>[編集済]</label>}
+                                  </div>                                    
+                                </div>
+
                                 {/* TODO: */}
                                 <div className="flex justify-end">
                                   {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
