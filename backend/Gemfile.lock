@@ -82,6 +82,8 @@ GEM
       responders
       warden (~> 1.2.3)
     digest (3.1.0)
+    dockerfile-rails (1.2.5)
+      rails
     erubi (1.11.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -181,6 +183,7 @@ DEPENDENCIES
   bootsnap
   debug
   devise
+  dockerfile-rails (>= 1.2)
   pg (~> 1.1)
   puma (~> 5.0)
   rack-cors
