@@ -168,7 +168,7 @@ export const ShowRestrauntModal = (props) => {
                     <DateTimeConverter 
                       created_at={props.restaurant.created_at}
                     />
-                    {props.restaurant.created_at != props.restaurant.updated_at && <label>[編集済]</label>}
+                    {props.restaurant.created_at !== props.restaurant.updated_at && <label>[編集済]</label>}
                   </div>                  
                 </div>                
                 <div className='flex justify-center'>
@@ -207,7 +207,7 @@ export const ShowRestrauntModal = (props) => {
                                     <DateTimeConverter 
                                       created_at={props.reviews[review_item].created_at}
                                     />
-                                    {props.reviews[review_item].created_at != props.reviews[review_item].updated_at && <label>[編集済]</label>}
+                                    {props.reviews[review_item].created_at !== props.reviews[review_item].updated_at && <label>[編集済]</label>}
                                   </div>                                    
                                 </div>
 
