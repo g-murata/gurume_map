@@ -3,6 +3,7 @@ import { useState } from "react"
 import { updateReview, deleteReview } from '../../apis/reviews';
 
 import {TagList} from '../TagList';
+import {DateTimeConverter} from '../DateTimeConverter'
 
 export const ShowRestrauntModal = (props) => {
   const [selectedReviewItem, setSelectedReviewItem] = useState('')
@@ -159,6 +160,10 @@ export const ShowRestrauntModal = (props) => {
                 <TagList 
                   tags_tagged_items={props.tags_tagged_items}
                   tags={props.tags}
+                />
+                <h1>投稿日時：</h1>
+                <DateTimeConverter 
+                  created_at={props.restaurant.created_at}
                 />
 
                 <div className='flex justify-center'>

@@ -489,7 +489,9 @@ export const Main = (props) => {
                     }} options={infoWindowOptions}>
                       <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}>
                         <h1>{filteredRestaurants[item].restaurant.name}</h1>
-                        <DateTimeConverter created_at={filteredRestaurants[item].restaurant.created_at}/>
+                        <DateTimeConverter 
+                          created_at={filteredRestaurants[item].restaurant.created_at}
+                        />
                       </div>
                     </InfoWindow>
                   </>
@@ -534,7 +536,9 @@ export const Main = (props) => {
                         tags={tags}
                       />
                       <h1>投稿日時：</h1>
-                      <DateTimeConverter created_at={filteredRestaurants[item].restaurant.created_at}/>
+                      <DateTimeConverter 
+                        created_at={filteredRestaurants[item].restaurant.created_at}
+                      />
                     </div>
                     <div className="px-6 pt-4 pb-2">
                     </div>
