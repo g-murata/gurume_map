@@ -38,6 +38,7 @@ export const ShowRestrauntModal = (props) => {
           if (Number(review.id) === Number(props.reviews[selectedReviewItem].id)) {
             review.evaluation = res.reviews.evaluation;
             review.content = res.reviews.content;
+            review.updated_at = res.reviews.updated_at;
           }
           return review;
         })
@@ -200,6 +201,7 @@ export const ShowRestrauntModal = (props) => {
                                 <DateTimeConverter 
                                   created_at={props.reviews[review_item].created_at}
                                 />
+                                {props.reviews[review_item].created_at != props.reviews[review_item].updated_at && <label>編集済</label>}
 
                                 {/* TODO: */}
                                 <div className="flex justify-end">

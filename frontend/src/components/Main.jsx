@@ -138,6 +138,7 @@ export const Main = (props) => {
           evaluation: res.review.evaluation,
           content: res.review.content,
           created_at: res.review.created_at,
+          updated_at: res.review.updated_at,
           user_name: res.user_name,
           restraunt_id: selectedItem,
           email: user.email
