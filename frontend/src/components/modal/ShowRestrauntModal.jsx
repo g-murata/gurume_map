@@ -162,11 +162,15 @@ export const ShowRestrauntModal = (props) => {
                   tags_tagged_items={props.tags_tagged_items}
                   tags={props.tags}
                 />
-                <h1>投稿日時：</h1>
-                <DateTimeConverter 
-                  created_at={props.restaurant.created_at}
-                />
-
+                <div className="text-gray-500">
+                  <h1>投稿日時：</h1>   
+                  <div className="flex">                             
+                    <DateTimeConverter 
+                      created_at={props.restaurant.created_at}
+                    />
+                    {props.restaurant.created_at != props.restaurant.updated_at && <label>[編集済]</label>}
+                  </div>                  
+                </div>                
                 <div className='flex justify-center'>
                   {props.isCheckUserReviewLoading ? <h1>・・・</h1> :
                     <>
@@ -197,11 +201,15 @@ export const ShowRestrauntModal = (props) => {
                                 <p>感想：</p>
                                 <p className="review">{props.reviews[review_item].content}</p>
                                 <br />
-                                <h1>投稿日時：</h1>
-                                <DateTimeConverter 
-                                  created_at={props.reviews[review_item].created_at}
-                                />
-                                {props.reviews[review_item].created_at != props.reviews[review_item].updated_at && <label>編集済</label>}
+                                <div className="text-gray-500">
+                                  <h1>投稿日時：</h1>         
+                                  <div className="flex">                       
+                                    <DateTimeConverter 
+                                      created_at={props.reviews[review_item].created_at}
+                                    />
+                                    {props.reviews[review_item].created_at != props.reviews[review_item].updated_at && <label>[編集済]</label>}
+                                  </div>                                    
+                                </div>
 
                                 {/* TODO: */}
                                 <div className="flex justify-end">

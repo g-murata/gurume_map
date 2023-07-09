@@ -183,6 +183,7 @@ export const Main = (props) => {
             restaurant.restaurant.name = res.restraunts.name;
             restaurant.restaurant.lat = res.restraunts.lat;
             restaurant.restaurant.lng = res.restraunts.lng;
+            restaurant.restaurant.updated_at = res.restraunts.updated_at;
           }
           return restaurant;
         })
@@ -491,9 +492,17 @@ export const Main = (props) => {
                     }} options={infoWindowOptions}>
                       <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}>
                         <h1>{filteredRestaurants[item].restaurant.name}</h1>
-                        <DateTimeConverter 
-                          created_at={filteredRestaurants[item].restaurant.created_at}
-                        />
+                        {/* TODO: タグ表示 */}
+
+                        <div className="text-gray-500">
+                          <h1>投稿日時：</h1>   
+                          <div className="flex">                             
+                            <DateTimeConverter 
+                              created_at={filteredRestaurants[item].restaurant.created_at}
+                            />
+                          </div>
+                        </div>
+
                       </div>
                     </InfoWindow>
                   </>
@@ -537,10 +546,14 @@ export const Main = (props) => {
                         tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
                         tags={tags}
                       />
-                      <h1>投稿日時：</h1>
-                      <DateTimeConverter 
-                        created_at={filteredRestaurants[item].restaurant.created_at}
-                      />
+                      <div className="text-gray-500">
+                        <h1>投稿日時：</h1>   
+                        <div className="flex">                             
+                          <DateTimeConverter 
+                            created_at={filteredRestaurants[item].restaurant.created_at}
+                          />
+                        </div>
+                      </div>
                     </div>
                     <div className="px-6 pt-4 pb-2">
                     </div>
