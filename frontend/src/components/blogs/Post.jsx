@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom";
 
-
 import { fetchBlog } from '../../apis/blog';
+import {DateTimeConverter} from '../DateTimeConverter'
 
 
 export const Post = () => {
@@ -30,7 +30,9 @@ export const Post = () => {
           </div>
 
           <div className="text-gray-700 mb-2">
-            {blog.created_at}
+          <DateTimeConverter 
+            created_at= {blog.created_at}
+          />
           </div>
 
           <div className="w-80 md:w-full break-words whitespace-normal text-gray-800 text-base ">
