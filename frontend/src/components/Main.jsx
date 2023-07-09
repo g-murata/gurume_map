@@ -96,6 +96,7 @@ export const Main = (props) => {
             lng: res.restraunts.lng,
             user_name: res.user_name,
             created_at: res.restraunts.created_at,
+            updated_at: res.restraunts.updated_at,
             user_email: user.email
           }
           // TODO:
