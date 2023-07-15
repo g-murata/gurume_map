@@ -132,7 +132,7 @@ export const ShowRestrauntModal = (props) => {
             <div className="md:px-8 md:w-9/12">
               <div className="flex place-content-between w-11/12  md:m-auto">
                 <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
-                <button className="fixed top-1 right-1 md:right-0 text-xs bg-gray-500 hover:bg-gray-700 text-white font-bold py-4 px-4 mx-2 rounded" onClick={props.onCloseDialog}>×</button>
+                <button className="fixed top-1 right-1 md:right-0 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 mx-2 rounded" onClick={props.onCloseDialog}>×</button>
               </div>
               <div className="md:px-8 md:w-9/12">
                 {(auth.currentUser.email === props.restaurant.user_email) &&
