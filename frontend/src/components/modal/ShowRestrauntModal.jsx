@@ -130,15 +130,15 @@ export const ShowRestrauntModal = (props) => {
         <>
           <div className="md:flex md:h-full">
             <div className="md:px-8 md:w-9/12">
-              <div className="flex place-content-between w-11/12  m-auto">
+              <div className="flex place-content-between w-11/12  md:m-auto">
                 <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
-                <button className="border border-solid border-gray-800 px-4 font-bold" onClick={props.onCloseDialog}>×</button>
+                <button className="fixed top-1 right-1 md:right-0 text-xs bg-gray-500 hover:bg-gray-700 text-white font-bold py-4 px-4 mx-2 rounded" onClick={props.onCloseDialog}>×</button>
               </div>
               <div className="md:px-8 md:w-9/12">
                 {(auth.currentUser.email === props.restaurant.user_email) &&
                   <>
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-2 rounded" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
-                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
+                    <button className="text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-2 rounded" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
+                    <button className="text-xs bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
                   </>
                 }
               </div>
