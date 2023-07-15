@@ -132,13 +132,15 @@ export const ShowRestrauntModal = (props) => {
             <div className="md:px-8 md:w-9/12">
               <div className="flex place-content-between w-11/12  m-auto">
                 <div className="text-3xl font-bold mb-2">{props.restaurant.name}</div>
+                <button className="border border-solid border-gray-800 px-4 font-bold" onClick={props.onCloseDialog}>×</button>
+              </div>
+              <div className="md:px-8 md:w-9/12">
                 {(auth.currentUser.email === props.restaurant.user_email) &&
                   <>
-                    <button className="font-bold" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
-                    <button className="font-bold" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-2 rounded" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
+                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
                   </>
                 }
-                <button className="font-bold" onClick={props.onCloseDialog}>Close</button>
               </div>
 
               <p className="text-gray-700 text-base w-11/12 m-auto">
@@ -216,8 +218,8 @@ export const ShowRestrauntModal = (props) => {
                                   {/* <button className="font-bold mx-8" onClick={() => onReviewShowDialog((props.reviews[review_item]))}>詳細</button> */}
                                   {props.reviews[review_item].email === auth.currentUser.email &&
                                     <>
-                                      <button className="font-bold mx-8" onClick={() => onReviewEditDialog((review_item))}>編集</button>
-                                      <button className="font-bold mx-8" onClick={() => handleReviewDeleteSubmit((review_item))}>削除</button>
+                                      <button className="text-blue-600 font-bold mx-8" onClick={() => onReviewEditDialog((review_item))}>編集</button>
+                                      <button className="text-red-600 font-bold mx-8" onClick={() => handleReviewDeleteSubmit((review_item))}>削除</button>
                                     </>
                                   }
                                 </div>
