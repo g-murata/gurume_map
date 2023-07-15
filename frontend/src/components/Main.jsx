@@ -87,7 +87,6 @@ export const Main = (props) => {
       .then((res) => {
         closeModal();
         const newRestaurants = [
-        ...restaurants,
         {
           restaurant: {
             id: res.restraunts.id,
@@ -99,10 +98,12 @@ export const Main = (props) => {
             updated_at: res.restraunts.updated_at,
             user_email: user.email
           }
-          // TODO:
           ,
+          // TODO:
           tags_tagged_items: []          
-        }]
+        } ,
+        ...restaurants
+        ]
 
         setRestraunt(newRestaurants)
         handleClear();
@@ -133,7 +134,7 @@ export const Main = (props) => {
     })
       .then((res) => {
         closeReviewModal();
-        const newReviews = [...reviews,
+        const newReviews = [
         {
           id: res.review.id,
           evaluation: res.review.evaluation,
@@ -143,7 +144,9 @@ export const Main = (props) => {
           user_name: res.user_name,
           restraunt_id: selectedItem,
           email: user.email
-        }]
+        },
+        ...reviews
+      ]
         setReview(newReviews)
         setIsLoading(false);
       })
