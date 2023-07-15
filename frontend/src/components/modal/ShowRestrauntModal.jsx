@@ -138,7 +138,7 @@ export const ShowRestrauntModal = (props) => {
                 {(auth.currentUser.email === props.restaurant.user_email) &&
                   <>
                     <button className="text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => props.onEditDialog((props.restaurant))}>編集</button>
-                    <button className="text-xs bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
+                    <button className="text-xs bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-8 rounded" onClick={() => props.handleDeleteSubmit((props.item))}>削除</button>
                   </>
                 }
               </div>
