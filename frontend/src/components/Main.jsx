@@ -48,7 +48,7 @@ const customStyles = {
 
 
 const containerStyle = {
-  height: "55vh",
+  height: "65vh",
   width: "100%",
 };
 
@@ -85,6 +85,7 @@ export const Main = (props) => {
       email: user.email
     })
       .then((res) => {
+        onSelect(res.restraunts)
         closeModal();
         const newRestaurants = [
         {
@@ -175,6 +176,7 @@ export const Main = (props) => {
       name: name.value,
     })
       .then((res) => {
+        onSelect(res.restraunts)        
         setEditModalIsOpen(false);
         setError('')
 
@@ -402,11 +404,6 @@ export const Main = (props) => {
     setSelectedTags([])
   };
 
-  const [showMap, setShowMap] = useState(true);
-
-  const toggleMapDisplay = () => {
-    setShowMap(!showMap)
-  }
 
   const [tags, setTags] = useState([]);  
   const [isSelected, setIsSelected] = useState(false);
@@ -431,7 +428,17 @@ export const Main = (props) => {
     return nameFilter && isTagSelected
   })
 
+  const [selectedLocation, setSelectedLocation] = useState({});
 
+  const onSelect = (item) => {
+    setSelectedLocation(item);
+  }
+  const onDeselect = () => {
+    setSelectedLocation({});
+  }
+
+  const selectedRestaurant = selectedLocation.id ? 
+    filteredRestaurants.find(filteredRestaurant => filteredRestaurant.restaurant.id === selectedLocation.id)?.restaurant : undefined;
 
   return (
     <>
@@ -461,57 +468,7 @@ export const Main = (props) => {
               )
             }
           </div>
-          <button onClick={() => handleClear()} class="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
 
-        </div>
-
-        <div className="max-w-screen-2xl px-4 md:px-8 mx-auto cursor-pointer" button onClick={() => toggleMapDisplay()}>{showMap ? "マップ非表示" : "マップ表示"}</div>
-        {showMap &&
-          <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={positionIshiBill}
-              zoom={17}
-              options={{
-                restriction: {
-                  latLngBounds: TOKYO_BOUNDS,
-                  strictBounds: true,
-                },
-              }}
-              onClick={getLatLng}
-            >
-              {Object.keys(filteredRestaurants).map(item => {               
-                return (
-                  <>
-                    <Marker
-                      className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}
-                      position={{
-                        lat: filteredRestaurants[item].restaurant.lat,
-                        lng: filteredRestaurants[item].restaurant.lng,
-                      }} />
-
-                    <InfoWindow position={{
-                      lat: filteredRestaurants[item].restaurant.lat,
-                      lng: filteredRestaurants[item].restaurant.lng,
-                    }} options={infoWindowOptions}>
-                      <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}>
-                        <h1>{filteredRestaurants[item].restaurant.name}</h1>
-                        {/* TODO: タグ表示 */}
-
-                      </div>
-                    </InfoWindow>
-                  </>
-                )
-              })}
-
-              <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
-                position={positionIshiBill} button onClick={() => alert('石井ビル')} />
-
-            </GoogleMap>
-          </div>
-        }
-
-        {!showMap &&
           <div class="flex flex-col items-center justify-center">
             <div class="relative">
               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -522,19 +479,26 @@ export const Main = (props) => {
                 type="text"
                 placeholder="店名検索"
                 value={searchTerm}
+                onClick={() => onDeselect()}
                 onChange={handleChange}
               />
             </div>
           </div>
-        }
 
-        <div className="flex flex-col max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-          <div className="grid grid-cols-2 md:grid-cols-4">
-            {Object.keys(filteredRestaurants).map(item => {
+          <button onClick={() => handleClear()} class="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
+
+        </div>
+
+          <div className="flex flex-col-reverse max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
+            <div className="overflow-auto h-65vh md:w-30vw">
+              {Object.keys(filteredRestaurants).map(item => {
               return (
                 <>
-                  <div className="max-w-md mx-auto rounded-lg overflow-hidden shadow-lg cursor-pointer px-6 py-4" onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}>
-                    <img className="w-full" src="https://source.unsplash.com/random/800x600" alt="画像"></img>
+                  <div className="border flex cursor-pointer" 
+                    onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}
+                    onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
+                    >
+                      <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="h-1/3 w-1/3" alt="Logo" />
                     <div className="px-6 py-4">
                       <div className="font-bold text-xl mb-2">{filteredRestaurants[item].restaurant.name}</div>
                       <TagList 
@@ -542,7 +506,6 @@ export const Main = (props) => {
                         tags={tags}
                       />
                       <div className="text-gray-500">
-                        <h1>投稿日時：</h1>   
                         <div className="flex">                             
                           <DateTimeConverter 
                             created_at={filteredRestaurants[item].restaurant.created_at}
@@ -550,9 +513,9 @@ export const Main = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className="px-6 pt-4 pb-2">
-                    </div>
                   </div>
+
+                  {/* 詳細/編集モーダル */}
                   <Modal
                     isOpen={filteredRestaurants[item].restaurant.id === selectedItem}
                     onAfterOpen={afterOpenModal}
@@ -621,12 +584,64 @@ export const Main = (props) => {
                         />
                       </form>
                     </Modal>
-                  }
+                  }                  
                 </>
-              )
-            })}
+              )})}
+            </div>
+            
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={positionIshiBill}
+              zoom={17}
+              options={{
+                restriction: {
+                  latLngBounds: TOKYO_BOUNDS,
+                  strictBounds: true,
+                },
+              }}
+              onClick={getLatLng}
+            >
+              <div className="overflow-auto h-60vh">
+                {Object.keys(filteredRestaurants).map(item => {               
+                  return (
+                    <>
+                      <Marker
+                        className="cursor-pointer" 
+                        button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}
+                        onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
+                        onMouseOut={onDeselect}
+                        position={{
+                          lat: filteredRestaurants[item].restaurant.lat,
+                          lng: filteredRestaurants[item].restaurant.lng,
+                        }} />                    
+                    </>
+                  )
+                })}
+              </div>
+              
+              {
+                (selectedRestaurant !== undefined) && (
+                  <InfoWindow 
+                    position={{
+                      lat: selectedRestaurant.lat,
+                      lng: selectedRestaurant.lng,
+                    }}
+                    options={infoWindowOptions}
+                  >
+                    <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(selectedRestaurant.id)}>
+                      <h2 className="text-lg">{selectedRestaurant.name}</h2>                    
+                    </div>
+                  </InfoWindow>
+                )              
+              }
+              <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
+                position={positionIshiBill} button onClick={() => alert('石井ビル')} />
+
+            </GoogleMap>
           </div>
-        </div>
+        
+
+        {/* 新規店名登録モーダル */}
         <Modal isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
