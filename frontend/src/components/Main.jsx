@@ -574,6 +574,7 @@ export const Main = (props) => {
             {Object.keys(filteredRestaurants).map(item => {
               return (
                 <>
+                  {/* 詳細/編集モーダル */}
                   <Modal
                     isOpen={filteredRestaurants[item].restaurant.id === selectedItem}
                     onAfterOpen={afterOpenModal}
@@ -648,6 +649,8 @@ export const Main = (props) => {
             })}
           </div>
         </div>
+
+        {/* 新規店名登録モーダル */}
         <Modal isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
