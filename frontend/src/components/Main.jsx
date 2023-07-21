@@ -479,6 +479,7 @@ export const Main = (props) => {
                 type="text"
                 placeholder="店名検索"
                 value={searchTerm}
+                onClick={() => onDeselect()}
                 onChange={handleChange}
               />
             </div>
