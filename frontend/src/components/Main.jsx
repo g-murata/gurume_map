@@ -513,7 +513,78 @@ export const Main = (props) => {
                       </div>
                     </div>
                   </div>
-                  </>
+
+                  {/* 詳細/編集モーダル */}
+                  <Modal
+                    isOpen={filteredRestaurants[item].restaurant.id === selectedItem}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={onCloseDialog}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                  >
+
+                    {!editModalIsOpen ?
+                      <>
+                        <ShowRestrauntModal
+                          ReactStarsRating={ReactStarsRating}
+                          evaluation={evaluation}
+                          setEvaluation={setEvaluation}
+                          onChange={onChange}
+                          onEditDialog={onEditDialog}
+                          handleDeleteSubmit={handleDeleteSubmit}
+                          onCloseDialog={onCloseDialog}
+                          OpenReviewModal={OpenReviewModal}
+                          setReview={setReview}
+                          restaurant={filteredRestaurants[item].restaurant}
+                          item={item}
+                          tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                          tags={tags}                          
+                          reviews={reviews}
+                          checkUsersWithoutReviews={checkUsersWithoutReviews}
+                          setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
+                          isLoading={isLoading}
+                          isReviewLoading={isReviewLoading}
+                          isCheckUserReviewLoading={isCheckUserReviewLoading}
+                          error={error}
+                          setError={setError}
+                        />
+
+                      </>
+                      :
+                      <>
+                        <form onSubmit={handleUpdateSubmit}>
+                          <EditRestrauntModal
+                            onCloseEditDialog={onCloseEditDialog}
+                            onCloseDialog={onCloseDialog}
+                            error={error}
+                            restaurant={filteredRestaurants[item].restaurant}
+                          />
+                        </form>
+                      </>
+                    }
+                  </Modal>
+
+                  {/* レビューモーダル */}
+                  {reviewModalIsOpen &&
+                    <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem}
+                      onAfterOpen={afterReviewOpenModal}
+                      onRequestClose={closeReviewModal}
+                      style={customStyles}
+                      contentLabel="Example Modal"
+                    >
+                      <form onSubmit={handleReviewSubmit}>
+                        <CreateReviewModal
+                          ReactStarsRating={ReactStarsRating}
+                          closeReviewModal={closeReviewModal}
+                          evaluation={evaluation}
+                          onChange={onChange}
+                          error={error}
+                          restaurant={filteredRestaurants[item].restaurant}
+                        />
+                      </form>
+                    </Modal>
+                  }                  
+                </>
               )})}
             </div>
             
