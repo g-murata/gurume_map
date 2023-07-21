@@ -8,8 +8,13 @@ module.exports = {
         '128': '32rem',
         '10vh': '10vh',
         '20vh': '20vh',
+        '60vh': '60vh',
+        '65vh': '65vh',
         '80vh': '80vh',
-        '90vh': '90vh'        
+        '90vh': '90vh',        
+      },
+      width: {
+        '30vw': '30vw',
       }
     },
   },
