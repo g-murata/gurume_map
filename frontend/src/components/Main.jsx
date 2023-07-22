@@ -321,6 +321,7 @@ export const Main = (props) => {
     setSelectedItem(restaurant.id)
     setIsReviewLoading(true)
     setIsCheckUserReviewLoading(true)
+    // TODO: ホバーの時とclickの時onSelectメソッドを動作させてるのイケてないよなぁ。スマホ用に作成したんだけども。
     onSelect(restaurant)
 
     fetchShowReview(restaurant.id)
