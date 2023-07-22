@@ -589,7 +589,7 @@ export const Main = (props) => {
             <GoogleMap
               mapContainerClassName="h-45vh md:h-65vh w-full"
               center={positionIshiBill}
-              zoom={15}
+              zoom={16}
               options={{
                 restriction: {
                   latLngBounds: TOKYO_BOUNDS,
