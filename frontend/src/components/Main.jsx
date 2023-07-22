@@ -626,7 +626,7 @@ export const Main = (props) => {
                     options={infoWindowOptions}
                   >
                     <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(selectedRestaurant)}>
-                      <h2 className="text-lg">{selectedRestaurant.name}</h2>                    
+                      <h2 className="text-sm md:text-lg">{selectedRestaurant.name}</h2>                    
                     </div>
                   </InfoWindow>
                 )              
