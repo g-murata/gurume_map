@@ -47,11 +47,6 @@ const customStyles = {
 };
 
 
-const containerStyle = {
-  height: "65vh",
-  width: "100%",
-};
-
 const center = {
   lat: 35.666333273506176,
   lng: 139.75424473120108,
@@ -590,7 +585,7 @@ export const Main = (props) => {
             </div>
             
             <GoogleMap
-              mapContainerStyle={containerStyle}
+              mapContainerClassName="h-45vh md:h-65vh w-full"
               center={positionIshiBill}
               zoom={17}
               options={{
