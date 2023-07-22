@@ -317,12 +317,13 @@ export const Main = (props) => {
   const [getLatestReviews, setGetLatestReviews] = useState("");
   const [getLatestReviewsRestraunt, setGetLatestReviewsRestraunt] = useState("");
 
-  const onOpenDialog = (id) => {
-    setSelectedItem(id)
+  const onOpenDialog = (restaurant) => {
+    setSelectedItem(restaurant.id)
     setIsReviewLoading(true)
     setIsCheckUserReviewLoading(true)
+    onSelect(restaurant)
 
-    fetchShowReview(id)
+    fetchShowReview(restaurant.id)
       .then((data) => {
         setReview(data.review)
         setIsReviewLoading(false)
@@ -330,7 +331,7 @@ export const Main = (props) => {
       )
 
     CheckUsersWithoutReviews({
-      restraunt_id: id,
+      restraunt_id: restaurant.id,
       email: auth.currentUser.email
     })
       .then((result) => {
@@ -490,7 +491,7 @@ export const Main = (props) => {
               return (
                 <>
                   <div className="border flex cursor-pointer" 
-                    onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}
+                    onClick={() => onOpenDialog(filteredRestaurants[item].restaurant)}
                     onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
                     >
                       <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="h-1/3 w-1/3" alt="Logo" />
@@ -602,7 +603,7 @@ export const Main = (props) => {
                     <>
                       <Marker
                         className="cursor-pointer" 
-                        button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant.id)}
+                        button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant)}
                         onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
                         onMouseOut={onDeselect}
                         position={{
@@ -623,7 +624,7 @@ export const Main = (props) => {
                     }}
                     options={infoWindowOptions}
                   >
-                    <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(selectedRestaurant.id)}>
+                    <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(selectedRestaurant)}>
                       <h2 className="text-lg">{selectedRestaurant.name}</h2>                    
                     </div>
                   </InfoWindow>
