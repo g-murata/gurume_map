@@ -22,7 +22,7 @@ export const CreateRestrauntModal = (props) => {
         <div className='flex justify-center '>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
         </div>
-        <div className="text-gray-400">※タグ登録について。現在管理者が手動で登録していますが、今後はユーザ側でも登録できるようにします！しばしお待ちを！（2023/07/15）</div>
+        <div className="text-gray-400">※お店のタグ登録について。現在管理者が手動で登録していますが、今後はユーザ側でも登録できるようにします！しばしお待ちを！</div>
       </div>
     </>
   )
