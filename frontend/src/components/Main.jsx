@@ -587,7 +587,7 @@ export const Main = (props) => {
             </div>
             
             <GoogleMap
-              mapContainerClassName="h-35vh md:h-65vh w-full"
+              mapContainerClassName="h-30vh md:h-65vh w-full"
               center={positionIshiBill}
               zoom={16}
               options={{
