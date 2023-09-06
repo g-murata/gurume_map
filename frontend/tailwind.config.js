@@ -8,6 +8,7 @@ module.exports = {
         '128': '32rem',
         '10vh': '10vh',
         '20vh': '20vh',
+        '35vh': '35vh',
         '45vh': '45vh',
         '60vh': '60vh',
         '65vh': '65vh',
