@@ -41,7 +41,7 @@ export const Header = (props) => {
         <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
           <Link to="/blog" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >開発者ブログ</Link>
           {/* TODO: 日付部分をfetchするようにする！ */}
-          <h1 className="text-xs text-yellow-600">2023/5/28更新</h1>
+          <h1 className="text-xs text-yellow-600">2023/10/01更新</h1>
           <div className="text-red-400 text-xs md:text-right"></div>
         </li>
 
