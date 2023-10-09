@@ -591,6 +591,7 @@ export const Main = (props) => {
               center={positionIshiBill}
               zoom={16}
               options={{
+                fullscreenControl: false, // 全画面表示ボタンを非表示にする
                 restriction: {
                   latLngBounds: TOKYO_BOUNDS,
                   strictBounds: true,
