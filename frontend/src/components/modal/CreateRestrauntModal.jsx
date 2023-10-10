@@ -40,6 +40,7 @@ export const CreateRestrauntModal = (props) => {
           return (
             <>
               <button 
+                type="button"
                 className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(props.tags[item].id) ? 'bg-red-500' : ''}`} 
                 key={props.tags[item].id} 
                 onClick={() => handleTagClick(props.tags[item].id)}
@@ -50,9 +51,9 @@ export const CreateRestrauntModal = (props) => {
           )}
           )
         }
-        {/* <div className='flex justify-center '>
-          <button onClick={props.handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
-        </div> */}
+        <div className='flex justify-center '>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+        </div>
       </div>
     </>
   )

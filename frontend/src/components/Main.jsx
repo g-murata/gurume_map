@@ -646,9 +646,8 @@ export const Main = (props) => {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <form >
+          <form onSubmit={handleSubmit}>
             <CreateRestrauntModal
-              handleSubmit={handleSubmit}
               closeModal={closeModal}
               error={error}
               coordinateLat={coordinateLat}
