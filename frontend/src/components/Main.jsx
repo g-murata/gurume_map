@@ -69,55 +69,6 @@ export const Main = (props) => {
   const user = auth.currentUser;
   const [error, setError] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const { name, lat, lng } = event.target.elements;
-    setIsLoading(true);
-    postRestraunt({
-      name: name.value,
-      lat: lat.value,
-      lng: lng.value,
-      email: user.email
-    })
-      .then((res) => {
-        onSelect(res.restraunts)
-        closeModal();
-        const newRestaurants = [
-        {
-          restaurant: {
-            id: res.restraunts.id,
-            name: res.restraunts.name,
-            lat: res.restraunts.lat,
-            lng: res.restraunts.lng,
-            user_name: res.user_name,
-            created_at: res.restraunts.created_at,
-            updated_at: res.restraunts.updated_at,
-            user_email: user.email
-          }
-          ,
-          // TODO:
-          tags_tagged_items: []          
-        } ,
-        ...restaurants
-        ]
-
-        setRestraunt(newRestaurants)
-        handleClear();
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        switch (error.code) {
-          case 'ERR_BAD_RESPONSE':
-            setError('不備あり！');
-            break;
-          default:
-            setError('エラーっす！Herokuのデプロイ先どうしようか？');
-            break;
-        }
-        setIsLoading(false);
-      });
-  }
-
   const handleReviewSubmit = (event) => {
     event.preventDefault();
     const { content } = event.target.elements;
@@ -646,16 +597,21 @@ export const Main = (props) => {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <form >
-            <CreateRestrauntModal
-              handleSubmit={handleSubmit}
-              closeModal={closeModal}
-              error={error}
-              coordinateLat={coordinateLat}
-              coordinateLng={coordinateLng}
-              tags={tags}
-            />
-          </form>
+          <CreateRestrauntModal
+            setIsLoading={setIsLoading}
+            restaurants={restaurants}
+            postRestraunt={postRestraunt}
+            setRestraunt={setRestraunt}
+            user={user}
+            onSelect={onSelect}
+            closeModal={closeModal}
+            handleClear={handleClear}
+            setError={setError}
+            error={error}
+            coordinateLat={coordinateLat}
+            coordinateLng={coordinateLng}
+            tags={tags}
+          />
         </Modal>
 
       </LoadScript >
