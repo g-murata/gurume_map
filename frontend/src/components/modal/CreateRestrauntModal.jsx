@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { postRestraunt } from '../../apis/restraunts';
+import { postTagsTaggedItem } from '../../apis/tags_tagged_items';
 
 export const CreateRestrauntModal = (props) => {
   const [isSelected, setIsSelected] = useState(false);
@@ -8,13 +10,41 @@ export const CreateRestrauntModal = (props) => {
     event.preventDefault();
     const { name, lat, lng } = event.target.elements;
     props.setIsLoading(true);
-    props.postRestraunt({
+    postRestraunt({
       name: name.value,
       lat: lat.value,
       lng: lng.value,
       email: props.user.email
     })
-      .then((res) => {
+      .then((res) => {        
+        selectedTags.forEach(tag => {
+          postTagsTaggedItem({
+            tagged_item_type: "Restraunt",
+            tagged_item_id: res.restraunts.id,
+            tag_id: tag
+          })  
+        })
+        .then((res) => {
+          debugger
+          // const tags_tagged_items = [
+          // {
+          //   id: res.id,
+          //   name: res.restraunts.name,
+          //   tagged_item_type: res.tagged_item_type,
+          //   tag_id: res.tag_id
+          // }            
+          // ]                 
+          }).catch((error) => {
+          switch (error.code) {
+            case 'ERR_BAD_RESPONSE':
+              props.setError('不備あり！');
+              break;
+            default:
+              props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
+              break;
+          }
+          props.setIsLoading(false);
+        });
         props.onSelect(res.restraunts)
         props.closeModal();
         const newRestaurants = [
@@ -29,9 +59,8 @@ export const CreateRestrauntModal = (props) => {
             updated_at: res.restraunts.updated_at,
             user_email: props.user.email
           }
-          ,
-          // TODO:
-          tags_tagged_items: []          
+        ,
+        tags_tagged_items: []
         } ,
         ...props.restaurants
         ]
@@ -41,6 +70,7 @@ export const CreateRestrauntModal = (props) => {
         props.setIsLoading(false);
       })
       .catch((error) => {
+        debugger
         switch (error.code) {
           case 'ERR_BAD_RESPONSE':
             props.setError('不備あり！');

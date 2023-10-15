@@ -3,7 +3,7 @@
 
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
-import { fetchRestaurants, postRestraunt, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
+import { fetchRestaurants, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
 import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
 import {
@@ -600,7 +600,6 @@ export const Main = (props) => {
           <CreateRestrauntModal
             setIsLoading={setIsLoading}
             restaurants={restaurants}
-            postRestraunt={postRestraunt}
             setRestraunt={setRestraunt}
             user={user}
             onSelect={onSelect}
