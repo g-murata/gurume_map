@@ -22,29 +22,9 @@ export const CreateRestrauntModal = (props) => {
             tagged_item_type: "Restraunt",
             tagged_item_id: res.restraunts.id,
             tag_id: tag
-          })  
-        })
-        .then((res) => {
-          debugger
-          // const tags_tagged_items = [
-          // {
-          //   id: res.id,
-          //   name: res.restraunts.name,
-          //   tagged_item_type: res.tagged_item_type,
-          //   tag_id: res.tag_id
-          // }            
-          // ]                 
-          }).catch((error) => {
-          switch (error.code) {
-            case 'ERR_BAD_RESPONSE':
-              props.setError('不備あり！');
-              break;
-            default:
-              props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
-              break;
-          }
-          props.setIsLoading(false);
-        });
+          })
+        })  
+        // thenを入れるとうまくいかない。PromiseAllってのを使えばいいのかしら。
         props.onSelect(res.restraunts)
         props.closeModal();
         const newRestaurants = [
@@ -70,7 +50,6 @@ export const CreateRestrauntModal = (props) => {
         props.setIsLoading(false);
       })
       .catch((error) => {
-        debugger
         switch (error.code) {
           case 'ERR_BAD_RESPONSE':
             props.setError('不備あり！');
