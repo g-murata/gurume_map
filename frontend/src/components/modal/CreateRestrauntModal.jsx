@@ -17,37 +17,42 @@ export const CreateRestrauntModal = (props) => {
       email: props.user.email
     })
       .then((res) => {        
-        selectedTags.forEach(tag => {
-          postTagsTaggedItem({
+        let tagPromises = selectedTags.map((tag) => {
+          return postTagsTaggedItem({
             tagged_item_type: "Restraunt",
             tagged_item_id: res.restraunts.id,
             tag_id: tag
-          })
-        })  
-        // thenを入れるとうまくいかない。PromiseAllってのを使えばいいのかしら。
+          }) 
+        });
         props.onSelect(res.restraunts)
         props.closeModal();
-        const newRestaurants = [
-        {
-          restaurant: {
-            id: res.restraunts.id,
-            name: res.restraunts.name,
-            lat: res.restraunts.lat,
-            lng: res.restraunts.lng,
-            user_name: res.user_name,
-            created_at: res.restraunts.created_at,
-            updated_at: res.restraunts.updated_at,
-            user_email: props.user.email
-          }
-        ,
-        tags_tagged_items: []
-        } ,
-        ...props.restaurants
-        ]
 
-        props.setRestraunt(newRestaurants)
-        props.handleClear();
-        props.setIsLoading(false);
+        Promise.all(tagPromises)
+        .then((tagResponses) => {
+          // tagResponsesには、各postTagsTaggedItemのレスポンスが含まれています。
+          const newRestaurant = {
+            restaurant: {
+              id: res.restraunts.id,
+              name: res.restraunts.name,
+              lat: res.restraunts.lat,
+              lng: res.restraunts.lng,
+              user_name: res.user_name,
+              created_at: res.restraunts.created_at,
+              updated_at: res.restraunts.updated_at,
+              user_email: props.user.email,
+            },
+            tags_tagged_items: tagResponses, // ここにレスポンスを追加
+          };
+          
+          // 新しいrestaurantを既存のリストに追加
+          const newRestaurants = [newRestaurant, ...props.restaurants];
+          // 状態を更新するロジックをここに追加します（例：setStateなど）
+
+          props.setRestraunt(newRestaurants)
+          props.handleClear();
+          props.setIsLoading(false);
+  
+        })  
       })
       .catch((error) => {
         switch (error.code) {
