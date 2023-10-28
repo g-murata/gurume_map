@@ -29,6 +29,8 @@ export const CreateRestrauntModal = (props) => {
 
         Promise.all(tagPromises)
         .then((tagResponses) => {
+          let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
+
           // tagResponsesには、各postTagsTaggedItemのレスポンスが含まれています。
           const newRestaurant = {
             restaurant: {
@@ -41,13 +43,13 @@ export const CreateRestrauntModal = (props) => {
               updated_at: res.restraunts.updated_at,
               user_email: props.user.email,
             },
-            tags_tagged_items: tagResponses, // ここにレスポンスを追加
+            tags_tagged_items: tags_tagged_items, // ここにレスポンスを追加
           };
           
           // 新しいrestaurantを既存のリストに追加
           const newRestaurants = [newRestaurant, ...props.restaurants];
           // 状態を更新するロジックをここに追加します（例：setStateなど）
-
+          
           props.setRestraunt(newRestaurants)
           props.handleClear();
           props.setIsLoading(false);
