@@ -1,3 +1,5 @@
+import {TagList} from '../TagList';
+
 export const EditRestrauntModal = (props) => {
   return (
     <>
@@ -26,6 +28,12 @@ export const EditRestrauntModal = (props) => {
           </label> */}
           <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.restaurant.lng}></input>
         </div>
+
+        <TagList 
+            tags_tagged_items={props.tags_tagged_items}
+            tags={props.tags}
+          />
+
         <div className='flex justify-center '>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">更新</button>
         </div>

@@ -507,6 +507,8 @@ export const Main = (props) => {
                             onCloseDialog={onCloseDialog}
                             error={error}
                             restaurant={filteredRestaurants[item].restaurant}
+                            tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                            tags={tags}                            
                           />
                         </form>
                       </>
