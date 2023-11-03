@@ -3,7 +3,7 @@
 
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
-import { fetchRestaurants, updateRestraunt, deleteRestraunt } from '../apis/restraunts';
+import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
 import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
 import {
@@ -110,50 +110,6 @@ export const Main = (props) => {
       });
 
     setCheckUsersWithoutReviews(false)
-  }
-
-  const handleUpdateSubmit = (event) => {
-
-    event.preventDefault();
-    const { name } = event.target.elements;
-    setIsLoading(true);
-    updateRestraunt({
-      id: selectedItem,
-      name: name.value,
-    })
-      .then((res) => {
-        onSelect(res.restraunts)        
-        setEditModalIsOpen(false);
-        setError('')
-
-        // TODO: これ見直さないと駄目かも。なんでfilteredの方まで更新されるのかわからん。
-        // TODO:　たぶんこれ非推奨なんじゃないかな。setStateで更新してあげないと。
-        // UPDATEの参考
-        // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
-        const updateRestaurants = restaurants.map((restaurant) => {
-          if (Number(restaurant.restaurant.id) === Number(selectedItem)) {
-            restaurant.restaurant.name = res.restraunts.name;
-            restaurant.restaurant.lat = res.restraunts.lat;
-            restaurant.restaurant.lng = res.restraunts.lng;
-            restaurant.restaurant.updated_at = res.restraunts.updated_at;
-          }
-          return restaurant;
-        })
-        setRestraunt(updateRestaurants);
-        handleClear();
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        switch (error.code) {
-          case 'ERR_BAD_RESPONSE':
-            setError('不備あり！');
-            break;
-          default:
-            setError('エラーっす！Herokuのデプロイ先どうしようか？');
-            break;
-        }
-        setIsLoading(false);
-      });
   }
 
   const handleDeleteSubmit = (index) => {
@@ -501,16 +457,22 @@ export const Main = (props) => {
                       </>
                       :
                       <>
-                        <form onSubmit={handleUpdateSubmit}>
-                          <EditRestrauntModal
-                            onCloseEditDialog={onCloseEditDialog}
-                            onCloseDialog={onCloseDialog}
-                            error={error}
-                            restaurant={filteredRestaurants[item].restaurant}
-                            tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
-                            tags={tags}                            
-                          />
-                        </form>
+                        <EditRestrauntModal
+                          setIsLoading={setIsLoading}                        
+                          selectedItem={selectedItem}
+                          onSelect={onSelect}
+                          setEditModalIsOpen={setEditModalIsOpen}
+                          onCloseEditDialog={onCloseEditDialog}
+                          setError={setError}
+                          restaurants={restaurants}
+                          setRestraunt={setRestraunt}
+                          onCloseDialog={onCloseDialog}
+                          handleClear={handleClear}
+                          error={error}
+                          restaurant={filteredRestaurants[item].restaurant}
+                          tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                          tags={tags}                            
+                        />
                       </>
                     }
                   </Modal>
