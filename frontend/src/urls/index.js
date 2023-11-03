@@ -12,8 +12,8 @@ export const blogShow = (blogsId) => `${DEFAULT_API_LOCALHOST}/blogs/${blogsId}`
 export const get_user = `${DEFAULT_API_LOCALHOST}/users/get_user`
 export const createUser = `${DEFAULT_API_LOCALHOST}/users`
 export const tags = `${DEFAULT_API_LOCALHOST}/tags`
-export const tags_tagged_item = `${DEFAULT_API_LOCALHOST}/tags_tagged_items`
-// export const tags_tagged_item = (tags_tagged_itemId) => `${DEFAULT_API_LOCALHOST}/tags_tagged_items/${tags_tagged_itemId}`
+export const tags_tagged_items = `${DEFAULT_API_LOCALHOST}/tags_tagged_items`
+export const tags_tagged_item = (tags_tagged_itemId) => `${DEFAULT_API_LOCALHOST}/tags_tagged_items/${tags_tagged_itemId}`
 
 // export const blogShow = `${DEFAULT_API_LOCALHOST}/blogs/1`
 // export const foodsIndex = (restaurantId) =>

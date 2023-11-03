@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updateRestraunt } from '../../apis/restraunts';
+import { postTagsTaggedItem, deleteTagsTaggedItem } from '../../apis/tags_tagged_items';
+
 
 export const EditRestrauntModal = (props) => {
   const [isSelected, setIsSelected] = useState(false);
@@ -16,7 +18,6 @@ export const EditRestrauntModal = (props) => {
   };
 
   const handleUpdateSubmit = (event) => {
-
     event.preventDefault();
     const { name } = event.target.elements;
     props.setIsLoading(true);
@@ -25,6 +26,18 @@ export const EditRestrauntModal = (props) => {
       name: name.value,
     })
       .then((res) => {
+        const deleteExistingTagsPromise = deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
+        
+        deleteExistingTagsPromise.then(() => {
+          const tagPromises = selectedTags.map((tag) => {
+            return postTagsTaggedItem({
+              tagged_item_type: "Restraunt",
+              tagged_item_id: res.restraunts.id,
+              tag_id: tag
+            }) 
+          });            
+        })  
+        debugger
         props.onSelect(res.restraunts)        
         props.setEditModalIsOpen(false);
         props.setError('')
@@ -59,6 +72,21 @@ export const EditRestrauntModal = (props) => {
       });
   }
 
+  useEffect(() => {
+    {Object.values(props.tags_tagged_items).map(value => {
+      // `props.tags_tagged_items`からタグIDの配列を作成します。
+      const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id);
+
+      // `setSelectedTags`を使って初期タグの状態を設定します。
+      setSelectedTags(initialTagIds);
+      debugger
+      // ここで`isSelected`の初期状態も設定する必要がありますが、
+      // そのロジックは`isSelected`の使われ方に依存します。
+      // 例えば、すべてのタグが選択されている場合は以下のようにします。
+      setIsSelected(true);
+    })}
+  }, [])
+
 
 
   return (
@@ -92,9 +120,6 @@ export const EditRestrauntModal = (props) => {
 
           <div className="my-2">                           
             {Object.keys(props.tags).map(item => {
-              console.log(props.tags_tagged_items)
-              console.log(props.tags[item].id)
-              console.log(selectedTags)
               return (
                 <>
                   <button 
