@@ -27,37 +27,43 @@ export const EditRestrauntModal = (props) => {
     })
       .then((res) => {
         const deleteExistingTagsPromise = deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
-        
-        deleteExistingTagsPromise.then(() => {
-          const tagPromises = selectedTags.map((tag) => {
-            return postTagsTaggedItem({
-              tagged_item_type: "Restraunt",
-              tagged_item_id: res.restraunts.id,
-              tag_id: tag
-            }) 
-          });            
-        })  
-        debugger
+
+        const tagPromises = selectedTags.map((tag) => {
+          return postTagsTaggedItem({
+            tagged_item_type: "Restraunt",
+            tagged_item_id: res.restraunts.id,
+            tag_id: tag
+          }) 
+        });            
+
         props.onSelect(res.restraunts)        
         props.setEditModalIsOpen(false);
         props.setError('')
 
-        // TODO: これ見直さないと駄目かも。なんでfilteredの方まで更新されるのかわからん。
-        // TODO:　たぶんこれ非推奨なんじゃないかな。setStateで更新してあげないと。
-        // UPDATEの参考
-        // https://zenn.dev/sprout2000/books/76a279bb90c3f3/viewer/chapter10
-        const updateRestaurants = props.restaurants.map((restaurant) => {
-          if (Number(restaurant.restaurant.id) === Number(props.selectedItem)) {
-            restaurant.restaurant.name = res.restraunts.name;
-            restaurant.restaurant.lat = res.restraunts.lat;
-            restaurant.restaurant.lng = res.restraunts.lng;
-            restaurant.restaurant.updated_at = res.restraunts.updated_at;
-          }
-          return restaurant;
+        Promise.all(tagPromises)
+        .then((tagResponses) => {
+          let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
+          const updateRestaurants = props.restaurants.map((restaurant) => {
+            if (Number(restaurant.restaurant.id) === Number(props.selectedItem)) {
+              return {
+                ...restaurant,
+                restaurant: {
+                  ...restaurant.restaurant,
+                  name: res.restraunts.name,
+                  lat: res.restraunts.lat,
+                  lng: res.restraunts.lng,
+                  updated_at: res.restraunts.updated_at,                  
+                }
+              }
+            }
+            // 条件に一致しない場合には元のオブジェクトをそのまま返す
+            return restaurant;
+          })
+          debugger
+          props.setRestraunt(updateRestaurants);
+          props.handleClear();
+          props.setIsLoading(false);          
         })
-        props.setRestraunt(updateRestaurants);
-        props.handleClear();
-        props.setIsLoading(false);
       })
       .catch((error) => {
         switch (error.code) {
