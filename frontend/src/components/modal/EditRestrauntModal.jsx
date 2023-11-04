@@ -53,7 +53,8 @@ export const EditRestrauntModal = (props) => {
                   lat: res.restraunts.lat,
                   lng: res.restraunts.lng,
                   updated_at: res.restraunts.updated_at,                  
-                }
+                },
+                tags_tagged_items: tags_tagged_items
               }
             }
             // 条件に一致しない場合には元のオブジェクトをそのまま返す
