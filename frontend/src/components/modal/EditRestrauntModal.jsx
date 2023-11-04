@@ -79,18 +79,16 @@ export const EditRestrauntModal = (props) => {
   }
 
   useEffect(() => {
-    {Object.values(props.tags_tagged_items).map(value => {
-      // `props.tags_tagged_items`からタグIDの配列を作成します。
-      const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id);
+    // `props.tags_tagged_items`からタグIDの配列を作成します。
+    const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id);
 
-      // `setSelectedTags`を使って初期タグの状態を設定します。
-      setSelectedTags(initialTagIds);
-      // ここで`isSelected`の初期状態も設定する必要がありますが、
-      // そのロジックは`isSelected`の使われ方に依存します。
-      // 例えば、すべてのタグが選択されている場合は以下のようにします。
-      setIsSelected(true);
-    })}
-  }, [])
+    // `setSelectedTags`を使って初期タグの状態を設定します。
+    setSelectedTags(initialTagIds);
+    // ここで`isSelected`の初期状態も設定する必要がありますが、
+    // そのロジックは`isSelected`の使われ方に依存します。
+    // 例えば、すべてのタグが選択されている場合は以下のようにします。
+    setIsSelected(true);
+  }, [props.tags_tagged_items])
 
   return (
     <>
