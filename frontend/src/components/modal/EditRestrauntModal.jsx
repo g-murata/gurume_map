@@ -26,7 +26,7 @@ export const EditRestrauntModal = (props) => {
       name: name.value,
     })
       .then((res) => {
-        const deleteExistingTagsPromise = deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
+        deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
 
         const tagPromises = selectedTags.map((tag) => {
           return postTagsTaggedItem({
@@ -60,7 +60,6 @@ export const EditRestrauntModal = (props) => {
             // 条件に一致しない場合には元のオブジェクトをそのまま返す
             return restaurant;
           })
-          debugger
           props.setRestraunt(updateRestaurants);
           props.handleClear();
           props.setIsLoading(false);          
@@ -86,15 +85,12 @@ export const EditRestrauntModal = (props) => {
 
       // `setSelectedTags`を使って初期タグの状態を設定します。
       setSelectedTags(initialTagIds);
-      debugger
       // ここで`isSelected`の初期状態も設定する必要がありますが、
       // そのロジックは`isSelected`の使われ方に依存します。
       // 例えば、すべてのタグが選択されている場合は以下のようにします。
       setIsSelected(true);
     })}
   }, [])
-
-
 
   return (
     <>
