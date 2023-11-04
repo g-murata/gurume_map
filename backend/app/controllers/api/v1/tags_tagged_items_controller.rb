@@ -9,7 +9,7 @@ module Api
             tags_tagged_item: tags_tagged_item
           }, status: :ok  
         else
-          render status: review.errors
+          render status: tags_tagged_item.errors
         end
       end
 
