@@ -264,6 +264,7 @@ export const Main = (props) => {
   const onCloseDialog = () => {
     setSelectedItem(false)
     setEditModalIsOpen(false);
+    setError('')
     setEvaluation(3)
   }
 
@@ -289,6 +290,7 @@ export const Main = (props) => {
 
   const onCloseEditDialog = () => {
     setEditModalIsOpen(false);
+    setError('')
   }
   // 北は千代田区、東は江戸川区、南は港区、西は渋谷区
   const TOKYO_BOUNDS = {
