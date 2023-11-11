@@ -17,66 +17,69 @@ export const EditRestrauntModal = (props) => {
     }
   };
 
-  const handleUpdateSubmit = (event) => {
+  const handleUpdateSubmit = async (event) => {
     event.preventDefault();
     const { name } = event.target.elements;
     props.setIsLoading(true);
-    updateRestraunt({
-      id: props.selectedItem,
-      name: name.value,
-    })
-      .then((res) => {
-        deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
-
-        const tagPromises = selectedTags.map((tag) => {
-          return postTagsTaggedItem({
-            tagged_item_type: "Restraunt",
-            tagged_item_id: res.restraunts.id,
-            tag_id: tag
-          }) 
-        });            
-
-        props.onSelect(res.restraunts)        
-        props.setEditModalIsOpen(false);
-        props.setError('')
-
-        Promise.all(tagPromises)
-        .then((tagResponses) => {
-          let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
-          const updateRestaurants = props.restaurants.map((restaurant) => {
-            if (Number(restaurant.restaurant.id) === Number(props.selectedItem)) {
-              return {
-                ...restaurant,
-                restaurant: {
-                  ...restaurant.restaurant,
-                  name: res.restraunts.name,
-                  lat: res.restraunts.lat,
-                  lng: res.restraunts.lng,
-                  updated_at: res.restraunts.updated_at,                  
-                },
-                tags_tagged_items: tags_tagged_items
-              }
-            }
-            // 条件に一致しない場合には元のオブジェクトをそのまま返す
-            return restaurant;
-          })
-          props.setRestraunt(updateRestaurants);
-          props.handleClear();
-          props.setIsLoading(false);          
-        })
-      })
-      .catch((error) => {
-        switch (error.code) {
-          case 'ERR_BAD_RESPONSE':
-            props.setError('不備あり！');
-            break;
-          default:
-            props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
-            break;
-        }
-        props.setIsLoading(false);
+  
+    try {
+      const res = await updateRestraunt({
+        id: props.selectedItem,
+        name: name.value,
       });
-  }
+  
+      await deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
+  
+      const tagPromises = selectedTags.map((tag) => {
+        return postTagsTaggedItem({
+          tagged_item_type: "Restraunt",
+          tagged_item_id: res.restraunts.id,
+          tag_id: tag
+        });
+      });
+  
+      const tagResponses = await Promise.all(tagPromises);
+      let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
+  
+      // UIの更新処理
+      props.onSelect(res.restraunts)        
+      props.setEditModalIsOpen(false);
+      props.setError('');
+  
+      const updateRestaurants = props.restaurants.map((restaurant) => {
+        if (Number(restaurant.restaurant.id) === Number(props.selectedItem)) {
+          return {
+            ...restaurant,
+            restaurant: {
+              ...restaurant.restaurant,
+              name: res.restraunts.name,
+              lat: res.restraunts.lat,
+              lng: res.restraunts.lng,
+              updated_at: res.restraunts.updated_at,                  
+            },
+            tags_tagged_items: tags_tagged_items
+          }
+        }
+        return restaurant;
+      });
+      props.setRestraunt(updateRestaurants);
+      props.handleClear();
+  
+    } catch (error) {
+      // エラー処理
+      switch (error.code) {
+        case 'ERR_BAD_RESPONSE':
+          props.setError('不備あり！');
+          break;
+        default:
+          props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
+          break;
+      }
+    } finally {
+      props.setIsLoading(false);
+    }
+  };  
+
 
   useEffect(() => {
     // `props.tags_tagged_items`からタグIDの配列を作成します。
