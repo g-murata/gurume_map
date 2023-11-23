@@ -2,7 +2,10 @@ module Api
   module V1
     class RestrauntsController < ApplicationController
       def index
-        restraunts = Restraunt.includes(:tags_tagged_items).joins(:user).select("restraunts.*, users.name as user_name, users.email as user_email").order(created_at: :DESC)
+        restraunts = Restraunt.includes(:tags_tagged_items).joins(:user)
+                      .select("restraunts.*, users.name as user_name, users.email as user_email")
+                      .order(created_at: :DESC)
+                      .order("tags_tagged_items.tag_id")
 
         render json: {
           restraunts: restraunts.map do |restaurant|
