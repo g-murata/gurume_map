@@ -39,8 +39,9 @@ function App() {
 
   return (
     <>
+      <h1>工事中！！（2023/11/23）</h1>
 
-      <Router>
+      {/* <Router>
         <AuthProvider>
           <Header
             userInfo={userInfo}
@@ -58,7 +59,7 @@ function App() {
           </Routes>
 
         </AuthProvider>
-      </Router>
+      </Router> */}
     </>
   );
 }
