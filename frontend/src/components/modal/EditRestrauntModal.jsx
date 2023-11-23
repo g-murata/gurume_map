@@ -84,7 +84,7 @@ export const EditRestrauntModal = (props) => {
   useEffect(() => {
     const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id);
     setSelectedTags(initialTagIds);
-  }, [])  
+  }, [props.tags_tagged_items])  
 
   return (
     <>
