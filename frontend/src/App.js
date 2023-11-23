@@ -1,3 +1,6 @@
+// 使用していない変数があってもエラーにならないよう。
+/* eslint-disable no-unused-vars */
+
 import { BrowserRouter as Router, Routes, Route, } from "react-router-dom";
 
 import { Header } from "./components/Header";
