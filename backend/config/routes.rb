@@ -21,6 +21,7 @@ Rails.application.routes.draw do
         end
       end  
       resources :tags, only: [:index]                
+      resources :tags_tagged_items, only: [:create, :destroy]                
     end 
   end   
 end
