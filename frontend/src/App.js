@@ -42,10 +42,10 @@ function App() {
 
   return (
     <>
-      <h1 className="text-5xl">工事中！！（2023/11/23）</h1>
-      <h1 className="text-3xl">デプロイ先（fly.io）のサーバが起動しなくなってしまったため。</h1>
+      {/* <h1 className="text-5xl">工事中！！（2023/11/23）</h1>
+      <h1 className="text-3xl">デプロイ先（fly.io）のサーバが起動しなくなってしまったため。</h1> */}
 
-      {/* <Router>
+      <Router>
         <AuthProvider>
           <Header
             userInfo={userInfo}
@@ -63,7 +63,7 @@ function App() {
           </Routes>
 
         </AuthProvider>
-      </Router> */}
+      </Router>
     </>
   );
 }
