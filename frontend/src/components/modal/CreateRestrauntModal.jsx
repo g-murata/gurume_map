@@ -101,23 +101,41 @@ export const CreateRestrauntModal = (props) => {
           <div>
             <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLng}></input>
           </div>
-          {Object.keys(props.tags).map(item => {
-            return (
-              <>
-                <button 
-                  type="button"
-                  className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(props.tags[item].id) ? 'bg-red-500' : ''}`} 
-                  key={props.tags[item].id} 
-                  onClick={() => handleTagClick(props.tags[item].id)}
-                >
-                  {props.tags[item].name}
-                </button >  
-              </>
-            )}
-            )
-          }
+          <div className="my-4">
+            {Object.keys(props.tags).map(item => {
+              return (
+                <>
+                  <button 
+                    type="button"
+                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(props.tags[item].id) ? 'bg-red-500' : ''}`} 
+                    key={props.tags[item].id} 
+                    onClick={() => handleTagClick(props.tags[item].id)}
+                  >
+                    {props.tags[item].name}
+                  </button >  
+                </>
+              )}
+              )
+            }
+          </div>
+
+        <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
+          お店のURL
+        </label>
+        <input className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="url" placeholder="https://gurume-map.netlify.app" name="url" />
+
+        <div>
+          <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
+            お店について一言
+          </label>
+          <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
+          placeholder="例：
+          ・公園の近くにあるカレー屋。
+          ・週3で食べに行ってます。"></textarea>
+        </div>
+
           <div className='flex justify-center '>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+            <button className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-8 my-8 rounded-full">登録</button>
           </div>
         </div>
       </form >
