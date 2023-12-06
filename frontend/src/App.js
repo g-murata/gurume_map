@@ -42,10 +42,10 @@ function App() {
 
   return (
     <>
-      <h1 className="text-5xl">しばしお待ちを！（2023/12/5）</h1>
-      <h1 className="text-3xl">flyioのサーバは起動できた。タグ設定機能がうまくいってないのでそこだけ直す。</h1>
+      {/* <h1 className="text-5xl">しばしお待ちを！（2023/12/5）</h1>
+      <h1 className="text-3xl">flyioのサーバは起動できた。タグ設定機能がうまくいってないのでそこだけ直す。</h1> */}
 
-      {/* <Router>
+      <Router>
         <AuthProvider>
           <Header
             userInfo={userInfo}
@@ -63,7 +63,7 @@ function App() {
           </Routes>
 
         </AuthProvider>
-      </Router> */}
+      </Router>
     </>
   );
 }
