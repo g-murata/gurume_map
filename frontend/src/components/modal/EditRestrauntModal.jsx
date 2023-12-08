@@ -19,13 +19,15 @@ export const EditRestrauntModal = (props) => {
 
   const handleUpdateSubmit = async (event) => {
     event.preventDefault();
-    const { name } = event.target.elements;
+    const { name, url, description } = event.target.elements;
     props.setIsLoading(true);
-  
+    
     try {
       const res = await updateRestraunt({
         id: props.selectedItem,
         name: name.value,
+        url: url.value,
+        description: description.value,  
       });
   
       await deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
@@ -55,7 +57,9 @@ export const EditRestrauntModal = (props) => {
               name: res.restraunts.name,
               lat: res.restraunts.lat,
               lng: res.restraunts.lng,
-              updated_at: res.restraunts.updated_at,                  
+              updated_at: res.restraunts.updated_at,    
+              url: res.restraunts.url,
+              description: res.restraunts.description,        
             },
             tags_tagged_items: tags_tagged_items
           }
@@ -132,6 +136,24 @@ export const EditRestrauntModal = (props) => {
               )
             }
           </div>
+
+        <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
+          お店のURL
+        </label>
+        <input className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="url"
+         placeholder="https://gurume-map.netlify.app" name="url" defaultValue={props.restaurant.url}/>
+
+        <div>
+          <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
+            お店について一言
+          </label>
+          <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
+          placeholder="例：
+          ・公園の近くにあるカレー屋。
+          ・週3で食べに行ってます。"
+          defaultValue={props.restaurant.description}
+          ></textarea>
+        </div>          
 
           <div className='flex justify-center '>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">更新</button>

@@ -176,17 +176,17 @@ export const ShowRestrauntModal = (props) => {
                   </div>
                   <div className='mt-3'>         
                     <span>URL：</span>
-                    <a className="text-blue-500 underline" href={props.restaurant.url} target="_blank" rel="noopener noreferrer">{props.restaurant.url}</a>
+                    <a className="cursor-pointer text-blue-500 underline" href={props.restaurant.url} target="_blank" rel="noopener noreferrer">{props.restaurant.url}</a>
                   </div>    
                 </div>   
                 <div className="text-gray-500 mt-3">お店について一言：</div>  
-                <p className="text-gray-500">{props.restaurant.description}</p>
+                <p className="description text-gray-500">{props.restaurant.description}</p>
                 <div className='flex justify-center'>
                   {props.isCheckUserReviewLoading ? <h1>・・・</h1> :
                     <>
                       {(props.checkUsersWithoutReviews && auth.currentUser.email !== "guest@guest.co.jp") &&
                         <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
-                          className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
+                          className="cursor-pointer bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
                         </button>
                       }
                     </>

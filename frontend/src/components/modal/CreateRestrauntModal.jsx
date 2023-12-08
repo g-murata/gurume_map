@@ -8,12 +8,14 @@ export const CreateRestrauntModal = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { name, lat, lng } = event.target.elements;
+    const { name, lat, lng, url, description } = event.target.elements;    
     props.setIsLoading(true);
     postRestraunt({
       name: name.value,
       lat: lat.value,
       lng: lng.value,
+      url: url.value,
+      description: description.value,
       email: props.user.email
     })
       .then((res) => {        
@@ -38,6 +40,8 @@ export const CreateRestrauntModal = (props) => {
               name: res.restraunts.name,
               lat: res.restraunts.lat,
               lng: res.restraunts.lng,
+              url: res.restraunts.url,
+              description: res.restraunts.description,        
               user_name: res.user_name,
               created_at: res.restraunts.created_at,
               updated_at: res.restraunts.updated_at,
