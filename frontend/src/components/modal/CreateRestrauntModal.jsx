@@ -139,7 +139,7 @@ export const CreateRestrauntModal = (props) => {
         </div>
 
           <div className='flex justify-center '>
-            <button className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-8 my-8 rounded-full">登録</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 my-8 rounded-full">登録</button>
           </div>
         </div>
       </form >
