@@ -172,7 +172,7 @@ export const ShowRestrauntModal = (props) => {
                     <DateTimeConverter 
                       created_at={props.restaurant.created_at}
                     />
-                    {props.restaurant.created_at !== props.restaurant.updated_at && <label>[編集済]</label>}
+                    {/* {props.restaurant.created_at !== props.restaurant.updated_at && <label>[編集済]</label>} */}
                   </div>
                   <div className='mt-3'>         
                     <span>URL：</span>
