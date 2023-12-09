@@ -23,6 +23,11 @@
     white-space: pre-wrap;
 }
 
+/* お店について一言が改行されるするため */
+.description {
+    white-space: pre-wrap;
+}
+
 /* ハンバーガーメニューをクリックした際ニュッと出てくるように。 */
 .menuWrapper {
     transform: translateX(100%);

@@ -158,27 +158,35 @@ export const ShowRestrauntModal = (props) => {
                     alt="ほげほげ画像"
                   ></img>
                 }
-                <span>このお店を登録した人：</span>
-                <p className="user_name">{props.restaurant.user_name}</p>
+                <div className='my-3'>         
+                  <span>このお店を登録した人：</span>
+                  <p className="user_name">{props.restaurant.user_name}</p>
+                </div>
                 <TagList 
                   tags_tagged_items={props.tags_tagged_items}
                   tags={props.tags}
                 />
-                <div className="text-gray-500">
+                <div className="text-gray-500 mt-3">
                   <h1>投稿日時：</h1>   
                   <div className="flex">                             
                     <DateTimeConverter 
                       created_at={props.restaurant.created_at}
                     />
                     {props.restaurant.created_at !== props.restaurant.updated_at && <label>[編集済]</label>}
-                  </div>                  
-                </div>                
+                  </div>
+                  <div className='mt-3'>         
+                    <span>URL：</span>
+                    <a className="cursor-pointer text-blue-500 underline" href={props.restaurant.url} target="_blank" rel="noopener noreferrer">{props.restaurant.url}</a>
+                  </div>    
+                </div>   
+                <div className="text-gray-500 mt-3">お店について一言：</div>  
+                <p className="description text-gray-500">{props.restaurant.description}</p>
                 <div className='flex justify-center'>
                   {props.isCheckUserReviewLoading ? <h1>・・・</h1> :
                     <>
                       {(props.checkUsersWithoutReviews && auth.currentUser.email !== "guest@guest.co.jp") &&
                         <button button onClick={() => props.OpenReviewModal(props.restaurant.id)}
-                          className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
+                          className="cursor-pointer bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 my-6 rounded-full">レビューを投稿する
                         </button>
                       }
                     </>
@@ -210,7 +218,7 @@ export const ShowRestrauntModal = (props) => {
                                       created_at={props.reviews[review_item].created_at}
                                     />
                                     {props.reviews[review_item].created_at !== props.reviews[review_item].updated_at && <label>[編集済]</label>}
-                                  </div>                                    
+                                  </div>       
                                 </div>
 
                                 {/* TODO: */}
