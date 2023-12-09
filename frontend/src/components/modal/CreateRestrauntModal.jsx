@@ -130,7 +130,7 @@ export const CreateRestrauntModal = (props) => {
 
         <div>
           <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
-            お店について一言
+            お店について一言 (100文字まで)
           </label>
           <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
           placeholder="例：
@@ -139,7 +139,7 @@ export const CreateRestrauntModal = (props) => {
         </div>
 
           <div className='flex justify-center '>
-            <button className="bg-yellow-500 hover:bg-yellow-300 text-white font-bold py-2 px-8 my-8 rounded-full">登録</button>
+            <button className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-8 my-8 rounded-full">登録</button>
           </div>
         </div>
       </form >
