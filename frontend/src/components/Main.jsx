@@ -549,8 +549,8 @@ export const Main = (props) => {
                   </InfoWindow>
                 )              
               }
-              <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
-                position={positionIshiBill} button onClick={() => alert('石井ビル')} />
+              {/* <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
+                position={positionIshiBill} button onClick={() => alert('石井ビル')} /> */}
 
             </GoogleMap>
           </div>
