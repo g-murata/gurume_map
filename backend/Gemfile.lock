@@ -83,6 +83,8 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.5.1)
     digest (3.1.0)
+    dockerfile-rails (1.5.12)
+      rails (>= 3.0.0)
     erubi (1.11.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -199,6 +201,7 @@ DEPENDENCIES
   bootsnap
   debug
   devise
+  dockerfile-rails (>= 1.2)
   pg (~> 1.1)
   puma (~> 5.0)
   rack-cors
@@ -210,4 +213,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.7
+   2.3.20
