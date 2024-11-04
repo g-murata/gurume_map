@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::RestrauntsController, type: :request  do
-  let(:restaurant) { FactoryBot.create(:restraunt) } 
+  let(:restaurant) { create(:restraunt) } 
   describe "GET #index" do
     it "returns a successful response" do
       restaurant

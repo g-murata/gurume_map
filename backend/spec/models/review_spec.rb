@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Review, type: :model do
   specify "正常" do
-    review = FactoryBot.build(:review)
+    review = build(:review)
     expect(review).to be_valid
   end
 
   specify "評価は0以上5未満" do
-    review = FactoryBot.build(:review)
+    review = build(:review)
     review.evaluation = 0
     expect(review).not_to be_valid
     expect(review.errors[:evaluation].size).to eq(1)
