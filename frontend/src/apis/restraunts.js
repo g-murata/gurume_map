@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { restaurants, restaurant } from '../urls/index'
 
-export const fetchRestaurants = () => {
-  return axios.get(restaurants)
+export const fetchRestaurants = (params) => {
+  return axios.get(restaurants(params))
     .then(res => {
       return res.data
     })
@@ -18,6 +18,7 @@ export const postRestraunt = (params) => {
       email: params.email,
       url: params.url,
       description: params.description,
+      area_id: params.area_id,
     }
   )
     .then(res => {

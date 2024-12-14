@@ -22,7 +22,7 @@ import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
 import CreateReviewModal from './modal/CreateReviewModal';
 import {TagList} from './TagList';
 import {DateTimeConverter} from './DateTimeConverter'
-
+import { AreaList } from './AreaList';
 
 // import Restaurants from './../restaurants.json';
 // const restaurants = Restaurants.data;
@@ -141,6 +141,7 @@ export const Main = (props) => {
 
   const [restaurants, setRestraunt] = useState([])
   const [reviews, setReview] = useState([])
+  // const [selectedArea, setSelectedArea] = useState(1);
 
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
@@ -176,8 +177,7 @@ export const Main = (props) => {
 
   useEffect(() => {
     setIsLoading(true);
-
-    fetchRestaurants()
+    fetchRestaurants(1)
       .then((data) => {
         setRestraunt(data.restraunts)
         setIsLoading(false);        
@@ -357,6 +357,12 @@ export const Main = (props) => {
             {/* <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1> */}
             {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
           {/* </div> */}
+          
+          <AreaList 
+            restaurants={restaurants}
+            // selectedArea={selectedArea}          
+            // setSelectedArea={setSelectedArea}
+          />
 
           <div className="my-2">                           
             {Object.keys(tags).map(item => {
@@ -374,7 +380,6 @@ export const Main = (props) => {
               )
             }
           </div>
-
           <div class="flex flex-col items-center justify-center">
             <div class="relative">
               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
