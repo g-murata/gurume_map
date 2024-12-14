@@ -1,6 +1,7 @@
 class Restraunt < ApplicationRecord
 
   belongs_to :user
+  belongs_to :area
   has_many :reviews, dependent: :destroy
   has_many :tags_tagged_items, as: :tagged_item, dependent: :destroy
 
