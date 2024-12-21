@@ -2,7 +2,7 @@ module Api
   module V1
     class RestrauntsController < ApplicationController
       def index
-        restraunts = Restraunt.includes(:tags_tagged_items).joins(:user).where(area_id: params[:area_id])
+        restraunts = Restraunt.includes(:tags_tagged_items).joins(:user)
                       .select("restraunts.*, users.name as user_name, users.email as user_email")
                       .order(created_at: :DESC)
                       .order("tags_tagged_items.tag_id")

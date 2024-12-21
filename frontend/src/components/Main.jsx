@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
 import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
+import { fetchAreas } from '../apis/areas';
 import {
   GoogleMap,
   LoadScript,
@@ -56,6 +57,11 @@ const positionIshiBill = {
   lat: 35.666333273506176,
   lng: 139.75424473120108,
 };
+
+const positionAkasaka = {
+  lat: 35.672057975969196,
+  lng: 139.73641857613632,
+}
 
 const divStyle = {
   background: "white",
@@ -141,7 +147,7 @@ export const Main = (props) => {
 
   const [restaurants, setRestraunt] = useState([])
   const [reviews, setReview] = useState([])
-  // const [selectedArea, setSelectedArea] = useState(1);
+  const [selectedArea, setSelectedArea] = useState(0);
 
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
@@ -191,6 +197,15 @@ export const Main = (props) => {
     fetchTags()      
     .then((data) => {
       setTags(data.tags)
+    })
+    .catch((error) => {
+      console.log(error)
+    }
+    )
+
+    fetchAreas()      
+    .then((data) => {
+      setAreas(data.areas)
     })
     .catch((error) => {
       console.log(error)
@@ -312,6 +327,7 @@ export const Main = (props) => {
 
 
   const [tags, setTags] = useState([]);  
+  const [areas, setAreas] = useState([]);  
   const [isSelected, setIsSelected] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -330,8 +346,9 @@ export const Main = (props) => {
 
     const tagIds = restaurant.tags_tagged_items.map(item => item.tag_id)
     const isTagSelected = Object.keys(selectedTags).length > 0 ? tagIds.some(tagId => selectedTags.includes(tagId)) : true; // 選択されたタグが含まれているかチェック
+    const areaFilter = restaurant.restaurant.area_id === Number(selectedArea) + 1
 
-    return nameFilter && isTagSelected
+    return nameFilter && isTagSelected && areaFilter
   })
 
   const [selectedLocation, setSelectedLocation] = useState({});
@@ -357,11 +374,10 @@ export const Main = (props) => {
             {/* <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1> */}
             {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
           {/* </div> */}
-          
           <AreaList 
-            restaurants={restaurants}
-            // selectedArea={selectedArea}          
-            // setSelectedArea={setSelectedArea}
+            areas={areas}
+            selectedArea={selectedArea}
+            setSelectedArea={setSelectedArea}
           />
 
           <div className="my-2">                           
@@ -510,7 +526,7 @@ export const Main = (props) => {
             
             <GoogleMap
               mapContainerClassName="h-30vh md:h-65vh w-full"
-              center={positionIshiBill}
+              center={selectedArea == 0 ? positionIshiBill : positionAkasaka}
               zoom={16}
               options={{
                 fullscreenControl: false, // 全画面表示ボタンを非表示にする
@@ -554,8 +570,8 @@ export const Main = (props) => {
                   </InfoWindow>
                 )              
               }
-              {/* <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
-                position={positionIshiBill} button onClick={() => alert('石井ビル')} /> */}
+              <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
+                position={positionIshiBill} button onClick={() => alert('石井ビル')} />
 
             </GoogleMap>
           </div>
