@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
 import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
+import { fetchAreas } from '../apis/areas';
 import {
   GoogleMap,
   LoadScript,
@@ -22,7 +23,7 @@ import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
 import CreateReviewModal from './modal/CreateReviewModal';
 import {TagList} from './TagList';
 import {DateTimeConverter} from './DateTimeConverter'
-
+import { AreaList } from './AreaList';
 
 // import Restaurants from './../restaurants.json';
 // const restaurants = Restaurants.data;
@@ -46,16 +47,26 @@ const customStyles = {
   },
 };
 
-
-const center = {
-  lat: 35.666333273506176,
-  lng: 139.75424473120108,
-};
-
-const positionIshiBill = {
-  lat: 35.666333273506176,
-  lng: 139.75424473120108,
-};
+const area_kari = [
+  {
+    id: 1,
+    name: "新橋",
+    lat: 35.66630562620729,
+    lng: 139.7581500275268,
+  },
+  {
+    id: 2,
+    name: "赤坂",
+    lat: 35.672057975969196,
+    lng: 139.73641857613632,
+  },
+  {
+    id: 3,
+    name: "新宿",
+    lat: 35.68953440195192,
+    lng: 139.70075664056398,
+  }
+]
 
 const divStyle = {
   background: "white",
@@ -141,6 +152,7 @@ export const Main = (props) => {
 
   const [restaurants, setRestraunt] = useState([])
   const [reviews, setReview] = useState([])
+  const [selectedArea, setSelectedArea] = useState(1);
 
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
@@ -176,7 +188,6 @@ export const Main = (props) => {
 
   useEffect(() => {
     setIsLoading(true);
-
     fetchRestaurants()
       .then((data) => {
         setRestraunt(data.restraunts)
@@ -191,6 +202,15 @@ export const Main = (props) => {
     fetchTags()      
     .then((data) => {
       setTags(data.tags)
+    })
+    .catch((error) => {
+      console.log(error)
+    }
+    )
+
+    fetchAreas()      
+    .then((data) => {
+      setAreas(data.areas)
     })
     .catch((error) => {
       console.log(error)
@@ -312,6 +332,7 @@ export const Main = (props) => {
 
 
   const [tags, setTags] = useState([]);  
+  const [areas, setAreas] = useState([]);  
   const [isSelected, setIsSelected] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -330,8 +351,9 @@ export const Main = (props) => {
 
     const tagIds = restaurant.tags_tagged_items.map(item => item.tag_id)
     const isTagSelected = Object.keys(selectedTags).length > 0 ? tagIds.some(tagId => selectedTags.includes(tagId)) : true; // 選択されたタグが含まれているかチェック
+    const areaFilter = restaurant.restaurant.area_id === Number(selectedArea) + 1
 
-    return nameFilter && isTagSelected
+    return nameFilter && isTagSelected && areaFilter
   })
 
   const [selectedLocation, setSelectedLocation] = useState({});
@@ -357,6 +379,11 @@ export const Main = (props) => {
             {/* <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1> */}
             {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
           {/* </div> */}
+          <AreaList 
+            areas={areas}
+            selectedArea={selectedArea}
+            setSelectedArea={setSelectedArea}
+          />
 
           <div className="my-2">                           
             {Object.keys(tags).map(item => {
@@ -374,7 +401,6 @@ export const Main = (props) => {
               )
             }
           </div>
-
           <div class="flex flex-col items-center justify-center">
             <div class="relative">
               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -505,7 +531,9 @@ export const Main = (props) => {
             
             <GoogleMap
               mapContainerClassName="h-30vh md:h-65vh w-full"
-              center={positionIshiBill}
+              center={area_kari.find((area) => area.id === Number(selectedArea) + 1)}
+              // TODO:　本当は↓を使いたい
+              // center={[areas[Number(selectedArea)].lat, areas[Number(selectedArea)].lng]}
               zoom={16}
               options={{
                 fullscreenControl: false, // 全画面表示ボタンを非表示にする
@@ -549,8 +577,8 @@ export const Main = (props) => {
                   </InfoWindow>
                 )              
               }
-              {/* <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
-                position={positionIshiBill} button onClick={() => alert('石井ビル')} /> */}
+              <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
+                position={areas[Number(1)]} button onClick={() => alert('石井ビル')} />
 
             </GoogleMap>
           </div>
@@ -576,6 +604,8 @@ export const Main = (props) => {
             coordinateLat={coordinateLat}
             coordinateLng={coordinateLng}
             tags={tags}
+            areas={areas}
+            selectedArea={selectedArea}
           />
         </Modal>
 

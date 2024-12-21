@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_06_111937) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_21_112554) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "areas", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "lat"
+    t.float "lng"
+  end
 
   create_table "blogs", force: :cascade do |t|
     t.string "title"
@@ -38,6 +46,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_06_111937) do
     t.bigint "user_id"
     t.string "url"
     t.string "description"
+    t.bigint "area_id"
+    t.index ["area_id"], name: "index_restraunts_on_area_id"
     t.index ["user_id"], name: "index_restraunts_on_user_id"
   end
 
@@ -83,6 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_06_111937) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "restraunts", "areas"
   add_foreign_key "restraunts", "users"
   add_foreign_key "reviews", "restraunts"
   add_foreign_key "reviews", "users"
