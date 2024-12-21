@@ -1,7 +1,7 @@
 // const DEFAULT_API_LOCALHOST = 'http://localhost:3001/api/v1'
 const DEFAULT_API_LOCALHOST = process.env.REACT_APP_RAILS_API_ENDPOINT
 
-export const restaurants = (area_id) => `${DEFAULT_API_LOCALHOST}/restraunts?area_id=${area_id}`
+export const restaurants = `${DEFAULT_API_LOCALHOST}/restraunts`
 export const restaurant = (restaurantId) => `${DEFAULT_API_LOCALHOST}/restraunts/${restaurantId}`
 export const reviews = `${DEFAULT_API_LOCALHOST}/reviews`
 export const review = (reviewId) => `${DEFAULT_API_LOCALHOST}/reviews/${reviewId}`

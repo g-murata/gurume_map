@@ -15,7 +15,7 @@ export const AreaList = (props) => {
             <button
               key={key}
               onClick={() => handleClick(Number(key))}
-              className={`cursor-pointer text-white bg-blue-200 font-bold mx-2 px-2 rounded ${props.selectedArea === Number(key) ? 'bg-red-400 text-black' : ''}`} 
+              className={`cursor-pointer text-white bg-gray-200 font-bold mx-2 px-2 rounded ${props.selectedArea === Number(key) ? 'bg-green-500 text-white' : ''}`} 
             >          
               {props.areas[Number(key)].name}
             </button>          

@@ -16,6 +16,7 @@ export const CreateRestrauntModal = (props) => {
       lng: lng.value,
       url: url.value,
       description: description.value,
+      area_id: Number(props.selectedArea + 1),
       email: props.user.email
     })
       .then((res) => {        
@@ -34,6 +35,7 @@ export const CreateRestrauntModal = (props) => {
           let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
 
           // tagResponsesには、各postTagsTaggedItemのレスポンスが含まれています。
+          debugger
           const newRestaurant = {
             restaurant: {
               id: res.restraunts.id,
@@ -41,7 +43,8 @@ export const CreateRestrauntModal = (props) => {
               lat: res.restraunts.lat,
               lng: res.restraunts.lng,
               url: res.restraunts.url,
-              description: res.restraunts.description,        
+              description: res.restraunts.description,       
+              area_id: res.restraunts.area_id, 
               user_name: res.user_name,
               created_at: res.restraunts.created_at,
               updated_at: res.restraunts.updated_at,

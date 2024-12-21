@@ -54,14 +54,25 @@ const center = {
 };
 
 const positionIshiBill = {
+  id: 1,
   lat: 35.666333273506176,
   lng: 139.75424473120108,
 };
 
 const positionAkasaka = {
+  id: 2,
   lat: 35.672057975969196,
   lng: 139.73641857613632,
 }
+
+const positionShinjuku = {
+  id: 3,
+  lat: 35.689629216416364,
+  lng: 139.70027114801252,
+}
+
+
+	
 
 const divStyle = {
   background: "white",
@@ -147,7 +158,7 @@ export const Main = (props) => {
 
   const [restaurants, setRestraunt] = useState([])
   const [reviews, setReview] = useState([])
-  const [selectedArea, setSelectedArea] = useState(0);
+  const [selectedArea, setSelectedArea] = useState(1);
 
   const [coordinateLat, setCoordinateLat] = useState('');
   const [coordinateLng, setCoordinateLng] = useState('');
@@ -183,7 +194,7 @@ export const Main = (props) => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchRestaurants(1)
+    fetchRestaurants()
       .then((data) => {
         setRestraunt(data.restraunts)
         setIsLoading(false);        
@@ -597,6 +608,8 @@ export const Main = (props) => {
             coordinateLat={coordinateLat}
             coordinateLng={coordinateLng}
             tags={tags}
+            areas={areas}
+            selectedArea={selectedArea}
           />
         </Modal>
 
