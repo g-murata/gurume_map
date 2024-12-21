@@ -537,7 +537,7 @@ export const Main = (props) => {
             
             <GoogleMap
               mapContainerClassName="h-30vh md:h-65vh w-full"
-              center={selectedArea == 0 ? positionIshiBill : positionAkasaka}
+              center={selectedArea === 0 ? positionIshiBill : positionAkasaka}
               zoom={16}
               options={{
                 fullscreenControl: false, // 全画面表示ボタンを非表示にする

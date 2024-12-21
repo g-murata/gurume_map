@@ -35,7 +35,6 @@ export const CreateRestrauntModal = (props) => {
           let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
 
           // tagResponsesには、各postTagsTaggedItemのレスポンスが含まれています。
-          debugger
           const newRestaurant = {
             restaurant: {
               id: res.restraunts.id,
@@ -94,12 +93,17 @@ export const CreateRestrauntModal = (props) => {
             新規店名登録
           </div>
           {props.error && <p style={{ color: 'red' }}>{props.error}</p>}
-          <div className="text-right">
+          <div className="my-4 text-right">
             <button className="font-bold" onClick={() => props.closeModal()}>Close</button>
           </div>
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
-            店名
-          </label>
+          <div className="flex justify-between">
+            <label className="text-gray-700 text-sm font-bold mb-2" for="name">
+              店名
+            </label>
+            <span className="text-green-500 text-sm font-bold mb-2">
+              エリア：{props.areas[Number(props.selectedArea)].name}
+            </span>
+          </div>            
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
           {/* TODO:hiddenはあんまし使いたくはない */}
           <div>
@@ -125,7 +129,6 @@ export const CreateRestrauntModal = (props) => {
               )
             }
           </div>
-
         <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
           お店のURL
         </label>
