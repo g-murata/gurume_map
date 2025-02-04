@@ -98,7 +98,8 @@ export const CreateRestrauntModal = (props) => {
           </div>
           <div className="flex justify-between">
             <label className="text-gray-700 text-sm font-bold mb-2" for="name">
-              店名
+              <span>店名</span>
+              <span className="text-xs text-red-600">　※必須</span>
             </label>
             <span className="text-green-500 text-sm font-bold mb-2">
               エリア：{props.areas[Number(props.selectedArea)].name}
@@ -130,13 +131,13 @@ export const CreateRestrauntModal = (props) => {
             }
           </div>
         <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
-          お店のURL
+          お店のURL（食べログのURLとか）
         </label>
         <input className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="url" placeholder="https://gurume-map.netlify.app" name="url" />
 
         <div>
           <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
-            お店について一言 (100文字まで)
+            ひとこと　※レビューではない
           </label>
           <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
           placeholder="例：
