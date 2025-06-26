@@ -18,6 +18,7 @@ export const postRestraunt = (params) => {
       email: params.email,
       url: params.url,
       description: params.description,
+      area_id: params.area_id,
     }
   )
     .then(res => {

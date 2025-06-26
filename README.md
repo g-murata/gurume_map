@@ -8,4 +8,4 @@ React
 Ruby on Rails
 
 
-<img src="https://user-images.githubusercontent.com/64738234/233073007-20ca488e-1636-4cdf-848a-802f3957494b.png" width="520px" />
+![ER図 drawio](https://github.com/user-attachments/assets/0167bb57-ba05-446d-9f6a-1223f4434f4c)

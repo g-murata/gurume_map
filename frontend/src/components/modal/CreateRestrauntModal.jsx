@@ -16,6 +16,7 @@ export const CreateRestrauntModal = (props) => {
       lng: lng.value,
       url: url.value,
       description: description.value,
+      area_id: Number(props.selectedArea + 1),
       email: props.user.email
     })
       .then((res) => {        
@@ -41,7 +42,8 @@ export const CreateRestrauntModal = (props) => {
               lat: res.restraunts.lat,
               lng: res.restraunts.lng,
               url: res.restraunts.url,
-              description: res.restraunts.description,        
+              description: res.restraunts.description,       
+              area_id: res.restraunts.area_id, 
               user_name: res.user_name,
               created_at: res.restraunts.created_at,
               updated_at: res.restraunts.updated_at,
@@ -91,12 +93,18 @@ export const CreateRestrauntModal = (props) => {
             新規店名登録
           </div>
           {props.error && <p style={{ color: 'red' }}>{props.error}</p>}
-          <div className="text-right">
+          <div className="my-4 text-right">
             <button className="font-bold" onClick={() => props.closeModal()}>Close</button>
           </div>
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
-            店名
-          </label>
+          <div className="flex justify-between">
+            <label className="text-gray-700 text-sm font-bold mb-2" for="name">
+              <span>店名</span>
+              <span className="text-xs text-red-600">　※必須</span>
+            </label>
+            <span className="text-green-500 text-sm font-bold mb-2">
+              エリア：{props.areas[Number(props.selectedArea)].name}
+            </span>
+          </div>            
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
           {/* TODO:hiddenはあんまし使いたくはない */}
           <div>
@@ -122,15 +130,14 @@ export const CreateRestrauntModal = (props) => {
               )
             }
           </div>
-
         <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
-          お店のURL
+          お店のURL（食べログのURLとか）
         </label>
         <input className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="url" placeholder="https://gurume-map.netlify.app" name="url" />
 
         <div>
           <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
-            お店について一言 (100文字まで)
+            ひとこと　※レビューではない
           </label>
           <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
           placeholder="例：
