@@ -16,6 +16,7 @@ import PrivateRoute from './components/PrivateRoute';
 
 import { useState, useEffect } from "react";
 import { auth } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { fetchShowUser } from './apis/users';
 
 function App() {
@@ -24,14 +25,10 @@ function App() {
   const [userRegistered, setUserRegistered] = useState(false);
 
   useEffect(() => {
-    // TODO: ここらの理解がよくできてないので、要宿題
-    // Firebase Authenticationのログイン状態が変化した場合に呼び出されるコールバック関数
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      console.log("ログイン状態確認")
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         fetchShowUser(auth.currentUser.email)
           .then((data) => {
-            console.log("ユーザ取得")
             setUserInfo(data.user)
           })
       }
