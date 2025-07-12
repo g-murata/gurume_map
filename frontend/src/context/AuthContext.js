@@ -19,17 +19,12 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    console.log("🧪 useEffect 発火チェック"); // ← これ入れて確認
     const unsubscribed = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });
     return () => {
-      console.log(onAuthStateChanged.toString())
-      console.log(auth)
-      console.log(user)
-      console.log(unsubscribed)
-      // unsubscribed();
+      unsubscribed();
     };
   }, []);
   if (loading) {
