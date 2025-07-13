@@ -77,17 +77,20 @@ export const Header = (props) => {
 
   return (
     <>
-      <div className="h-10vh bg-white md:h-20vh">
-        <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
+      <div className="h-10vh flex items-center bg-white md:h-20vh">
+        <div className="w-full max-w-screen-2xl px-4 md:px-8 mx-auto">
           <header className="flex justify-between items-center py-4 md:py-8">
+            
             <Link to="/" className="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
               GurumeMap
               <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} className="w-9" alt="Logo" />
             </Link>
 
-            <nav className="hidden md:flex gap-12">
+            <nav className="hidden md:flex items-center justify-between">
               <HeaderLink />
             </nav>
+            
+            {/* スマホメニュー */}
             <div className={`md:hidden menuWrapper ${openMenu ? "menuWrapper__active" : ""}`} onClick={(e) => { testFunction(e, setOpenMenu) }}>
               {openMenu ? (
                 <div className='flex flex-row absolute top-0 right-0 h-screen min-h-fit'>
