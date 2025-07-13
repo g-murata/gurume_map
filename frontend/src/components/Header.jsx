@@ -79,7 +79,7 @@ export const Header = (props) => {
     <>
       <div className="h-10vh flex items-center bg-white md:h-15vh">
         <div className="w-full max-w-screen-2xl px-4 md:px-8 mx-auto">
-          <header className="flex justify-between items-center py-4 md:py-20">
+          <header className="flex justify-between items-center py-4 md:py-8">
             
             <Link to="/" className="w-1/3 inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
               GurumeMap
