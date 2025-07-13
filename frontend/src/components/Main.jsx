@@ -385,7 +385,7 @@ export const Main = (props) => {
             setSelectedArea={setSelectedArea}
           />
 
-          <div className="my-2">                           
+          <div className="my-2">      
             {Object.keys(tags).map(item => {
               return (
                 <>

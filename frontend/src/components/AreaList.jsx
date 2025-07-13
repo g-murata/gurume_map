@@ -7,7 +7,6 @@ export const AreaList = (props) => {
 
   return (
     <>
-      エリア選択：
       <div className="flex">
       {(Object.keys(props.areas)).map(key => {  
         return(
