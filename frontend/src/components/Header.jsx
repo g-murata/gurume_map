@@ -42,7 +42,7 @@ export const Header = (props) => {
         <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
           <Link to="/blog" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >
             開発者ブログ
-            <div className="text-xs text-red-600">2024/12/21更新</div>
+            {/* <div className="text-xs text-red-600">2024/12/21更新</div> */}
           </Link>
           <div className="text-red-400 text-xs md:text-right"></div>
         </li>
