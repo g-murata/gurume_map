@@ -7,7 +7,7 @@ export const AreaList = (props) => {
 
   return (
     <>
-      <div className="flex items-center">
+      <div className="flex">
       {(Object.keys(props.areas)).map(key => {  
         return(
           <>
