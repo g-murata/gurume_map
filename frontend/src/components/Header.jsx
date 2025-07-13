@@ -81,12 +81,12 @@ export const Header = (props) => {
         <div className="w-full max-w-screen-2xl px-4 md:px-8 mx-auto">
           <header className="flex justify-between items-center py-4 md:py-8">
             
-            <Link to="/" className="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
+            <Link to="/" className="w-1/3 inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
               GurumeMap
               <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} className="w-9" alt="Logo" />
             </Link>
 
-            <nav className="hidden md:flex items-center justify-between">
+            <nav className="hidden md:flex items-center justify-between w-2/3">
               <HeaderLink />
             </nav>
             
