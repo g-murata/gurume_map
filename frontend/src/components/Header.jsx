@@ -77,7 +77,7 @@ export const Header = (props) => {
 
   return (
     <>
-      <div className="h-10vh flex items-center bg-white md:h-20vh">
+      <div className="h-10vh flex items-center bg-white md:h-15vh">
         <div className="w-full max-w-screen-2xl px-4 md:px-8 mx-auto">
           <header className="flex justify-between items-center py-4 md:py-8">
             
