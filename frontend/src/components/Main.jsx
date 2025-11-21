@@ -65,6 +65,12 @@ const area_kari = [
     name: "新宿",
     lat: 35.68953440195192,
     lng: 139.70075664056398,
+  },
+  {
+    id: 4,
+    name: "王子",
+    lat: 35.752229730596184,
+    lng: 139.7381560725481,
   }
 ]
 
@@ -312,9 +318,9 @@ export const Main = (props) => {
     setEditModalIsOpen(false);
     setError('')
   }
-  // 北は千代田区、東は江戸川区、南は港区、西は渋谷区
+  // 北は北区、東は江戸川区、南は港区、西は渋谷区
   const TOKYO_BOUNDS = {
-    north: 35.701007,
+    north: 35.802229730596184,
     south: 35.613797,
     west: 139.653936,
     east: 139.88256,
