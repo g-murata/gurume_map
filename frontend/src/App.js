@@ -43,7 +43,7 @@ function App() {
       <h1 className="text-3xl">flyioのサーバは起動できた。タグ設定機能がうまくいってないのでそこだけ直す。</h1> */}
 
       <Router>
-        {/* <AuthProvider>
+        <AuthProvider>
           <Header
             userInfo={userInfo}
             setUserRegistered={setUserRegistered}
@@ -59,8 +59,8 @@ function App() {
             <Route exact path="/landing" element={<Landing />} />
           </Routes>
 
-        </AuthProvider> */}
-        <div className="flex flex-col items-center justify-center text-9xl">工事中!</div>
+        </AuthProvider>
+        {/* <div className="flex flex-col items-center justify-center text-9xl">工事中!</div> */}
       </Router>
     </>
   );
