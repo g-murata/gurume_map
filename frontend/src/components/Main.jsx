@@ -4,8 +4,8 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
-import { fetchTags} from '../apis/tags';
+import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews } from '../apis/reviews';
+import { fetchTags } from '../apis/tags';
 import { fetchAreas } from '../apis/areas';
 import {
   GoogleMap,
@@ -21,8 +21,8 @@ import CreateRestrauntModal from './modal/CreateRestrauntModal';
 import EditRestrauntModal from './modal/EditRestrauntModal';
 import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
 import CreateReviewModal from './modal/CreateReviewModal';
-import {TagList} from './TagList';
-import {DateTimeConverter} from './DateTimeConverter'
+import { TagList } from './TagList';
+import { DateTimeConverter } from './DateTimeConverter'
 import { AreaList } from './AreaList';
 
 // import Restaurants from './../restaurants.json';
@@ -99,18 +99,18 @@ export const Main = (props) => {
       .then((res) => {
         closeReviewModal();
         const newReviews = [
-        {
-          id: res.review.id,
-          evaluation: res.review.evaluation,
-          content: res.review.content,
-          created_at: res.review.created_at,
-          updated_at: res.review.updated_at,
-          user_name: res.user_name,
-          restraunt_id: selectedItem,
-          email: user.email
-        },
-        ...reviews
-      ]
+          {
+            id: res.review.id,
+            evaluation: res.review.evaluation,
+            content: res.review.content,
+            created_at: res.review.created_at,
+            updated_at: res.review.updated_at,
+            user_name: res.user_name,
+            restraunt_id: selectedItem,
+            email: user.email
+          },
+          ...reviews
+        ]
         setReview(newReviews)
         setIsLoading(false);
       })
@@ -197,31 +197,31 @@ export const Main = (props) => {
     fetchRestaurants()
       .then((data) => {
         setRestraunt(data.restraunts)
-        setIsLoading(false);        
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error)
-        setIsLoading(false);        
+        setIsLoading(false);
       }
       )
 
-    fetchTags()      
-    .then((data) => {
-      setTags(data.tags)
-    })
-    .catch((error) => {
-      console.log(error)
-    }
-    )
+    fetchTags()
+      .then((data) => {
+        setTags(data.tags)
+      })
+      .catch((error) => {
+        console.log(error)
+      }
+      )
 
-    fetchAreas()      
-    .then((data) => {
-      setAreas(data.areas)
-    })
-    .catch((error) => {
-      console.log(error)
-    }
-    )
+    fetchAreas()
+      .then((data) => {
+        setAreas(data.areas)
+      })
+      .catch((error) => {
+        console.log(error)
+      }
+      )
 
     GetLatestReviews()
       .then((data) => {
@@ -231,7 +231,7 @@ export const Main = (props) => {
       .catch((error) => {
         console.log(error)
       }
-      )    
+      )
 
   }, [])
 
@@ -337,8 +337,8 @@ export const Main = (props) => {
   };
 
 
-  const [tags, setTags] = useState([]);  
-  const [areas, setAreas] = useState([]);  
+  const [tags, setTags] = useState([]);
+  const [areas, setAreas] = useState([]);
   const [isSelected, setIsSelected] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -371,7 +371,7 @@ export const Main = (props) => {
     setSelectedLocation({});
   }
 
-  const selectedRestaurant = selectedLocation.id ? 
+  const selectedRestaurant = selectedLocation.id ?
     filteredRestaurants.find(filteredRestaurant => filteredRestaurant.restaurant.id === selectedLocation.id)?.restaurant : undefined;
 
   return (
@@ -381,30 +381,31 @@ export const Main = (props) => {
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         <div className="flex flex-col items-center justify-center">
           {/* <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}> */}
-            {/* <h1>お店：{getLatestReviewsRestraunt.name && getLatestReviewsRestraunt.name}</h1> */}
-            {/* <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1> */}
-            {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
+          {/* <h1>お店：{getLatestReviewsRestraunt.name && getLatestReviewsRestraunt.name}</h1> */}
+          {/* <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1> */}
+          {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
           {/* </div> */}
-          <AreaList 
+          <AreaList
             areas={areas}
             selectedArea={selectedArea}
             setSelectedArea={setSelectedArea}
           />
 
-          <div className="my-2">      
+          <div className="my-2">
             {Object.keys(tags).map(item => {
               return (
                 <>
-                  <button 
-                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(tags[item].id) ? 'bg-red-500' : ''}`} 
-                    key={tags[item].id} 
+                  <button
+                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(tags[item].id) ? 'bg-red-500' : ''}`}
+                    key={tags[item].id}
                     onClick={() => handleTagClick(tags[item].id)}
                   >
                     {tags[item].name}
-                  </button >  
+                  </button >
                 </>
-              )}
               )
+            }
+            )
             }
           </div>
           <div className="flex flex-col items-center justify-center">
@@ -427,25 +428,25 @@ export const Main = (props) => {
 
         </div>
 
-          <div className="flex flex-col-reverse max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-            <div className="overflow-auto h-65vh md:w-30vw">
-              {Object.keys(filteredRestaurants).map(item => {
+        <div className="flex flex-col-reverse max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
+          <div className="overflow-auto h-65vh md:w-30vw">
+            {Object.keys(filteredRestaurants).map(item => {
               return (
                 <>
-                  <div className="border flex cursor-pointer" 
+                  <div className="border flex cursor-pointer"
                     onClick={() => onOpenDialog(filteredRestaurants[item].restaurant)}
-                    onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
-                    >
-                      <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="h-1/3 w-1/3" alt="Logo" />
+                    onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)}
+                  >
+                    <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="h-1/3 w-1/3" alt="Logo" />
                     <div className="px-6 py-4">
                       <div className="font-bold text-xl mb-2">{filteredRestaurants[item].restaurant.name}</div>
-                      <TagList 
+                      <TagList
                         tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
                         tags={tags}
                       />
                       <div className="text-gray-500">
-                        <div className="flex">                             
-                          <DateTimeConverter 
+                        <div className="flex">
+                          <DateTimeConverter
                             created_at={filteredRestaurants[item].restaurant.created_at}
                           />
                         </div>
@@ -477,7 +478,7 @@ export const Main = (props) => {
                           restaurant={filteredRestaurants[item].restaurant}
                           item={item}
                           tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
-                          tags={tags}                          
+                          tags={tags}
                           reviews={reviews}
                           checkUsersWithoutReviews={checkUsersWithoutReviews}
                           setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
@@ -492,7 +493,7 @@ export const Main = (props) => {
                       :
                       <>
                         <EditRestrauntModal
-                          setIsLoading={setIsLoading}                        
+                          setIsLoading={setIsLoading}
                           selectedItem={selectedItem}
                           onSelect={onSelect}
                           setEditModalIsOpen={setEditModalIsOpen}
@@ -505,7 +506,7 @@ export const Main = (props) => {
                           error={error}
                           restaurant={filteredRestaurants[item].restaurant}
                           tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
-                          tags={tags}                            
+                          tags={tags}
                         />
                       </>
                     }
@@ -530,65 +531,66 @@ export const Main = (props) => {
                         />
                       </form>
                     </Modal>
-                  }                  
+                  }
                 </>
-              )})}
+              )
+            })}
+          </div>
+
+          <GoogleMap
+            mapContainerClassName="h-30vh md:h-65vh w-full"
+            center={area_kari.find((area) => area.id === Number(selectedArea) + 1)}
+            // TODO:　本当は↓を使いたい
+            // center={[areas[Number(selectedArea)].lat, areas[Number(selectedArea)].lng]}
+            zoom={16}
+            options={{
+              fullscreenControl: false, // 全画面表示ボタンを非表示にする
+              restriction: {
+                latLngBounds: TOKYO_BOUNDS,
+                strictBounds: true,
+              },
+            }}
+            onClick={getLatLng}
+          >
+            <div className="overflow-auto h-60vh">
+              {Object.keys(filteredRestaurants).map(item => {
+                return (
+                  <>
+                    <Marker
+                      className="cursor-pointer"
+                      button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant)}
+                      onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)}
+                      onMouseOut={onDeselect}
+                      position={{
+                        lat: filteredRestaurants[item].restaurant.lat,
+                        lng: filteredRestaurants[item].restaurant.lng,
+                      }} />
+                  </>
+                )
+              })}
             </div>
-            
-            <GoogleMap
-              mapContainerClassName="h-30vh md:h-65vh w-full"
-              center={area_kari.find((area) => area.id === Number(selectedArea) + 1)}
-              // TODO:　本当は↓を使いたい
-              // center={[areas[Number(selectedArea)].lat, areas[Number(selectedArea)].lng]}
-              zoom={16}
-              options={{
-                fullscreenControl: false, // 全画面表示ボタンを非表示にする
-                restriction: {
-                  latLngBounds: TOKYO_BOUNDS,
-                  strictBounds: true,
-                },
-              }}
-              onClick={getLatLng}
-            >
-              <div className="overflow-auto h-60vh">
-                {Object.keys(filteredRestaurants).map(item => {               
-                  return (
-                    <>
-                      <Marker
-                        className="cursor-pointer" 
-                        button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant)}
-                        onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
-                        onMouseOut={onDeselect}
-                        position={{
-                          lat: filteredRestaurants[item].restaurant.lat,
-                          lng: filteredRestaurants[item].restaurant.lng,
-                        }} />                    
-                    </>
-                  )
-                })}
-              </div>
-              
-              {
-                (selectedRestaurant !== undefined) && (
-                  <InfoWindow 
-                    position={{
-                      lat: selectedRestaurant.lat,
-                      lng: selectedRestaurant.lng,
-                    }}
-                    options={infoWindowOptions}
-                  >
-                    <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(selectedRestaurant)}>
-                      <h2 className="text-xs md:text-lg">{selectedRestaurant.name}</h2>                    
-                    </div>
-                  </InfoWindow>
-                )              
-              }
-              {/* <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
+
+            {
+              (selectedRestaurant !== undefined) && (
+                <InfoWindow
+                  position={{
+                    lat: selectedRestaurant.lat,
+                    lng: selectedRestaurant.lng,
+                  }}
+                  options={infoWindowOptions}
+                >
+                  <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(selectedRestaurant)}>
+                    <h2 className="text-xs md:text-lg">{selectedRestaurant.name}</h2>
+                  </div>
+                </InfoWindow>
+              )
+            }
+            {/* <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
                 position={areas[Number(0)]} button onClick={() => alert('石井ビル')} /> */}
 
-            </GoogleMap>
-          </div>
-        
+          </GoogleMap>
+        </div>
+
 
         {/* 新規店名登録モーダル */}
         <Modal isOpen={modalIsOpen}

@@ -25,7 +25,7 @@ module Api
 
 
       def create
-        review = Review.new(params.permit(:evaluation, :content, :restraunt_id))
+        review = Review.new(params.permit(:evaluation, :content, :restraunt_id, :image))
         review.user_id = User.where(email: params[:email]).pick(:id)
 
         if review.save
@@ -42,7 +42,7 @@ module Api
       def update
         review = Review.find(params[:id])
 
-        if review.update(params.permit(:evaluation, :content))
+        if review.update(params.permit(:evaluation, :content, :image))
           render json: {
             reviews: review
             },status: :ok

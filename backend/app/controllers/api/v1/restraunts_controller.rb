@@ -19,7 +19,8 @@ module Api
       end
 
       def create
-        restraunt = Restraunt.new(params.permit(:name, :lat, :lng, :url, :description, :area_id))
+        # binding.irb
+        restraunt = Restraunt.new(params.permit(:name, :lat, :lng, :url, :description, :area_id, :image))
         restraunt.user_id = User.where(email: params[:email]).pick(:id)
         if restraunt.save
           render json: {
@@ -36,7 +37,7 @@ module Api
       def update
         restraunt = Restraunt.find(params[:id])
 
-        if restraunt.update(params.permit(:name, :url, :description))
+        if restraunt.update(params.permit(:name, :url, :description, :image))
           render json: {
             restraunts: restraunt
             },status: :ok

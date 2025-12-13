@@ -10,6 +10,9 @@ export const fetchRestaurants = () => {
 }
 
 export const postRestraunt = (params) => {
+  console.log(params)
+  console.log(params.image)
+  debugger
   return axios.post(restaurants,
     {
       name: params.name,
@@ -19,6 +22,7 @@ export const postRestraunt = (params) => {
       url: params.url,
       description: params.description,
       area_id: params.area_id,
+      // params
     }
   )
     .then(res => {

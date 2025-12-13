@@ -5,10 +5,11 @@ import { postTagsTaggedItem } from '../../apis/tags_tagged_items';
 export const CreateRestrauntModal = (props) => {
   const [isSelected, setIsSelected] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null)
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { name, lat, lng, url, description } = event.target.elements;    
+    const { name, lat, lng, url, description } = event.target.elements;
     props.setIsLoading(true);
     postRestraunt({
       name: name.value,
@@ -16,51 +17,53 @@ export const CreateRestrauntModal = (props) => {
       lng: lng.value,
       url: url.value,
       description: description.value,
+      image: selectedImage,
       area_id: Number(props.selectedArea + 1),
       email: props.user.email
     })
-      .then((res) => {        
+      .then((res) => {
         let tagPromises = selectedTags.map((tag) => {
           return postTagsTaggedItem({
             tagged_item_type: "Restraunt",
             tagged_item_id: res.restraunts.id,
             tag_id: tag
-          }) 
+          })
         });
         props.onSelect(res.restraunts)
         props.closeModal();
 
         Promise.all(tagPromises)
-        .then((tagResponses) => {
-          let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
+          .then((tagResponses) => {
+            let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
 
-          // tagResponsesには、各postTagsTaggedItemのレスポンスが含まれています。
-          const newRestaurant = {
-            restaurant: {
-              id: res.restraunts.id,
-              name: res.restraunts.name,
-              lat: res.restraunts.lat,
-              lng: res.restraunts.lng,
-              url: res.restraunts.url,
-              description: res.restraunts.description,       
-              area_id: res.restraunts.area_id, 
-              user_name: res.user_name,
-              created_at: res.restraunts.created_at,
-              updated_at: res.restraunts.updated_at,
-              user_email: props.user.email,
-            },
-            tags_tagged_items: tags_tagged_items, // ここにレスポンスを追加
-          };
-          
-          // 新しいrestaurantを既存のリストに追加
-          const newRestaurants = [newRestaurant, ...props.restaurants];
-          // 状態を更新するロジックをここに追加します（例：setStateなど）
-          
-          props.setRestraunt(newRestaurants)
-          props.handleClear();
-          props.setIsLoading(false);
-  
-        })  
+            // tagResponsesには、各postTagsTaggedItemのレスポンスが含まれています。
+            const newRestaurant = {
+              restaurant: {
+                id: res.restraunts.id,
+                name: res.restraunts.name,
+                lat: res.restraunts.lat,
+                lng: res.restraunts.lng,
+                url: res.restraunts.url,
+                description: res.restraunts.description,
+                // image: res.restraunts.image,
+                area_id: res.restraunts.area_id,
+                user_name: res.user_name,
+                created_at: res.restraunts.created_at,
+                updated_at: res.restraunts.updated_at,
+                user_email: props.user.email,
+              },
+              tags_tagged_items: tags_tagged_items, // ここにレスポンスを追加
+            };
+
+            // 新しいrestaurantを既存のリストに追加
+            const newRestaurants = [newRestaurant, ...props.restaurants];
+            // 状態を更新するロジックをここに追加します（例：setStateなど）
+
+            props.setRestraunt(newRestaurants)
+            props.handleClear();
+            props.setIsLoading(false);
+
+          })
       })
       .catch((error) => {
         switch (error.code) {
@@ -104,7 +107,7 @@ export const CreateRestrauntModal = (props) => {
             <span className="text-green-500 text-sm font-bold mb-2">
               エリア：{props.areas[Number(props.selectedArea)].name}
             </span>
-          </div>            
+          </div>
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
           {/* TODO:hiddenはあんまし使いたくはない */}
           <div>
@@ -117,33 +120,51 @@ export const CreateRestrauntModal = (props) => {
             {Object.keys(props.tags).map(item => {
               return (
                 <>
-                  <button 
+                  <button
                     type="button"
-                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(props.tags[item].id) ? 'bg-red-500' : ''}`} 
-                    key={props.tags[item].id} 
+                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(props.tags[item].id) ? 'bg-red-500' : ''}`}
+                    key={props.tags[item].id}
                     onClick={() => handleTagClick(props.tags[item].id)}
                   >
                     {props.tags[item].name}
-                  </button >  
+                  </button >
                 </>
-              )}
               )
             }
+            )
+            }
           </div>
-        <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
-          お店のURL（食べログのURLとか）
-        </label>
-        <input className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="url" placeholder="https://gurume-map.netlify.app" name="url" />
-
-        <div>
-          <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
-            ひとこと　※レビューではない
+          <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
+            お店のURL（食べログのURLとか）
           </label>
-          <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
-          placeholder="例：
+          <input className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="url" placeholder="https://gurume-map.netlify.app" name="url" />
+
+          <div>
+            <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
+              ひとこと　※レビューではない
+            </label>
+            <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="例：
           ・公園の近くにあるカレー屋。
           ・週3で食べに行ってます。"></textarea>
-        </div>
+          </div>
+
+          <div className="my-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              画像
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              // ファイル選択時に selectedImage State を更新
+              onChange={(e) => setSelectedImage(e.target.files[0])}
+            />
+            {selectedImage && (
+              <p className="text-xs mt-1 text-gray-500">
+                選択中のファイル: {selectedImage.name}
+              </p>
+            )}
+          </div>
 
           <div className='flex justify-center '>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 my-8 rounded-full">登録</button>
