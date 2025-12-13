@@ -10,6 +10,8 @@ export const CreateRestrauntModal = (props) => {
     event.preventDefault();
     const { name, lat, lng, url, description } = event.target.elements;    
     props.setIsLoading(true);
+    console.log(event.target.elements)
+
     postRestraunt({
       name: name.value,
       lat: lat.value,
@@ -19,7 +21,8 @@ export const CreateRestrauntModal = (props) => {
       area_id: Number(props.selectedArea + 1),
       email: props.user.email
     })
-      .then((res) => {        
+      .then((res) => {   
+        console.log(res) 
         let tagPromises = selectedTags.map((tag) => {
           return postTagsTaggedItem({
             tagged_item_type: "Restraunt",
@@ -63,6 +66,8 @@ export const CreateRestrauntModal = (props) => {
         })  
       })
       .catch((error) => {
+        console.log(error) 
+        console.log(error.code) 
         switch (error.code) {
           case 'ERR_BAD_RESPONSE':
             props.setError('不備あり！');
@@ -97,7 +102,7 @@ export const CreateRestrauntModal = (props) => {
             <button className="font-bold" onClick={() => props.closeModal()}>Close</button>
           </div>
           <div className="flex justify-between">
-            <label className="text-gray-700 text-sm font-bold mb-2" for="name">
+            <label className="text-gray-700 text-sm font-bold mb-2" htmlFor="name">
               <span>店名</span>
               <span className="text-xs text-red-600">　※必須</span>
             </label>
@@ -108,35 +113,35 @@ export const CreateRestrauntModal = (props) => {
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
           {/* TODO:hiddenはあんまし使いたくはない */}
           <div>
-            <input type="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLat}></input>
+            <input type="hidden" id="lat" name="lat" rows="4" readOnly className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLat}></input>
           </div>
           <div>
-            <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLng}></input>
+            <input type="hidden" id="lng" name="lng" rows="4" readOnly className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLng}></input>
           </div>
           <div className="my-4">
-            {Object.keys(props.tags).map(item => {
-              return (
-                <>
-                  <button 
-                    type="button"
-                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(props.tags[item].id) ? 'bg-red-500' : ''}`} 
-                    key={props.tags[item].id} 
-                    onClick={() => handleTagClick(props.tags[item].id)}
-                  >
-                    {props.tags[item].name}
-                  </button >  
-                </>
-              )}
-              )
-            }
+          {Object.keys(props.tags).map(itemKey => { 
+            const tag = props.tags[itemKey]; 
+            
+            return (
+              <div key={itemKey} className="inline-flex items-center">
+                <button 
+                  type="button"
+                  className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(tag.id) ? 'bg-red-500' : ''}`} 
+                  onClick={() => handleTagClick(tag.id)}
+                >
+                  {tag.name}
+                </button >  
+              </div>
+            )}
+          )}
           </div>
-        <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
+        <label className="block text-gray-700 text-sm font-bold mb-2 my-3" htmlFor="url">
           お店のURL（食べログのURLとか）
         </label>
         <input className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="url" placeholder="https://gurume-map.netlify.app" name="url" />
 
         <div>
-          <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
+          <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
             ひとこと　※レビューではない
           </label>
           <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
