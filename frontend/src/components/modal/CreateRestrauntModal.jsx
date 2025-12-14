@@ -37,6 +37,7 @@ export const CreateRestrauntModal = (props) => {
             let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
 
             // tagResponsesには、各postTagsTaggedItemのレスポンスが含まれています。
+            debugger
             const newRestaurant = {
               restaurant: {
                 id: res.restraunts.id,
@@ -45,7 +46,7 @@ export const CreateRestrauntModal = (props) => {
                 lng: res.restraunts.lng,
                 url: res.restraunts.url,
                 description: res.restraunts.description,
-                // image: res.restraunts.image,
+                image_url: res.restraunts.image_url,
                 area_id: res.restraunts.area_id,
                 user_name: res.user_name,
                 created_at: res.restraunts.created_at,

@@ -2,8 +2,8 @@ import { auth } from '../../firebase';
 import { useState } from "react"
 import { updateReview, deleteReview } from '../../apis/reviews';
 
-import {TagList} from '../TagList';
-import {DateTimeConverter} from '../DateTimeConverter'
+import { TagList } from '../TagList';
+import { DateTimeConverter } from '../DateTimeConverter'
 
 export const ShowRestrauntModal = (props) => {
   const [selectedReviewItem, setSelectedReviewItem] = useState('')
@@ -147,39 +147,44 @@ export const ShowRestrauntModal = (props) => {
                 {/* TODO:平均評価を計算する */}
                 {/* <span>平均評価：</span>
                               <span className="star5_rating" data-rate={restaurants[item].evaluation}></span> */}
-                {props.restaurant.image == null ?
+                {console.log(props.restaurant.image_url)}
+                {props.restaurant.image_url != null ?
                   <div className="flex justify-center ">
-                    <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-2/4" alt="Logo" />
+                    <img
+                      src={props.restaurant.image_url}
+                      alt={props.restaurant.name}
+                      style={{ maxWidth: '100%', height: 'auto' }}
+                    />
                   </div>
                   :
                   <img
                     className="w-7/12 m-auto"
-                    src={props.restaurant.image}
+                    src={`${process.env.PUBLIC_URL}/no_image_square.png`}
                     alt="ほげほげ画像"
                   ></img>
                 }
-                <div className='my-3'>         
+                <div className='my-3'>
                   <span>このお店を登録した人：</span>
                   <p className="user_name">{props.restaurant.user_name}</p>
                 </div>
-                <TagList 
+                <TagList
                   tags_tagged_items={props.tags_tagged_items}
                   tags={props.tags}
                 />
                 <div className="text-gray-500 mt-3">
-                  <h1>投稿日時：</h1>   
-                  <div className="flex">                             
-                    <DateTimeConverter 
+                  <h1>投稿日時：</h1>
+                  <div className="flex">
+                    <DateTimeConverter
                       created_at={props.restaurant.created_at}
                     />
                     {/* {props.restaurant.created_at !== props.restaurant.updated_at && <label>[編集済]</label>} */}
                   </div>
-                  <div className='mt-3'>         
+                  <div className='mt-3'>
                     <span>URL：</span>
                     <a className="cursor-pointer text-blue-500 underline" href={props.restaurant.url} target="_blank" rel="noopener noreferrer">{props.restaurant.url}</a>
-                  </div>    
-                </div>   
-                <div className="text-gray-500 mt-3">お店について一言：</div>  
+                  </div>
+                </div>
+                <div className="text-gray-500 mt-3">お店について一言：</div>
                 <p className="description text-gray-500">{props.restaurant.description}</p>
                 <div className='flex justify-center'>
                   {props.isCheckUserReviewLoading ? <h1>・・・</h1> :
@@ -212,13 +217,13 @@ export const ShowRestrauntModal = (props) => {
                                 <p className="review">{props.reviews[review_item].content}</p>
                                 <br />
                                 <div className="text-gray-500">
-                                  <h1>投稿日時：</h1>         
-                                  <div className="flex">                       
-                                    <DateTimeConverter 
+                                  <h1>投稿日時：</h1>
+                                  <div className="flex">
+                                    <DateTimeConverter
                                       created_at={props.reviews[review_item].created_at}
                                     />
                                     {props.reviews[review_item].created_at !== props.reviews[review_item].updated_at && <label>[編集済]</label>}
-                                  </div>       
+                                  </div>
                                 </div>
 
                                 {/* TODO: */}
@@ -243,7 +248,7 @@ export const ShowRestrauntModal = (props) => {
                 </>
               }
             </>
-          </div> 
+          </div>
         </>
       }
     </>
