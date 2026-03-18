@@ -1,39 +1,81 @@
-export const CreateReViewModal = (props) => {
+export const CreateReviewModal = (props) => {
   return (
-    <>
-      <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
-        <div className="text-3xl font-bold text-center">
-          新規レビュー登録
+    <div className="bg-white p-6 md:p-8">
+      <div className="max-w-lg mx-auto">
+        
+        {/* ヘッダーと閉じるボタン */}
+        <div className="flex justify-between items-center mb-8">
+          <div className="text-2xl font-bold text-gray-800">
+            新規レビュー登録
+          </div>
+          <button 
+            type="button" 
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors" 
+            onClick={() => props.closeReviewModal()}
+          >
+            ✕
+          </button>
         </div>
-        {props.error && <p style={{ color: 'red' }}>{props.error}</p>}
-        <div className="text-right">
-          <button className="font-bold" onClick={() => props.closeReviewModal()}>Close</button>
+
+        {props.error && <p className="mb-4 text-sm font-bold text-red-500 bg-red-50 p-3 rounded-lg">{props.error}</p>}
+
+        {/* 店名表示 */}
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            店名
+          </label>
+          <div className="px-4 py-3 bg-gray-50 text-gray-700 rounded-xl border border-gray-100 font-semibold">
+            {props.restaurant.name}
+          </div>
         </div>
-        <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
-          店名
-        </label>
-        <p className="restaurant_name">{props.restaurant.name}</p>
-        <div>
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="evaluation">
+
+        {/* 評価 */}
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="evaluation">
             評価
           </label>
-          <props.ReactStarsRating id="evaluation" name="evaluation" placeholder="評価" className="evaluation" onChange={props.onChange} value={props.evaluation} />
+          <div className="py-2">
+            <props.ReactStarsRating 
+              id="evaluation" 
+              name="evaluation" 
+              className="evaluation flex gap-1" 
+              onChange={props.onChange} 
+              value={props.evaluation} 
+            />
+          </div>
         </div>
-        <div>
-          <label for="content" className="block text-gray-700 text-sm font-bold mb-2">
+
+        {/* 感想入力エリア */}
+        <div className="mb-8">
+          <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">
             感想
           </label>
-          <textarea id="content" name="content" rows="4" className="h-60 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="感想"></textarea>
+          <textarea 
+            id="content" 
+            name="content" 
+            rows="6" 
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" 
+            placeholder="このお店の良かったところ、おすすめメニューなど..."
+          ></textarea>
         </div>
-        <div className='flex justify-center '>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-6 rounded-full">登録</button>
+
+        {/* ボタンエリア */}
+        <div className='flex flex-col gap-3'>
+          <button className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition-colors duration-200">
+            レビューを投稿する
+          </button>
+          <button 
+            type="button" 
+            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold py-3 px-4 rounded-xl transition-colors duration-200" 
+            onClick={() => props.closeReviewModal()}
+          >
+            キャンセル
+          </button>
         </div>
-        <div className="text-right">
-          <button className="font-bold" onClick={() => props.closeReviewModal()}>詳細画面に戻る</button>
-        </div>
+
       </div>
-    </>
+    </div>
   )
 }
 
-export default CreateReViewModal;
+export default CreateReviewModal;

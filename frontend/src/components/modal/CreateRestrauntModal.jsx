@@ -5,6 +5,7 @@ import { postTagsTaggedItem } from '../../apis/tags_tagged_items';
 export const CreateRestrauntModal = (props) => {
   const [isSelected, setIsSelected] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [isTagListOpen, setIsTagListOpen] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -34,7 +35,6 @@ export const CreateRestrauntModal = (props) => {
         .then((tagResponses) => {
           let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
 
-          // tagResponsesには、各postTagsTaggedItemのレスポンスが含まれています。
           const newRestaurant = {
             restaurant: {
               id: res.restraunts.id,
@@ -49,13 +49,10 @@ export const CreateRestrauntModal = (props) => {
               updated_at: res.restraunts.updated_at,
               user_email: props.user.email,
             },
-            tags_tagged_items: tags_tagged_items, // ここにレスポンスを追加
+            tags_tagged_items: tags_tagged_items,
           };
           
-          // 新しいrestaurantを既存のリストに追加
           const newRestaurants = [newRestaurant, ...props.restaurants];
-          // 状態を更新するロジックをここに追加します（例：setStateなど）
-          
           props.setRestraunt(newRestaurants)
           props.handleClear();
           props.setIsLoading(false);
@@ -76,7 +73,6 @@ export const CreateRestrauntModal = (props) => {
   }
 
   const handleTagClick = (tagId) => {
-    // 選択されたタグを追加または削除する処理
     setIsSelected(!isSelected)
     if (selectedTags.includes(tagId)) {
       setSelectedTags(selectedTags.filter((id) => id !== tagId));
@@ -86,71 +82,83 @@ export const CreateRestrauntModal = (props) => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div className="max-w-lg px-8 mx-auto md:px-8 md:flex-row">
-          <div className="text-3xl font-bold text-center">
-            新規店名登録
-          </div>
-          {props.error && <p style={{ color: 'red' }}>{props.error}</p>}
-          <div className="my-4 text-right">
-            <button className="font-bold" onClick={() => props.closeModal()}>Close</button>
-          </div>
-          <div className="flex justify-between">
-            <label className="text-gray-700 text-sm font-bold mb-2" for="name">
-              <span>店名</span>
-              <span className="text-xs text-red-600">　※必須</span>
+    <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8">
+      <div className="max-w-lg mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <div className="text-2xl font-bold text-gray-800">新規店名登録</div>
+          <button type="button" className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors" onClick={() => props.closeModal()}>✕</button>
+        </div>
+        
+        {props.error && <p className="mb-4 text-sm font-bold text-red-500 bg-red-50 p-3 rounded-lg">{props.error}</p>}
+
+        <div className="mb-6">
+          <div className="flex justify-between items-end mb-2">
+            <label className="text-gray-700 text-sm font-bold" htmlFor="name">
+              店名 <span className="text-xs text-red-500 font-normal ml-1">※必須</span>
             </label>
-            <span className="text-green-500 text-sm font-bold mb-2">
+            <span className="text-xs font-semibold px-2 py-1 bg-slate-100 text-slate-600 rounded-md">
               エリア：{props.areas[Number(props.selectedArea)].name}
             </span>
           </div>            
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="店名" name="name" />
-          {/* TODO:hiddenはあんまし使いたくはない */}
-          <div>
-            <input type="hidden" id="lat" name="lat" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLat}></input>
-          </div>
-          <div>
-            <input type="hidden" id="lng" name="lng" rows="4" readonly="true" className="bg-slate-400 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={props.coordinateLng}></input>
-          </div>
-          <div className="my-4">
-            {Object.keys(props.tags).map(item => {
-              return (
-                <>
+          <input className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" id="name" placeholder="例：美味しいラーメン屋" name="name" required />
+        </div>
+
+        <input type="hidden" id="lat" name="lat" value={props.coordinateLat} />
+        <input type="hidden" id="lng" name="lng" value={props.coordinateLng} />
+
+        <div className="mb-6 border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+          <button
+            type="button"
+            onClick={() => setIsTagListOpen(!isTagListOpen)}
+            className="w-full px-4 py-3 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors"
+          >
+            <span className="text-gray-700 text-sm font-bold">🏷️ タグ付け</span>
+            <svg className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isTagListOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          
+          <div className={`transition-all duration-300 ease-in-out ${isTagListOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className="p-4 flex flex-wrap gap-2 border-t border-gray-200 bg-white">
+              {Object.keys(props.tags).map(item => {
+                const isSelected = selectedTags.includes(props.tags[item].id);
+                return (
                   <button 
                     type="button"
-                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(props.tags[item].id) ? 'bg-red-500' : ''}`} 
+                    className={`text-sm px-3 py-1.5 rounded-full transition-all duration-200 border ${
+                      isSelected 
+                        ? 'bg-primary-50 text-primary-600 border-primary-200 font-bold shadow-sm' 
+                        : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
+                    }`}
                     key={props.tags[item].id} 
                     onClick={() => handleTagClick(props.tags[item].id)}
                   >
                     {props.tags[item].name}
                   </button >  
-                </>
+                )}
               )}
-              )
-            }
+            </div>
           </div>
-        <label className="block text-gray-700 text-sm font-bold mb-2 my-3" for="url">
-          お店のURL（食べログのURLとか）
-        </label>
-        <input className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="url" placeholder="https://gurume-map.netlify.app" name="url" />
+        </div>
 
-        <div>
-          <label for="description" className="block text-gray-700 text-sm font-bold mb-2 my-3">
-            ひとこと　※レビューではない
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="url">
+            お店のURL <span className="text-xs text-gray-400 font-normal ml-1">(食べログなど)</span>
           </label>
-          <textarea id="description" name="description" rows="4" className="h-30 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
-          placeholder="例：
-          ・公園の近くにあるカレー屋。
-          ・週3で食べに行ってます。"></textarea>
+          <input className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" id="url" placeholder="https://..." name="url" />
         </div>
 
-          <div className='flex justify-center '>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 my-8 rounded-full">登録</button>
-          </div>
+        <div className="mb-8">
+          <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">
+            お店について一言 <span className="text-xs text-gray-400 font-normal ml-1">※レビューではない</span>
+          </label>
+          <textarea id="description" name="description" rows="4" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" 
+          placeholder="例：&#13;&#10;・公園の近くにあるカレー屋。&#13;&#10;・週3で食べに行ってます。"></textarea>
         </div>
-      </form >
-    </>
+
+        <button className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition-colors duration-200">
+          このお店を登録する
+        </button>
+      </div>
+    </form >
   )
 }
 

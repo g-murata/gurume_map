@@ -4,6 +4,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        // モダンな少し落ち着いたブルーをメインカラーに設定
+        primary: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          500: '#3b82f6',
+          600: '#2563eb',
+        }
+      },
       height: {
         '128': '32rem',
         '10vh': '10vh',

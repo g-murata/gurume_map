@@ -1,22 +1,18 @@
-
 export const TagList = (props) => {
   return (
-    <>
+    <div className="flex flex-wrap gap-1.5">
       {(Object.keys(props.tags_tagged_items)).map(key => {
+          const tag = props.tags.find(tag => tag.id === props.tags_tagged_items[key].tag_id);
           return(
-          <>
-            {/* TODO: undefined判定については、開発環境限定の処理にしてもよいかもしれんね？ */}
-            {props.tags.find(tag => tag.id === props.tags_tagged_items[key].tag_id) !== undefined && 
-              <div className="bg-gray-100 font-bold py-2 px-4 m-1 rounded-full inline-block">
-                <p className="text-gray-600 text-xs md:text-base">
-                  {props.tags.find(tag => tag.id === props.tags_tagged_items[key].tag_id).name}
-                </p>
-              </div>
+          <div key={key}>
+            {tag !== undefined && 
+              <span className="bg-white border border-gray-200 text-gray-500 font-medium py-1 px-2.5 rounded-md text-xs shadow-sm">
+                {tag.name}
+              </span>
             }
-          </>
+          </div>
         )
       })}
-
-    </>
+    </div>
   )
 }

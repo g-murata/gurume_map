@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi"
-
 import { Link } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
@@ -22,84 +21,70 @@ export const Header = (props) => {
   };
 
   const testFunction = (e, setter) => {
-
     if (e.target === e.currentTarget) {
-      //メニューの外側をクリックしたときだけメニューを閉じる
-      console.log("メニューの外側をクリックした");
       setter(false);
-    } else {
-      console.log("メニューの内側をクリックした");
     }
   }
 
   const HeaderLink = () => {
     return (
       <>
-        {(process.env.NODE_ENV === 'development') && <div className='p-8 md:p-4 border-b-2 list-none bg-yellow-400'>開発環境です！</div>}
-        <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
-          <Link to="/about" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >使い方（How to Use）</Link>
+        {(process.env.NODE_ENV === 'development') && <div className='p-4 text-xs font-bold text-yellow-800 bg-yellow-200 rounded-lg md:mr-4'>開発環境</div>}
+        <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none'>
+          <Link to="/about" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={menuFunction} >使い方</Link>
         </li>
-        <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
-          <Link to="/blog" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >
-            開発者ブログ
-            {/* <div className="text-xs text-red-600">2024/12/21更新</div> */}
-          </Link>
-          <div className="text-red-400 text-xs md:text-right"></div>
+        <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none'>
+          <Link to="/blog" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={menuFunction} >開発者ブログ</Link>
         </li>
 
         {user
           ? <>
-            <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
-              <span className="text-gray-500 active:text-yellow-700 text-lg font-semibold block">ログインユーザ：{props.userInfo ? props.userInfo.name : "名無しさん"}</span>
+            <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none md:ml-4'>
+              <span className="block px-3 py-1 text-sm font-semibold text-primary-600 bg-primary-50 rounded-full">
+                {props.userInfo ? props.userInfo.name : "名無しさん"}
+              </span>
             </li>
-            <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
-              <Link to="/landing" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={handleLogout} >ログアウト</Link>
+            <li className='p-4 list-none md:p-2 md:border-none'>
+              <Link to="/landing" className="block text-base font-semibold text-gray-500 transition-colors hover:text-red-500" onClick={handleLogout} >ログアウト</Link>
             </li>
           </>
           :
           <>
-            <>
-              <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
-                <Link to="/signup" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >新規会員登録</Link>
-              </li>
-            </>
-            <li className='p-8 md:p-4 border-b-2 list-none md:border-none'>
-              <Link to="/login" className="text-gray-600 hover:text-red-500 active:text-yellow-700 text-lg font-semibold block" onClick={menuFunction} >ログイン</Link>
+            <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none md:ml-4'>
+              <Link to="/signup" className="block px-4 py-2 text-sm font-semibold text-white transition-all rounded-full bg-primary-500 hover:bg-primary-600 hover:shadow-md" onClick={menuFunction} >新規会員登録</Link>
+            </li>
+            <li className='p-4 list-none md:p-2 md:border-none'>
+              <Link to="/login" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={menuFunction} >ログイン</Link>
             </li>
           </>
         }
-
       </>
-
-
     )
   }
 
-
   return (
     <>
-      <div className="h-10vh flex items-center bg-white md:h-15vh">
-        <div className="w-full max-w-screen-2xl px-4 md:px-8 mx-auto">
-          <header className="flex justify-between items-center py-4 md:py-8">
+      <div className="sticky top-0 z-50 flex items-center h-[10vh] md:h-[12vh] bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div className="w-full max-w-screen-2xl px-4 mx-auto md:px-8">
+          <header className="flex items-center justify-between py-2 md:py-4">
             
-            <Link to="/" className="w-1/3 inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
+            <Link to="/" className="flex items-center gap-2 w-1/3 text-2xl font-extrabold text-gray-800 md:text-3xl tracking-tight hover:opacity-80 transition-opacity">
               GurumeMap
-              <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} className="w-9" alt="Logo" />
+              <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} className="w-8 drop-shadow-sm" alt="Logo" />
             </Link>
 
-            <nav className="hidden md:flex items-center justify-between w-2/3">
+            <nav className="hidden items-center justify-end w-2/3 md:flex gap-4">
               <HeaderLink />
             </nav>
-            
-            {/* スマホメニュー */}
+
             <div className={`md:hidden menuWrapper ${openMenu ? "menuWrapper__active" : ""}`} onClick={(e) => { testFunction(e, setOpenMenu) }}>
               {openMenu ? (
-                <div className='flex flex-row absolute top-0 right-0 h-screen min-h-fit'>
-                  <div className='bg-white'>
-                    <ul className=' text-center border-l-2 '>
-                      <li className='p-2 border-b-2'>
-                        <button onClick={menuFunction} className="text-blue-400 hover:text-blue-600 active:text-blue-700 text-lg font-bold p-2">
-                          close
+                <div className='absolute top-0 right-0 flex flex-row h-screen min-h-fit shadow-2xl'>
+                  <div className='bg-white/95 backdrop-blur-xl w-64'>
+                    <ul className='border-l border-gray-100 text-left pl-4 pt-4'>
+                      <li className='p-2 mb-4'>
+                        <button onClick={menuFunction} className="text-gray-400 hover:text-gray-600 text-lg font-bold p-2 transition-colors">
+                          ✕ 閉じる
                         </button>
                       </li>
                       <HeaderLink />
@@ -109,11 +94,10 @@ export const Header = (props) => {
               ) : undefined}
             </div>
 
-            <button type="button" onClick={menuFunction} className="inline-flex items-center md:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2">
-              <label className="text-2xl text-gray-600 "><GiHamburgerMenu /></label>
+            <button type="button" onClick={menuFunction} className="inline-flex items-center px-3 py-2 text-gray-500 transition-colors bg-gray-100 rounded-xl md:hidden hover:bg-gray-200 active:bg-gray-300">
+              <label className="text-2xl cursor-pointer"><GiHamburgerMenu /></label>
             </button>
           </header>
-
         </div>
       </div>
     </>

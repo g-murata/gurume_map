@@ -25,16 +25,14 @@ import {TagList} from './TagList';
 import {DateTimeConverter} from './DateTimeConverter'
 import { AreaList } from './AreaList';
 
-// import Restaurants from './../restaurants.json';
-// const restaurants = Restaurants.data;
-
-
 const customStyles = {
   overlay: {
     position: "fixed",
     top: 0,
     left: 0,
-    backgroundColor: "rgba(0,0,0,0.50)"
+    backgroundColor: "rgba(0,0,0,0.50)",
+    backdropFilter: "blur(4px)", // 背景を少しぼかす
+    zIndex: 1000
   },
   content: {
     top: '50%',
@@ -44,34 +42,17 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     overflow: "scroll",
+    borderRadius: "1rem", // モーダル自体の角丸
+    border: "none",
+    padding: "0"
   },
 };
 
 const area_kari = [
-  {
-    id: 1,
-    name: "新橋",
-    lat: 35.66630562620729,
-    lng: 139.7581500275268,
-  },
-  {
-    id: 2,
-    name: "赤坂見附",
-    lat: 35.676607396575264,
-    lng: 139.73728881531363,
-  },
-  {
-    id: 3,
-    name: "新宿",
-    lat: 35.68953440195192,
-    lng: 139.70075664056398,
-  },
-  {
-    id: 4,
-    name: "王子",
-    lat: 35.752229730596184,
-    lng: 139.7381560725481,
-  }
+  { id: 1, name: "新橋", lat: 35.66630562620729, lng: 139.7581500275268 },
+  { id: 2, name: "赤坂見附", lat: 35.676607396575264, lng: 139.73728881531363 },
+  { id: 3, name: "新宿", lat: 35.68953440195192, lng: 139.70075664056398 },
+  { id: 4, name: "王子", lat: 35.752229730596184, lng: 139.7381560725481 }
 ]
 
 const divStyle = {
@@ -80,7 +61,6 @@ const divStyle = {
 };
 
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
-
 
 export const Main = (props) => {
   const user = auth.currentUser;
@@ -154,8 +134,6 @@ export const Main = (props) => {
     }
   }
 
-
-
   const [restaurants, setRestraunt] = useState([])
   const [reviews, setReview] = useState([])
   const [selectedArea, setSelectedArea] = useState(1);
@@ -176,8 +154,6 @@ export const Main = (props) => {
     }
   }
   const closeModal = () => {
-    // todo:エラーの消し方これでいいんかな？
-    // TODO:評価の戻し方これでいいのかなぁ
     setError('')
     setEvaluation(3)
     setIsOpen(false);
@@ -191,7 +167,6 @@ export const Main = (props) => {
     setIsReviewOpen(false);
   }
 
-
   useEffect(() => {
     setIsLoading(true);
     fetchRestaurants()
@@ -202,44 +177,30 @@ export const Main = (props) => {
       .catch((error) => {
         console.log(error)
         setIsLoading(false);        
-      }
-      )
+      })
 
     fetchTags()      
     .then((data) => {
       setTags(data.tags)
     })
-    .catch((error) => {
-      console.log(error)
-    }
-    )
+    .catch((error) => console.log(error))
 
     fetchAreas()      
     .then((data) => {
       setAreas(data.areas)
     })
-    .catch((error) => {
-      console.log(error)
-    }
-    )
+    .catch((error) => console.log(error))
 
     GetLatestReviews()
       .then((data) => {
         setGetLatestReviews(data.review)
         setGetLatestReviewsRestraunt(data.restraunt)
       })
-      .catch((error) => {
-        console.log(error)
-      }
-      )    
-
+      .catch((error) => console.log(error))    
   }, [])
 
-
   const [size, setSize] = useState(undefined);
-  const infoWindowOptions = {
-    pixelOffset: size,
-  };
+  const infoWindowOptions = { pixelOffset: size };
   const createOffsetSize = () => {
     return setSize(new window.google.maps.Size(0, -45));
   };
@@ -254,15 +215,13 @@ export const Main = (props) => {
     setSelectedItem(restaurant.id)
     setIsReviewLoading(true)
     setIsCheckUserReviewLoading(true)
-    // TODO: ホバーの時とclickの時onSelectメソッドを動作させてるのイケてないよなぁ。スマホ用に作成したんだけども。
     onSelect(restaurant)
 
     fetchShowReview(restaurant.id)
       .then((data) => {
         setReview(data.review)
         setIsReviewLoading(false)
-      }
-      )
+      })
 
     CheckUsersWithoutReviews({
       restraunt_id: restaurant.id,
@@ -271,7 +230,6 @@ export const Main = (props) => {
       .then((result) => {
         setCheckUsersWithoutReviews(result.review);
         setIsCheckUserReviewLoading(false)
-
       })
       .catch((error) => {
         console.log("レビュー投稿可否チェックでエラー起きとるで★")
@@ -280,12 +238,8 @@ export const Main = (props) => {
       });
   }
 
-  function afterOpenModal() {
-    // subtitle.style.color = '#f00';
-  }
-  function afterReviewOpenModal() {
-
-  }
+  function afterOpenModal() {}
+  function afterReviewOpenModal() {}
 
   const onCloseDialog = () => {
     setSelectedItem(false)
@@ -297,7 +251,6 @@ export const Main = (props) => {
   const getLatLng = (event) => {
     setCoordinateLat(event.latLng.lat());
     setCoordinateLng(event.latLng.lng());
-
     OpenModal()
   };
 
@@ -318,7 +271,7 @@ export const Main = (props) => {
     setEditModalIsOpen(false);
     setError('')
   }
-  // 北は北区、東は江戸川区、南は港区、西は渋谷区
+  
   const TOKYO_BOUNDS = {
     north: 35.802229730596184,
     south: 35.613797,
@@ -336,14 +289,12 @@ export const Main = (props) => {
     setSelectedTags([])
   };
 
-
   const [tags, setTags] = useState([]);  
   const [areas, setAreas] = useState([]);  
   const [isSelected, setIsSelected] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
 
   const handleTagClick = (tagId) => {
-    // 選択されたタグを追加または削除する処理
     setIsSelected(!isSelected)
     if (selectedTags.includes(tagId)) {
       setSelectedTags(selectedTags.filter((id) => id !== tagId));
@@ -354,9 +305,8 @@ export const Main = (props) => {
 
   const filteredRestaurants = Object.values(restaurants).filter((restaurant) => {
     const nameFilter = restaurant.restaurant.name.includes(searchTerm)
-
     const tagIds = restaurant.tags_tagged_items.map(item => item.tag_id)
-    const isTagSelected = Object.keys(selectedTags).length > 0 ? tagIds.some(tagId => selectedTags.includes(tagId)) : true; // 選択されたタグが含まれているかチェック
+    const isTagSelected = Object.keys(selectedTags).length > 0 ? tagIds.some(tagId => selectedTags.includes(tagId)) : true;
     const areaFilter = restaurant.restaurant.area_id === Number(selectedArea) + 1
 
     return nameFilter && isTagSelected && areaFilter
@@ -374,81 +324,130 @@ export const Main = (props) => {
   const selectedRestaurant = selectedLocation.id ? 
     filteredRestaurants.find(filteredRestaurant => filteredRestaurant.restaurant.id === selectedLocation.id)?.restaurant : undefined;
 
+
+  const [isTagFilterOpen, setIsTagFilterOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  
   return (
     <>
-      {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-blue-600">ユーザ登録完了！</h1>}
+      {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-primary-600 font-bold py-2">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
-        <div className="flex flex-col items-center justify-center">
-          {/* <div className="cursor-pointer" button onClick={() => onOpenDialog(getLatestReviewsRestraunt.id)}> */}
-            {/* <h1>お店：{getLatestReviewsRestraunt.name && getLatestReviewsRestraunt.name}</h1> */}
-            {/* <h1>最新レビュー：{getLatestReviews.content ? getLatestReviews.content.slice(0, 8) + "..." : ""}</h1> */}
-            {/* <label>投稿日時：{getLatestReviews.created_at}　</label> */}
-          {/* </div> */}
-          <AreaList 
-            areas={areas}
-            selectedArea={selectedArea}
-            setSelectedArea={setSelectedArea}
-          />
+        
+        {/* === 検索・フィルターエリア === */}
+        <div className="bg-white border-b border-gray-100 shadow-sm z-10 relative">
+          <div className="max-w-screen-2xl mx-auto px-4 py-3 flex justify-between items-center">
+            
+            {/* 左側：エリア選択（ドロップダウン化された AreaList） */}
+            <AreaList 
+              areas={areas}
+              selectedArea={selectedArea}
+              setSelectedArea={setSelectedArea}
+            />
 
-          <div className="my-2">      
-            {Object.keys(tags).map(item => {
-              return (
-                <>
-                  <button 
-                    className={`bg-blue-500 text-white font-bold mx-2 px-2 rounded ${selectedTags.includes(tags[item].id) ? 'bg-red-500' : ''}`} 
-                    key={tags[item].id} 
-                    onClick={() => handleTagClick(tags[item].id)}
-                  >
-                    {tags[item].name}
-                  </button >  
-                </>
-              )}
-              )
-            }
+            {/* 右側：検索・絞り込みアコーディオンのトグル */}
+            <button
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-full transition-all duration-200 shadow-sm ${
+                isSearchOpen || searchTerm || selectedTags.length > 0
+                  ? 'bg-primary-50 text-primary-600 border border-primary-200'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              {searchTerm || selectedTags.length > 0 ? '絞り込み中' : '検索・フィルター'}
+            </button>
           </div>
-          <div className="flex flex-col items-center justify-center">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg aria-hidden="true" className="w-5 h-5 pb-1 text-gray-500 " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+
+          {/* === アコーディオンの中身（店名検索 ＆ タグ） === */}
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out bg-gray-50 ${isSearchOpen ? 'max-h-[500px] border-b border-gray-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className="max-w-screen-xl mx-auto px-4 py-6 flex flex-col items-center">
+              
+              {/* 店名検索 */}
+              <div className="relative w-full max-w-md mb-6">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                  <svg aria-hidden="true" className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <input
+                  className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-12 pr-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 transition-all shadow-sm"
+                  type="text"
+                  placeholder="店名で検索..."
+                  value={searchTerm}
+                  onClick={() => onDeselect()}
+                  onChange={handleChange}
+                />
               </div>
-              <input
-                className="shadow appearance-none border pl-10 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                placeholder="店名検索"
-                value={searchTerm}
-                onClick={() => onDeselect()}
-                onChange={handleChange}
-              />
+
+              {/* タグリスト */}
+              <div className="flex flex-wrap justify-center gap-2 max-w-2xl mb-4">      
+                {Object.keys(tags).map(item => {
+                  const isSelected = selectedTags.includes(tags[item].id);
+                  return (
+                    <button 
+                      key={tags[item].id} 
+                      className={`text-sm px-4 py-1.5 rounded-full transition-all duration-200 border ${
+                        isSelected 
+                          ? 'bg-primary-50 text-primary-600 border-primary-200 font-bold shadow-sm' 
+                          : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-100'
+                      }`}
+                      onClick={() => handleTagClick(tags[item].id)}
+                    >
+                      {tags[item].name}
+                    </button >  
+                  )}
+                )}
+              </div>
+
+              {/* クリアボタン (条件指定時のみ表示) */}
+              {(searchTerm || selectedTags.length > 0) && (
+                <button onClick={() => handleClear()} className="text-sm font-semibold text-red-500 hover:text-red-600 transition-colors flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                  条件をクリア
+                </button>
+              )}
             </div>
           </div>
-
-          <button onClick={() => handleClear()} className="px-2 bg-gray-500 text-white font-semibold rounded hover:bg-gray-500">クリア</button>
-
         </div>
 
-          <div className="flex flex-col-reverse max-w-screen-2xl px-4 md:px-8 mx-auto md:items-left md:flex-row">
-            <div className="overflow-auto h-65vh md:w-30vw">
-              {Object.keys(filteredRestaurants).map(item => {
+        {/* === メインコンテンツ（リスト＆マップ） === */}
+        <div className="flex flex-col-reverse max-w-screen-2xl mx-auto md:items-start md:flex-row bg-gray-50/50">
+          
+          {/* 左側：レストランリスト */}
+          <div className="overflow-auto h-65vh md:w-30vw px-4 py-4 scrollbar-hide">
+            {Object.keys(filteredRestaurants).map(item => {
               return (
-                <>
-                  <div className="border flex cursor-pointer" 
+                <div key={filteredRestaurants[item].restaurant.id}>
+                  
+                  {/* === モダン化されたカード === */}
+                  <div 
+                    className="flex mb-4 bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                     onClick={() => onOpenDialog(filteredRestaurants[item].restaurant)}
                     onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
-                    >
-                      <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="h-1/3 w-1/3" alt="Logo" />
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{filteredRestaurants[item].restaurant.name}</div>
-                      <TagList 
-                        tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
-                        tags={tags}
+                  >
+                    <div className="w-1/3 min-w-[120px] bg-gray-50 flex-shrink-0">
+                      <img 
+                        src={`${process.env.PUBLIC_URL}/no_image_square.png`} 
+                        className="object-cover w-full h-full" 
+                        alt="Logo" 
                       />
-                      <div className="text-gray-500">
-                        <div className="flex">                             
-                          <DateTimeConverter 
-                            created_at={filteredRestaurants[item].restaurant.created_at}
+                    </div>
+                    
+                    <div className="flex flex-col justify-between w-2/3 p-4">
+                      <div>
+                        <div className="mb-2 text-lg font-bold text-gray-800 line-clamp-1">
+                          {filteredRestaurants[item].restaurant.name}
+                        </div>
+                        <div className="mb-2">
+                          <TagList 
+                            tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                            tags={tags}
                           />
                         </div>
+                      </div>
+                      <div className="text-xs text-gray-400 font-medium">
+                        <DateTimeConverter 
+                          created_at={filteredRestaurants[item].restaurant.created_at}
+                        />
                       </div>
                     </div>
                   </div>
@@ -459,55 +458,49 @@ export const Main = (props) => {
                     onAfterOpen={afterOpenModal}
                     onRequestClose={onCloseDialog}
                     style={customStyles}
-                    contentLabel="Example Modal"
+                    contentLabel="Show Restaurant Modal"
                   >
-
                     {!editModalIsOpen ?
-                      <>
-                        <ShowRestrauntModal
-                          ReactStarsRating={ReactStarsRating}
-                          evaluation={evaluation}
-                          setEvaluation={setEvaluation}
-                          onChange={onChange}
-                          onEditDialog={onEditDialog}
-                          handleDeleteSubmit={handleDeleteSubmit}
-                          onCloseDialog={onCloseDialog}
-                          OpenReviewModal={OpenReviewModal}
-                          setReview={setReview}
-                          restaurant={filteredRestaurants[item].restaurant}
-                          item={item}
-                          tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
-                          tags={tags}                          
-                          reviews={reviews}
-                          checkUsersWithoutReviews={checkUsersWithoutReviews}
-                          setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
-                          isLoading={isLoading}
-                          isReviewLoading={isReviewLoading}
-                          isCheckUserReviewLoading={isCheckUserReviewLoading}
-                          error={error}
-                          setError={setError}
-                        />
-
-                      </>
+                      <ShowRestrauntModal
+                        ReactStarsRating={ReactStarsRating}
+                        evaluation={evaluation}
+                        setEvaluation={setEvaluation}
+                        onChange={onChange}
+                        onEditDialog={onEditDialog}
+                        handleDeleteSubmit={handleDeleteSubmit}
+                        onCloseDialog={onCloseDialog}
+                        OpenReviewModal={OpenReviewModal}
+                        setReview={setReview}
+                        restaurant={filteredRestaurants[item].restaurant}
+                        item={item}
+                        tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                        tags={tags}                          
+                        reviews={reviews}
+                        checkUsersWithoutReviews={checkUsersWithoutReviews}
+                        setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
+                        isLoading={isLoading}
+                        isReviewLoading={isReviewLoading}
+                        isCheckUserReviewLoading={isCheckUserReviewLoading}
+                        error={error}
+                        setError={setError}
+                      />
                       :
-                      <>
-                        <EditRestrauntModal
-                          setIsLoading={setIsLoading}                        
-                          selectedItem={selectedItem}
-                          onSelect={onSelect}
-                          setEditModalIsOpen={setEditModalIsOpen}
-                          onCloseEditDialog={onCloseEditDialog}
-                          setError={setError}
-                          restaurants={restaurants}
-                          setRestraunt={setRestraunt}
-                          onCloseDialog={onCloseDialog}
-                          handleClear={handleClear}
-                          error={error}
-                          restaurant={filteredRestaurants[item].restaurant}
-                          tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
-                          tags={tags}                            
-                        />
-                      </>
+                      <EditRestrauntModal
+                        setIsLoading={setIsLoading}                        
+                        selectedItem={selectedItem}
+                        onSelect={onSelect}
+                        setEditModalIsOpen={setEditModalIsOpen}
+                        onCloseEditDialog={onCloseEditDialog}
+                        setError={setError}
+                        restaurants={restaurants}
+                        setRestraunt={setRestraunt}
+                        onCloseDialog={onCloseDialog}
+                        handleClear={handleClear}
+                        error={error}
+                        restaurant={filteredRestaurants[item].restaurant}
+                        tags_tagged_items={filteredRestaurants[item].tags_tagged_items}
+                        tags={tags}                            
+                      />
                     }
                   </Modal>
 
@@ -517,7 +510,7 @@ export const Main = (props) => {
                       onAfterOpen={afterReviewOpenModal}
                       onRequestClose={closeReviewModal}
                       style={customStyles}
-                      contentLabel="Example Modal"
+                      contentLabel="Review Modal"
                     >
                       <form onSubmit={handleReviewSubmit}>
                         <CreateReviewModal
@@ -531,71 +524,67 @@ export const Main = (props) => {
                       </form>
                     </Modal>
                   }                  
-                </>
-              )})}
+                </div>
+              )
+            })}
+          </div>
+          
+          {/* 右側：マップ */}
+          <GoogleMap
+            mapContainerClassName="h-30vh md:h-65vh w-full md:w-70vw"
+            center={area_kari.find((area) => area.id === Number(selectedArea) + 1)}
+            zoom={16}
+            options={{
+              fullscreenControl: false, 
+              restriction: {
+                latLngBounds: TOKYO_BOUNDS,
+                strictBounds: true,
+              },
+            }}
+            onClick={getLatLng}
+          >
+            <div className="overflow-auto h-60vh">
+              {Object.keys(filteredRestaurants).map(item => {               
+                return (
+                  <Marker
+                    key={filteredRestaurants[item].restaurant.id}
+                    className="cursor-pointer" 
+                    button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant)}
+                    onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
+                    onMouseOut={onDeselect}
+                    position={{
+                      lat: filteredRestaurants[item].restaurant.lat,
+                      lng: filteredRestaurants[item].restaurant.lng,
+                    }} 
+                  />                    
+                )
+              })}
             </div>
             
-            <GoogleMap
-              mapContainerClassName="h-30vh md:h-65vh w-full"
-              center={area_kari.find((area) => area.id === Number(selectedArea) + 1)}
-              // TODO:　本当は↓を使いたい
-              // center={[areas[Number(selectedArea)].lat, areas[Number(selectedArea)].lng]}
-              zoom={16}
-              options={{
-                fullscreenControl: false, // 全画面表示ボタンを非表示にする
-                restriction: {
-                  latLngBounds: TOKYO_BOUNDS,
-                  strictBounds: true,
-                },
-              }}
-              onClick={getLatLng}
-            >
-              <div className="overflow-auto h-60vh">
-                {Object.keys(filteredRestaurants).map(item => {               
-                  return (
-                    <>
-                      <Marker
-                        className="cursor-pointer" 
-                        button onClick={() => onOpenDialog(filteredRestaurants[item].restaurant)}
-                        onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
-                        onMouseOut={onDeselect}
-                        position={{
-                          lat: filteredRestaurants[item].restaurant.lat,
-                          lng: filteredRestaurants[item].restaurant.lng,
-                        }} />                    
-                    </>
-                  )
-                })}
-              </div>
-              
-              {
-                (selectedRestaurant !== undefined) && (
-                  <InfoWindow 
-                    position={{
-                      lat: selectedRestaurant.lat,
-                      lng: selectedRestaurant.lng,
-                    }}
-                    options={infoWindowOptions}
-                  >
-                    <div style={divStyle} className="cursor-pointer" button onClick={() => onOpenDialog(selectedRestaurant)}>
-                      <h2 className="text-xs md:text-lg">{selectedRestaurant.name}</h2>                    
-                    </div>
-                  </InfoWindow>
-                )              
-              }
-              {/* <Marker icon={{ url: `${process.env.PUBLIC_URL}/ishii_marker.png` }}
-                position={areas[Number(0)]} button onClick={() => alert('石井ビル')} /> */}
-
-            </GoogleMap>
-          </div>
+            {
+              (selectedRestaurant !== undefined) && (
+                <InfoWindow 
+                  position={{
+                    lat: selectedRestaurant.lat,
+                    lng: selectedRestaurant.lng,
+                  }}
+                  options={infoWindowOptions}
+                >
+                  <div style={divStyle} className="cursor-pointer font-bold px-2 py-1" button onClick={() => onOpenDialog(selectedRestaurant)}>
+                    <h2 className="text-xs md:text-sm text-gray-800">{selectedRestaurant.name}</h2>                    
+                  </div>
+                </InfoWindow>
+              )              
+            }
+          </GoogleMap>
+        </div>
         
-
         {/* 新規店名登録モーダル */}
         <Modal isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
-          contentLabel="Example Modal"
+          contentLabel="Create Restaurant Modal"
         >
           <CreateRestrauntModal
             setIsLoading={setIsLoading}
