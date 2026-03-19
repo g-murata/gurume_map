@@ -1,26 +1,34 @@
 module Api
   module V1
     class BlogsController < ApplicationController
-      include Rails.application.routes.url_helpers
-
       def index
         blogs = Blog.with_attached_image.all.order(created_at: "DESC")
 
         render json: {
           blogs: blogs.map do |blog|
-            data = blog.as_json
-            data["image_url"] = blog.image.attached? ? url_for(blog.image) : blog.image
-            data
+            {
+              id: blog.id,
+              title: blog.title,
+              content: blog.content,
+              created_at: blog.created_at,
+              updated_at: blog.updated_at,
+              image_url: blog.image.attached? ? rails_blob_url(blog.image, only_path: false) : nil
+            }
           end
         }, status: :ok
       end
 
       def show
         blog = Blog.find(params[:id])
-        data = blog.as_json
-        data["image_url"] = blog.image.attached? ? url_for(blog.image) : blog.image
         render json: {
-          blogs: data
+          blogs: {
+            id: blog.id,
+            title: blog.title,
+            content: blog.content,
+            created_at: blog.created_at,
+            updated_at: blog.updated_at,
+            image_url: blog.image.attached? ? rails_blob_url(blog.image, only_path: false) : nil
+          }
         }, status: :ok
       end
 
