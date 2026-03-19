@@ -51,7 +51,9 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Run and own the application files as a non-root user for security
-RUN useradd rails --home /rails --shell /bin/bash
+RUN useradd rails --home /rails --shell /bin/bash && \
+    mkdir -p /data && \
+    chown -R rails:rails /rails /data
 USER rails:rails
 
 # Copy built artifacts: gems, application

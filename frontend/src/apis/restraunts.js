@@ -10,17 +10,19 @@ export const fetchRestaurants = () => {
 }
 
 export const postRestraunt = (params) => {
-  return axios.post(restaurants,
-    {
-      name: params.name,
-      lat: params.lat,
-      lng: params.lng,
-      email: params.email,
-      url: params.url,
-      description: params.description,
-      area_id: params.area_id,
-    }
-  )
+  const formData = new FormData();
+  formData.append('name', params.name);
+  formData.append('lat', params.lat);
+  formData.append('lng', params.lng);
+  formData.append('email', params.email);
+  formData.append('url', params.url);
+  formData.append('description', params.description);
+  formData.append('area_id', params.area_id);
+  if (params.image) {
+    formData.append('image', params.image);
+  }
+
+  return axios.post(restaurants, formData)
     .then(res => {
       return res.data
     })
@@ -28,13 +30,15 @@ export const postRestraunt = (params) => {
 };
 
 export const updateRestraunt = (params) => {
-  return axios.patch(`${restaurant(params.id)}`,
-    {
-      name: params.name,
-      url: params.url,
-      description: params.description,
-    }
-  )
+  const formData = new FormData();
+  formData.append('name', params.name);
+  formData.append('url', params.url);
+  formData.append('description', params.description);
+  if (params.image) {
+    formData.append('image', params.image);
+  }
+
+  return axios.patch(`${restaurant(params.id)}`, formData)
     .then(res => {
       return res.data
     })

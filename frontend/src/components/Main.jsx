@@ -66,6 +66,8 @@ export const Main = (props) => {
   const user = auth.currentUser;
   const [error, setError] = useState('');
 
+  const [reviewImage, setReviewImage] = useState(null);
+
   const handleReviewSubmit = (event) => {
     event.preventDefault();
     const { content } = event.target.elements;
@@ -74,7 +76,8 @@ export const Main = (props) => {
       restraunt_id: selectedItem,
       evaluation: evaluation,
       content: content.value,
-      email: user.email
+      email: user.email,
+      image: reviewImage
     })
       .then((res) => {
         closeReviewModal();
@@ -87,21 +90,20 @@ export const Main = (props) => {
           updated_at: res.review.updated_at,
           user_name: res.user_name,
           restraunt_id: selectedItem,
-          email: user.email
+          email: user.email,
+          image_url: res.review.image_url
         },
         ...reviews
       ]
         setReview(newReviews)
         setIsLoading(false);
+        setReviewImage(null);
       })
       .catch((error) => {
-        switch (error.code) {
-          case 'ERR_BAD_RESPONSE':
-            setError('不備あり！');
-            break;
-          default:
-            setError('エラーっす！Herokuのデプロイ先どうしようか？');
-            break;
+        if (error.response && error.response.status === 422) {
+          setError('不備あり！');
+        } else {
+          setError('通信エラーっす！バックエンド起きてる？');
         }
         setIsLoading(false);
       });
@@ -122,14 +124,7 @@ export const Main = (props) => {
           setRestraunt(newRestaurants);
         })
         .catch((error) => {
-          switch (error.code) {
-            case 'ERR_BAD_RESPONSE':
-              setError('不備あり！');
-              break;
-            default:
-              setError('エラーっす！Herokuのデプロイ先どうしようか？');
-              break;
-          }
+          setError('通信エラーっす！バックエンド起きてる？');
         });
     }
   }
@@ -423,10 +418,10 @@ export const Main = (props) => {
                       onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
                     >
                       <div className="w-1/3 min-w-[120px] bg-gray-50 flex-shrink-0">
-                        {filteredRestaurants[item].restaurant.image == null ?
+                        {filteredRestaurants[item].restaurant.image_url == null ?
                            <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="object-cover w-full h-full opacity-50 p-2" alt="no_image" />
                            :
-                           <img src={filteredRestaurants[item].restaurant.image} className="object-cover w-full h-full" alt={filteredRestaurants[item].restaurant.name} />
+                           <img src={filteredRestaurants[item].restaurant.image_url} className="object-cover w-full h-full" alt={filteredRestaurants[item].restaurant.name} />
                         }
                       </div>
                       
@@ -460,11 +455,19 @@ export const Main = (props) => {
 
                     {reviewModalIsOpen &&
                       <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem} onAfterOpen={afterReviewOpenModal} onRequestClose={closeReviewModal} style={customStyles} contentLabel="Review Modal">
-                        <form onSubmit={handleReviewSubmit}>
-                          <CreateReviewModal ReactStarsRating={ReactStarsRating} closeReviewModal={closeReviewModal} evaluation={evaluation} onChange={onChange} error={error} restaurant={filteredRestaurants[item].restaurant} />
-                        </form>
+                        <CreateReviewModal 
+                          ReactStarsRating={ReactStarsRating} 
+                          closeReviewModal={closeReviewModal} 
+                          handleReviewSubmit={handleReviewSubmit}
+                          evaluation={evaluation} 
+                          onChange={onChange} 
+                          error={error} 
+                          restaurant={filteredRestaurants[item].restaurant} 
+                          setReviewImage={setReviewImage} 
+                        />
                       </Modal>
-                    }                  
+                    }
+                  
                   </div>
                 )
               })}

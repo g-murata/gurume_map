@@ -6,6 +6,20 @@ export const EditRestrauntModal = (props) => {
   const [isSelected, setIsSelected] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [isTagListOpen, setIsTagListOpen] = useState(false); // アコーディオン用ステート
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(props.restaurant.image_url || '');
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleTagClick = (tagId) => {
     setIsSelected(!isSelected)
@@ -26,7 +40,8 @@ export const EditRestrauntModal = (props) => {
         id: props.selectedItem,
         name: name.value,
         url: url.value,
-        description: description.value,  
+        description: description.value,
+        image: image,
       });
   
       await deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
@@ -57,7 +72,8 @@ export const EditRestrauntModal = (props) => {
               lng: res.restraunts.lng,
               updated_at: res.restraunts.updated_at,    
               url: res.restraunts.url,
-              description: res.restraunts.description,        
+              description: res.restraunts.description,
+              image_url: res.restraunts.image_url,
             },
             tags_tagged_items: tags_tagged_items
           }
@@ -68,15 +84,13 @@ export const EditRestrauntModal = (props) => {
       props.handleClear();
   
     } catch (error) {
-      switch (error.code) {
-        case 'ERR_BAD_RESPONSE':
-          props.setError('不備あり！');
-          break;
-        default:
-          props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
-          break;
+      if (error.response && error.response.status === 422) {
+        props.setError('不備あり！');
+      } else {
+        props.setError('通信エラーっす！バックエンド起きてる？');
       }
     } finally {
+
       props.setIsLoading(false);
     }
   };  
@@ -174,6 +188,26 @@ export const EditRestrauntModal = (props) => {
             name="url" 
             defaultValue={props.restaurant.url}
           />
+        </div>
+
+        {/* 写真編集 */}
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+            お店の写真 <span className="text-xs text-gray-400 font-normal ml-1">(変更する場合のみ選択)</span>
+          </label>
+          <input 
+            type="file" 
+            id="image" 
+            name="image" 
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" 
+          />
+          {preview && (
+            <div className="mt-4 w-full h-48 rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+              <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+            </div>
+          )}
         </div>
 
         {/* 説明入力 */}

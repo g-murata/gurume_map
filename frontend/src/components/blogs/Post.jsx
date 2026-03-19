@@ -37,11 +37,11 @@ export const Post = () => {
         <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden mb-12">
           
           {/* ヒーロー画像 */}
-          {blog.image && (
+          {blog.image_url && (
             <div className="w-full h-64 md:h-96 overflow-hidden bg-gray-100">
               <img 
                 className="object-cover w-full h-full" 
-                src={blog.image} 
+                src={blog.image_url} 
                 alt={blog.title} 
               />
             </div>
