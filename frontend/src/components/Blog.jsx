@@ -40,9 +40,10 @@ export const Blog = () => {
                 <div className="relative h-48 overflow-hidden bg-gray-100">
                   <img
                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                    src={blogs[item].image}
+                    src={blogs[item].image_url}
                     alt={blogs[item].title}
                   />
+
                   {/* 画像の上に薄いグラデーションを乗せて高級感を */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>

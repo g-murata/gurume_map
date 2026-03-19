@@ -135,10 +135,10 @@ export const ShowRestrauntModal = (props) => {
               }
 
               <div className="mb-6 overflow-hidden shadow-sm rounded-2xl bg-gray-50 flex justify-center">
-                {props.restaurant.image == null ?
+                {props.restaurant.image_url == null ?
                   <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="object-cover w-1/2 h-48 md:h-64 opacity-50 py-4" alt="Logo" />
                   :
-                  <img src={props.restaurant.image} alt={props.restaurant.name} className="object-cover w-full h-48 md:h-64" />
+                  <img src={props.restaurant.image_url} alt={props.restaurant.name} className="object-cover w-full h-48 md:h-64" />
                 }
               </div>
 

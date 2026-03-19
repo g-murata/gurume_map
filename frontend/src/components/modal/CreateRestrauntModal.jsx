@@ -6,6 +6,7 @@ export const CreateRestrauntModal = (props) => {
   const [isSelected, setIsSelected] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [isTagListOpen, setIsTagListOpen] = useState(false);
+  const [image, setImage] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,7 +19,8 @@ export const CreateRestrauntModal = (props) => {
       url: url.value,
       description: description.value,
       area_id: Number(props.selectedArea + 1),
-      email: props.user.email
+      email: props.user.email,
+      image: image
     })
       .then((res) => {        
         let tagPromises = selectedTags.map((tag) => {
@@ -48,6 +50,7 @@ export const CreateRestrauntModal = (props) => {
               created_at: res.restraunts.created_at,
               updated_at: res.restraunts.updated_at,
               user_email: props.user.email,
+              image_url: res.restraunts.image_url
             },
             tags_tagged_items: tags_tagged_items,
           };
@@ -144,6 +147,20 @@ export const CreateRestrauntModal = (props) => {
             お店のURL <span className="text-xs text-gray-400 font-normal ml-1">(食べログなど)</span>
           </label>
           <input className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" id="url" placeholder="https://..." name="url" />
+        </div>
+
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+            お店の写真 <span className="text-xs text-gray-400 font-normal ml-1">(任意)</span>
+          </label>
+          <input 
+            type="file" 
+            id="image" 
+            name="image" 
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" 
+          />
         </div>
 
         <div className="mb-8">

@@ -423,10 +423,10 @@ export const Main = (props) => {
                       onMouseOver={() => onSelect(filteredRestaurants[item].restaurant)} 
                     >
                       <div className="w-1/3 min-w-[120px] bg-gray-50 flex-shrink-0">
-                        {filteredRestaurants[item].restaurant.image == null ?
+                        {filteredRestaurants[item].restaurant.image_url == null ?
                            <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="object-cover w-full h-full opacity-50 p-2" alt="no_image" />
                            :
-                           <img src={filteredRestaurants[item].restaurant.image} className="object-cover w-full h-full" alt={filteredRestaurants[item].restaurant.name} />
+                           <img src={filteredRestaurants[item].restaurant.image_url} className="object-cover w-full h-full" alt={filteredRestaurants[item].restaurant.name} />
                         }
                       </div>
                       
