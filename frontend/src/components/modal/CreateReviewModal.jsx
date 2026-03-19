@@ -42,9 +42,7 @@ export const CreateReviewModal = (props) => {
           <label className="block text-gray-700 text-sm font-bold mb-2">
             店名
           </label>
-          <div className="px-4 py-3 bg-gray-50 text-gray-700 rounded-xl border border-gray-100 font-semibold">
             {props.restaurant.name}
-          </div>
         </div>
 
         {/* 評価 */}
