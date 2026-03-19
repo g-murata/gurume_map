@@ -1,0 +1,8 @@
+one:
+  tagged_item_type: "Restraunt"
+  tagged_item_id: <%= ActiveRecord::FixtureSet.identify(:ramen_shop) %>
+  tag_id: <%= ActiveRecord::FixtureSet.identify(:ramen) %>
+two:
+  tagged_item_type: "Blog"
+  tagged_item_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
+  tag_id: <%= ActiveRecord::FixtureSet.identify(:ramen) %>

@@ -81,19 +81,19 @@ export const SignUp = (props) => {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
                   ニックネーム <span className="text-xs text-gray-400 font-normal ml-1">(10文字以内)</span>
                 </label>
-                <input className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" type="text" placeholder="例: ぐるめ太郎" name="name" required />
+                <input id="username" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" type="text" placeholder="例: ぐるめ太郎" name="name" required />
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                   メールアドレス
                 </label>
-                <input className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" type="email" placeholder="mail@example.com" name="email" required />
+                <input id="email" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" type="email" placeholder="mail@example.com" name="email" required />
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                   パスワード <span className="text-xs text-gray-400 font-normal ml-1">(6文字以上)</span>
                 </label>
-                <input className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" type="password" placeholder="••••••••" name="password" required />
+                <input id="password" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" type="password" placeholder="••••••••" name="password" required />
               </div>
               
               <button className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:-translate-y-0.5 transition-all duration-200 mt-4">
