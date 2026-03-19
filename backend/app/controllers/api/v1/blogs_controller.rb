@@ -8,19 +8,19 @@ module Api
 
         render json: {
           blogs: blogs.map do |blog|
-            blog.as_json.merge(
-              image_url: blog.image.attached? ? url_for(blog.image) : blog.image_url
-            )
+            data = blog.as_json
+            data["image_url"] = blog.image.attached? ? url_for(blog.image) : blog.image
+            data
           end
         }, status: :ok
       end
 
       def show
         blog = Blog.find(params[:id])
+        data = blog.as_json
+        data["image_url"] = blog.image.attached? ? url_for(blog.image) : blog.image
         render json: {
-          blogs: blog.as_json.merge(
-            image_url: blog.image.attached? ? url_for(blog.image) : blog.image_url
-          )
+          blogs: data
         }, status: :ok
       end
 

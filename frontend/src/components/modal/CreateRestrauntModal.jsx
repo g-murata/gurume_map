@@ -7,6 +7,21 @@ export const CreateRestrauntModal = (props) => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [isTagListOpen, setIsTagListOpen] = useState(false);
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState('');
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreview('');
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -50,7 +65,7 @@ export const CreateRestrauntModal = (props) => {
               created_at: res.restraunts.created_at,
               updated_at: res.restraunts.updated_at,
               user_email: props.user.email,
-              image_url: res.restraunts.image_url
+              image_url: res.restraunts.image_url // ここでサーバーから返された動的URLを使う
             },
             tags_tagged_items: tags_tagged_items,
           };
@@ -63,13 +78,10 @@ export const CreateRestrauntModal = (props) => {
         })  
       })
       .catch((error) => {
-        switch (error.code) {
-          case 'ERR_BAD_RESPONSE':
-            props.setError('不備あり！');
-            break;
-          default:
-            props.setError('エラーっす！Herokuのデプロイ先どうしようか？');
-            break;
+        if (error.response && error.response.status === 422) {
+          props.setError('不備あり！');
+        } else {
+          props.setError('通信エラーっす！バックエンド起きてる？');
         }
         props.setIsLoading(false);
       });
@@ -158,9 +170,19 @@ export const CreateRestrauntModal = (props) => {
             id="image" 
             name="image" 
             accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
+            onChange={handleImageChange}
             className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" 
           />
+          {preview && (
+            <div className="mt-4 relative w-full h-48 rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+              <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+              <button 
+                type="button" 
+                onClick={() => {setImage(null); setPreview(''); document.getElementById('image').value = '';}}
+                className="absolute top-2 right-2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
+              >✕</button>
+            </div>
+          )}
         </div>
 
         <div className="mb-8">

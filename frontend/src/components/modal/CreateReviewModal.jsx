@@ -1,6 +1,24 @@
+import { useState } from "react";
+
 export const CreateReviewModal = (props) => {
+  const [preview, setPreview] = useState('');
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    props.setReviewImage(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreview('');
+    }
+  };
+
   return (
-    <div className="bg-white p-6 md:p-8">
+    <form onSubmit={props.handleReviewSubmit} className="bg-white p-6 md:p-8">
       <div className="max-w-lg mx-auto">
         
         {/* ヘッダーと閉じるボタン */}
@@ -11,7 +29,7 @@ export const CreateReviewModal = (props) => {
           <button 
             type="button" 
             className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors" 
-            onClick={() => props.closeReviewModal()}
+            onClick={() => {props.closeReviewModal(); setPreview('');}}
           >
             ✕
           </button>
@@ -45,6 +63,31 @@ export const CreateReviewModal = (props) => {
           </div>
         </div>
 
+        {/* 写真追加 */}
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="review_image">
+            料理やお店の写真 <span className="text-xs text-gray-400 font-normal ml-1">(任意)</span>
+          </label>
+          <input 
+            type="file" 
+            id="review_image" 
+            name="image" 
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" 
+          />
+          {preview && (
+            <div className="mt-4 relative w-full h-48 rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+              <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+              <button 
+                type="button" 
+                onClick={() => {props.setReviewImage(null); setPreview(''); document.getElementById('review_image').value = '';}}
+                className="absolute top-2 right-2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
+              >✕</button>
+            </div>
+          )}
+        </div>
+
         {/* 感想入力エリア */}
         <div className="mb-8">
           <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">
@@ -74,7 +117,7 @@ export const CreateReviewModal = (props) => {
         </div>
 
       </div>
-    </div>
+    </form>
   )
 }
 

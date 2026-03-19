@@ -22,11 +22,7 @@ export const postRestraunt = (params) => {
     formData.append('image', params.image);
   }
 
-  return axios.post(restaurants, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  })
+  return axios.post(restaurants, formData)
     .then(res => {
       return res.data
     })
@@ -42,11 +38,7 @@ export const updateRestraunt = (params) => {
     formData.append('image', params.image);
   }
 
-  return axios.patch(`${restaurant(params.id)}`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  })
+  return axios.patch(`${restaurant(params.id)}`, formData)
     .then(res => {
       return res.data
     })
