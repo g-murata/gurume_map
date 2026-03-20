@@ -45,6 +45,21 @@ export const EditRestrauntModal = (props) => {
     }
   };
 
+  const handleRemoveImage = (e) => {
+    e.stopPropagation();
+    if (image) {
+      // 新しく選択した画像をキャンセルする場合：元の状態に戻す
+      setImage(null);
+      setPreview(props.restaurant.image_url || '');
+      // 元の画像を表示に戻すだけなので deleteImage は false
+    } else {
+      // 元からあった画像を削除する場合
+      setDeleteImage(true);
+      setPreview('');
+    }
+    document.getElementById('image').value = '';
+  };
+
   const handleTagClick = (tagId) => {
     setIsSelected(!isSelected)
     let newTags;
@@ -143,6 +158,30 @@ export const EditRestrauntModal = (props) => {
       setIsTagListOpen(true);
     }
   }, [props.tags_tagged_items])  
+
+  const handleCloseEditDialog = () => {
+    const name = document.getElementById('name')?.value || '';
+    const url = document.getElementById('url')?.value || '';
+    const description = document.getElementById('description')?.value || '';
+    
+    const isTextDirty = name !== props.restaurant.name || 
+                        url !== (props.restaurant.url || '') || 
+                        description !== (props.restaurant.description || '');
+    
+    const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id).sort();
+    const currentTagIds = [...selectedTags].sort();
+    const isTagsDirty = JSON.stringify(initialTagIds) !== JSON.stringify(currentTagIds);
+    
+    const isImageDirty = image !== null || deleteImage;
+
+    if (isTextDirty || isTagsDirty || isImageDirty) {
+      if (window.confirm("書きかけの内容がありますが、キャンセルしてもよろしいですか？")) {
+        props.onCloseEditDialog();
+      }
+    } else {
+      props.onCloseEditDialog();
+    }
+  };
 
   return (
     <form onSubmit={handleUpdateSubmit} onChange={checkDirty} className="bg-white p-6 md:p-8">
@@ -254,14 +293,7 @@ export const EditRestrauntModal = (props) => {
               </div>
               <button 
                 type="button" 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDeleteImage(true);
-                  setImage(null);
-                  setPreview('');
-                  document.getElementById('image').value = '';
-                  props.setIsDirty(true);
-                }}
+                onClick={handleRemoveImage}
                 className="absolute top-2 right-2 z-30 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
                 title="画像を削除"
               >✕</button>
@@ -292,7 +324,7 @@ export const EditRestrauntModal = (props) => {
           <button 
             type="button" 
             className="w-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold py-3 px-4 rounded-xl transition-colors duration-200" 
-            onClick={() => props.onCloseEditDialog()}
+            onClick={handleCloseEditDialog}
           >
             詳細画面に戻る
           </button>

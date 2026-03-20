@@ -30,7 +30,19 @@ export const ShowRestrauntModal = (props) => {
   }
 
   const handleReviewEditCancel = () => {
-    if (props.isDirty) {
+    const content = document.getElementById('content')?.value || '';
+    const originalReview = props.reviews[selectedReviewItem];
+    
+    if (!originalReview) {
+      closeReviewEditModal();
+      return;
+    }
+
+    const isEvaluationDirty = Number(props.evaluation) !== Number(originalReview.evaluation);
+    const isContentDirty = content.trim() !== (originalReview.content || '').trim();
+    const isImageDirty = reviewImage !== null || deleteReviewImage;
+
+    if (isEvaluationDirty || isContentDirty || isImageDirty) {
       if (window.confirm("書きかけの内容がありますが、キャンセルしてもよろしいですか？")) {
         closeReviewEditModal();
       }
@@ -73,6 +85,20 @@ export const ShowRestrauntModal = (props) => {
       setReviewPreview(props.reviews[selectedReviewItem].image_url || '');
       setTimeout(checkReviewDirty, 0);
     }
+  };
+
+  const handleRemoveReviewImage = (e) => {
+    e.stopPropagation();
+    if (reviewImage) {
+      // 新しく選択した画像をキャンセルする場合：元の状態に戻す
+      setReviewImage(null);
+      setReviewPreview(props.reviews[selectedReviewItem].image_url || '');
+    } else {
+      // 元からあった画像を削除する場合
+      setDeleteReviewImage(true);
+      setReviewPreview('');
+    }
+    document.getElementById('edit_review_image').value = '';
   };
 
   const handleReviewUpdateSubmit = (event) => {
@@ -188,14 +214,7 @@ export const ShowRestrauntModal = (props) => {
                   </div>
                   <button 
                     type="button" 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setDeleteReviewImage(true);
-                      setReviewImage(null);
-                      setReviewPreview('');
-                      document.getElementById('edit_review_image').value = '';
-                      props.setIsDirty(true);
-                    }}
+                    onClick={handleRemoveReviewImage}
                     className="absolute top-2 right-2 z-30 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
                     title="画像を削除"
                   >✕</button>
