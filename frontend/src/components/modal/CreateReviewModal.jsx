@@ -13,8 +13,10 @@ export const CreateReviewModal = (props) => {
   }, [props]);
 
   useEffect(() => {
+    // モーダルが開いた時にDirty状態をリセット
+    props.setIsDirty(false);
     checkDirty();
-  }, [props.evaluation, checkDirty]);
+  }, [props.evaluation, checkDirty, props.setIsDirty]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -30,6 +32,15 @@ export const CreateReviewModal = (props) => {
       setPreview('');
       setTimeout(checkDirty, 0);
     }
+  };
+
+  const handleRemoveImage = (e) => {
+    e.stopPropagation();
+    props.setReviewImage(null);
+    setPreview('');
+    document.getElementById('review_image').value = '';
+    // 画像を消した後は他のフィールドの状態を見てDirtyを再判定
+    setTimeout(checkDirty, 0);
   };
 
   return (
@@ -101,7 +112,7 @@ export const CreateReviewModal = (props) => {
               </div>
               <button 
                 type="button" 
-                onClick={(e) => {e.stopPropagation(); props.setReviewImage(null); setPreview(''); document.getElementById('review_image').value = '';}}
+                onClick={handleRemoveImage}
                 className="absolute top-2 right-2 z-30 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
               >✕</button>
             </div>

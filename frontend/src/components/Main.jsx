@@ -170,11 +170,15 @@ export const Main = (props) => {
   }
 
   const OpenReviewModal = () => {
+    setEvaluation(3);
+    setReviewImage(null);
     setIsDirty(false);
     setIsReviewOpen(true)
   }
   const closeReviewModal = () => {
     setError('')
+    setEvaluation(3);
+    setReviewImage(null);
     setIsReviewOpen(false);
     setIsDirty(false);
   }
@@ -543,6 +547,7 @@ export const Main = (props) => {
                           onChange={onChange} 
                           error={error} 
                           restaurant={filteredRestaurants[item].restaurant} 
+                          reviewImage={reviewImage}
                           setReviewImage={setReviewImage} 
                           setIsDirty={setIsDirty}
                           openImageLightbox={openImageLightbox}
