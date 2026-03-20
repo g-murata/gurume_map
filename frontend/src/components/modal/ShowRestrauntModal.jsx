@@ -138,7 +138,7 @@ export const ShowRestrauntModal = (props) => {
               />
               {reviewPreview && (
                 <div className="mt-4 w-full h-64 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 relative flex items-center justify-center">
-                  <img src={reviewPreview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110" />
+                  <img src={reviewPreview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-30 scale-110" />
                   <img src={reviewPreview} alt="Preview" className="relative z-10 max-w-full max-h-full object-contain" />
                 </div>
               )}
@@ -173,7 +173,7 @@ export const ShowRestrauntModal = (props) => {
                   <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="object-contain w-1/2 h-full opacity-50 py-4" alt="Logo" />
                   :
                   <>
-                    <img src={props.restaurant.image_url} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110" />
+                    <img src={props.restaurant.image_url} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-30 scale-110" />
                     <img src={props.restaurant.image_url} alt={props.restaurant.name} className="relative z-10 object-contain w-full h-full" />
                   </>
                 }
@@ -286,7 +286,7 @@ export const ShowRestrauntModal = (props) => {
                             
                             {props.reviews[review_item].image_url && (
                               <div className="mb-3 w-full h-48 rounded-xl overflow-hidden border border-gray-100 bg-gray-100 relative flex items-center justify-center">
-                                <img src={props.reviews[review_item].image_url} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110" />
+                                <img src={props.reviews[review_item].image_url} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-30 scale-110" />
                                 <img src={props.reviews[review_item].image_url} alt="Review" className="relative z-10 max-w-full max-h-full object-contain" />
                               </div>
                             )}
