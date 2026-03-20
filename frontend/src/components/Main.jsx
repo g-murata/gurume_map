@@ -4,7 +4,7 @@
 import { auth } from '../firebase';
 import { useState, useEffect } from "react";
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, postReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
+import { fetchShowReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
 import { fetchAreas } from '../apis/areas';
 import {
@@ -17,10 +17,9 @@ import {
 import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import Loading from './Loading';
-import CreateRestrauntModal from './modal/CreateRestrauntModal';
-import EditRestrauntModal from './modal/EditRestrauntModal';
 import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
-import CreateReviewModal from './modal/CreateReviewModal';
+import ReviewModal from './modal/ReviewModal';
+import RestrauntModal from './modal/RestrauntModal';
 import {TagList} from './TagList';
 import {DateTimeConverter} from './DateTimeConverter'
 import { AreaList } from './AreaList';
@@ -65,51 +64,6 @@ const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY
 export const Main = (props) => {
   const user = auth.currentUser;
   const [error, setError] = useState('');
-
-  const [reviewImage, setReviewImage] = useState(null);
-
-  const handleReviewSubmit = (event) => {
-    event.preventDefault();
-    const { content } = event.target.elements;
-    setIsLoading(true);
-    postReview({
-      restraunt_id: selectedItem,
-      evaluation: evaluation,
-      content: content.value,
-      email: user.email,
-      image: reviewImage
-    })
-      .then((res) => {
-        closeReviewModal();
-        const newReviews = [
-        {
-          id: res.review.id,
-          evaluation: res.review.evaluation,
-          content: res.review.content,
-          created_at: res.review.created_at,
-          updated_at: res.review.updated_at,
-          user_name: res.user_name,
-          restraunt_id: selectedItem,
-          email: user.email,
-          image_url: res.review.image_url
-        },
-        ...reviews
-      ]
-        setReview(newReviews)
-        setIsLoading(false);
-        setReviewImage(null);
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 422) {
-          setError('不備あり！');
-        } else {
-          setError('通信エラーっす！バックエンド起きてる？');
-        }
-        setIsLoading(false);
-      });
-
-    setCheckUsersWithoutReviews(false)
-  }
 
   const handleDeleteSubmit = (index) => {
     if (window.confirm("本当に削除してもよろしいですか？\n※このお店に登録されているレビューも全て削除されます。")) {
@@ -171,14 +125,12 @@ export const Main = (props) => {
 
   const OpenReviewModal = () => {
     setEvaluation(3);
-    setReviewImage(null);
     setIsDirty(false);
     setIsReviewOpen(true)
   }
   const closeReviewModal = () => {
     setError('')
     setEvaluation(3);
-    setReviewImage(null);
     setIsReviewOpen(false);
     setIsDirty(false);
   }
@@ -533,24 +485,28 @@ export const Main = (props) => {
                       {!editModalIsOpen ?
                         <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReview} restaurant={filteredRestaurants[item].restaurant} item={item} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isLoading={isLoading} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} error={error} setError={setError} isDirty={isDirty} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
                         :
-                        <EditRestrauntModal setIsLoading={setIsLoading} selectedItem={selectedItem} onSelect={onSelect} setEditModalIsOpen={setEditModalIsOpen} onCloseEditDialog={() => guardedClose(onCloseEditDialog)} setError={setError} restaurants={restaurants} setRestraunt={setRestraunt} onCloseDialog={() => guardedClose(onCloseDialog)} handleClear={handleClear} error={error} restaurant={filteredRestaurants[item].restaurant} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
+                        <RestrauntModal mode="edit" setIsLoading={setIsLoading} selectedItem={selectedItem} onSelect={onSelect} setEditModalIsOpen={setEditModalIsOpen} onCloseEditDialog={onCloseEditDialog} setError={setError} restaurants={restaurants} setRestraunt={setRestraunt} onCloseDialog={onCloseDialog} handleClear={handleClear} error={error} restaurant={filteredRestaurants[item].restaurant} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
                       }
                     </Modal>
 
                     {reviewModalIsOpen &&
                       <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem} onAfterOpen={afterReviewOpenModal} onRequestClose={() => guardedClose(closeReviewModal)} style={customStyles} contentLabel="Review Modal">
-                        <CreateReviewModal 
-                          ReactStarsRating={ReactStarsRating} 
-                          closeReviewModal={() => guardedClose(closeReviewModal)} 
-                          handleReviewSubmit={handleReviewSubmit}
-                          evaluation={evaluation} 
-                          onChange={onChange} 
-                          error={error} 
-                          restaurant={filteredRestaurants[item].restaurant} 
-                          reviewImage={reviewImage}
-                          setReviewImage={setReviewImage} 
+                        <ReviewModal 
+                          mode="create"
+                          restaurant={filteredRestaurants[item].restaurant}
+                          evaluation={evaluation}
+                          onChange={onChange}
                           setIsDirty={setIsDirty}
                           openImageLightbox={openImageLightbox}
+                          closeReviewModal={closeReviewModal}
+                          error={error}
+                          setError={setError}
+                          setIsLoading={setIsLoading}
+                          user={user}
+                          reviews={reviews}
+                          setReview={setReview}
+                          setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
+                          ReactStarsRating={ReactStarsRating}
                         />
                       </Modal>
                     }
@@ -604,7 +560,7 @@ export const Main = (props) => {
 
         {/* 新規店名登録モーダル */}
         <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={() => guardedClose(closeModal)} style={customStyles} contentLabel="Create Restaurant Modal">
-          <CreateRestrauntModal setIsLoading={setIsLoading} restaurants={restaurants} setRestraunt={setRestraunt} user={user} onSelect={onSelect} closeModal={() => guardedClose(closeModal)} handleClear={handleClear} setError={setError} error={error} coordinateLat={coordinateLat} coordinateLng={coordinateLng} tags={tags} areas={areas} selectedArea={selectedArea} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
+          <RestrauntModal mode="create" setIsLoading={setIsLoading} restaurants={restaurants} setRestraunt={setRestraunt} user={user} onSelect={onSelect} closeModal={closeModal} handleClear={handleClear} setError={setError} error={error} coordinateLat={coordinateLat} coordinateLng={coordinateLng} tags={tags} areas={areas} selectedArea={selectedArea} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
         </Modal>
 
       </LoadScript >

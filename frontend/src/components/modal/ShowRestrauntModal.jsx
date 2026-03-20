@@ -1,158 +1,38 @@
 import { auth } from '../../firebase';
-import { useState, useEffect, useCallback } from "react"
-import { updateReview, deleteReview } from '../../apis/reviews';
+import { useState } from "react"
+import { deleteReview } from '../../apis/reviews';
 
 import {TagList} from '../TagList';
 import {DateTimeConverter} from '../DateTimeConverter'
+import ReviewModal from './ReviewModal';
 
 export const ShowRestrauntModal = (props) => {
   const [selectedReviewItem, setSelectedReviewItem] = useState('')
   const [editReviewModalIsOpen, setEditReviewModalIsOpen] = useState(false);
 
-  const [reviewImage, setReviewImage] = useState(null);
-  const [deleteReviewImage, setDeleteReviewImage] = useState(false);
-  const [reviewPreview, setReviewPreview] = useState('');
-
   const onReviewEditDialog = (item) => {
     setSelectedReviewItem(item)
     props.setEvaluation(props.reviews[item].evaluation)
-    setReviewPreview(props.reviews[item].image_url || '')
-    setDeleteReviewImage(false)
     setEditReviewModalIsOpen(true)
   }
   const closeReviewEditModal = () => {
-    props.setError('')
-    setReviewImage(null)
-    setDeleteReviewImage(false)
-    setReviewPreview('')
     setEditReviewModalIsOpen(false);
     props.setIsDirty(false);
   }
 
-  const handleReviewEditCancel = () => {
-    const content = document.getElementById('content')?.value || '';
-    const originalReview = props.reviews[selectedReviewItem];
-    
-    if (!originalReview) {
-      closeReviewEditModal();
-      return;
-    }
-
-    const isEvaluationDirty = Number(props.evaluation) !== Number(originalReview.evaluation);
-    const isContentDirty = content.trim() !== (originalReview.content || '').trim();
-    const isImageDirty = reviewImage !== null || deleteReviewImage;
-
-    if (isEvaluationDirty || isContentDirty || isImageDirty) {
-      if (window.confirm("書きかけの内容がありますが、キャンセルしてもよろしいですか？")) {
-        closeReviewEditModal();
-      }
-    } else {
-      closeReviewEditModal();
-    }
-  };
-
-  const checkReviewDirty = useCallback(() => {
-    const content = document.getElementById('content')?.value || '';
-    const originalReview = props.reviews[selectedReviewItem];
-    
-    if (!originalReview) return;
-
-    const isEvaluationDirty = props.evaluation !== originalReview.evaluation;
-    const isContentDirty = content !== (originalReview.content || '');
-    const isImageDirty = reviewImage !== null || deleteReviewImage;
-
-    props.setIsDirty(isEvaluationDirty || isContentDirty || isImageDirty);
-  }, [props, selectedReviewItem, reviewImage, deleteReviewImage]);
-
-  useEffect(() => {
-    if (editReviewModalIsOpen) {
-      checkReviewDirty();
-    }
-  }, [props.evaluation, checkReviewDirty, editReviewModalIsOpen]);
-
-  const handleReviewImageChange = (e) => {
-    const file = e.target.files[0];
-    setReviewImage(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setReviewPreview(reader.result);
-        setDeleteReviewImage(false); // 新しい画像が選択されたら削除フラグはオフ
-        props.setIsDirty(true);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setReviewPreview(props.reviews[selectedReviewItem].image_url || '');
-      setTimeout(checkReviewDirty, 0);
-    }
-  };
-
-  const handleRemoveReviewImage = (e) => {
-    e.stopPropagation();
-    if (reviewImage) {
-      // 新しく選択した画像をキャンセルする場合：元の状態に戻す
-      setReviewImage(null);
-      setReviewPreview(props.reviews[selectedReviewItem].image_url || '');
-    } else {
-      // 元からあった画像を削除する場合
-      setDeleteReviewImage(true);
-      setReviewPreview('');
-    }
-    document.getElementById('edit_review_image').value = '';
-  };
-
-  const handleReviewUpdateSubmit = (event) => {
-    event.preventDefault();
-    const { content } = event.target.elements;
-    updateReview({
-      id: props.reviews[selectedReviewItem].id,
-      evaluation: props.evaluation,
-      content: content.value,
-      image: reviewImage,
-      delete_image: deleteReviewImage
-    })
-      .then((res) => {
-        const updateReviews = props.reviews.map((review) => {
-          if (Number(review.id) === Number(props.reviews[selectedReviewItem].id)) {
-            review.evaluation = res.reviews.evaluation;
-            review.content = res.reviews.content;
-            review.updated_at = res.reviews.updated_at;
-            review.image_url = res.reviews.image_url;
-          }
-          return review;
-        })
-        props.setReview(updateReviews);
-
-        props.setError('')
-        props.setIsDirty(false);
-        closeReviewEditModal();
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 422) {
-          props.setError('不備あり！');
-        } else {
-          props.setError('通信エラーっす！バックエンド起きてる？');
-        }
-      });
-  }
-
   const handleReviewDeleteSubmit = (index) => {
-    console.log("Attempting to delete review at index:", index);
     const reviewId = props.reviews[index].id;
-    console.log("Review ID to delete:", reviewId);
     if (window.confirm("本当にレビューを削除してもよろしいですか？")) {
       deleteReview({
         id: reviewId
       })
         .then(() => {
-          console.log("Review deleted successfully");
           const newReviews = [...props.reviews]
           newReviews.splice(index, 1)
           props.setReview(newReviews);
           props.setCheckUsersWithoutReviews(true);
         })
         .catch((error) => {
-          console.error("Error deleting review:", error);
           props.setError('通信エラーっす！バックエンド起きてる？');
         });
     }
@@ -163,71 +43,24 @@ export const ShowRestrauntModal = (props) => {
       {props.error && <p className="mb-4 text-sm font-bold text-red-500 bg-red-50 p-3 rounded-lg">{props.error}</p>}
       
       {editReviewModalIsOpen ?
-        <form onSubmit={handleReviewUpdateSubmit} onChange={checkReviewDirty}>
-          <div className="max-w-lg px-4 mx-auto md:px-8">
-            <div className="mb-6 text-2xl font-bold text-center text-gray-800">
-              レビュー編集
-            </div>
-            
-            <div className="mb-6">
-              <label className="block mb-2 text-sm font-bold text-gray-700">店名</label>
-              {props.restaurant.name}
-            </div>
-            
-            <div className="mb-6">
-              <label className="block mb-2 text-sm font-bold text-gray-700">評価</label>
-              <props.ReactStarsRating id="evaluation" name="evaluation" className="evaluation" onChange={props.onChange} value={props.evaluation} />
-            </div>
-            
-            <div className="mb-6">
-              <label htmlFor="content" className="block mb-2 text-sm font-bold text-gray-700">感想</label>
-              <textarea 
-                id="content" 
-                name="content" 
-                rows="4" 
-                className="w-full p-4 text-sm text-gray-800 transition-all duration-200 border border-gray-200 h-60 bg-gray-50 rounded-xl focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20" 
-                placeholder="感想"
-                defaultValue={props.reviews[selectedReviewItem].content}
-              ></textarea>
-            </div>
-
-            <div className="mb-6">
-              <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="edit_review_image">
-                写真 <span className="text-xs text-gray-400 font-normal ml-1">(変更する場合のみ選択)</span>
-              </label>
-              <input 
-                type="file" 
-                id="edit_review_image" 
-                accept="image/*"
-                onChange={handleReviewImageChange}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 text-sm focus:outline-none focus:border-primary-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700" 
-              />
-              {reviewPreview && (
-                <div 
-                  className="mt-4 w-full h-64 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 relative flex items-center justify-center cursor-pointer group"
-                  onClick={() => props.openImageLightbox(reviewPreview)}
-                >
-                  <img src={reviewPreview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110 group-hover:opacity-50 transition-opacity" />
-                  <img src={reviewPreview} alt="Preview" className="relative z-10 max-w-full max-h-full object-contain" />
-                  <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                    <span className="text-white text-xs font-bold bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm">画像を拡大</span>
-                  </div>
-                  <button 
-                    type="button" 
-                    onClick={handleRemoveReviewImage}
-                    className="absolute top-2 right-2 z-30 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
-                    title="画像を削除"
-                  >✕</button>
-                </div>
-              )}
-            </div>
-            
-            <div className='flex flex-col gap-3 justify-center mt-8'>
-              <button className="w-full px-4 py-3 font-bold text-white transition-colors shadow-sm bg-primary-500 hover:bg-primary-600 rounded-xl">更新する</button>
-              <button type="button" className="w-full px-4 py-3 font-bold text-gray-500 transition-colors bg-gray-100 hover:bg-gray-200 rounded-xl" onClick={() => handleReviewEditCancel()}>キャンセル</button>
-            </div>
-          </div>
-        </form>
+        <ReviewModal 
+          mode="edit"
+          restaurant={props.restaurant}
+          review={props.reviews[selectedReviewItem]}
+          evaluation={props.evaluation}
+          onChange={props.onChange}
+          reviewImage={props.reviewImage}
+          setReviewImage={props.setReviewImage}
+          setIsDirty={props.setIsDirty}
+          openImageLightbox={props.openImageLightbox}
+          closeReviewModal={closeReviewEditModal}
+          error={props.error}
+          setError={props.setError}
+          setIsLoading={props.setIsLoading}
+          reviews={props.reviews}
+          setReview={props.setReview}
+          ReactStarsRating={props.ReactStarsRating}
+        />
         :
         <>
           <div className="flex flex-col md:flex-row gap-8">
