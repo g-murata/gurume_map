@@ -33,9 +33,9 @@ export const Header = (props) => {
         <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none'>
           <Link to="/about" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={menuFunction} >使い方</Link>
         </li>
-        <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none'>
+        {/* <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none'>
           <Link to="/blog" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={menuFunction} >開発者ブログ</Link>
-        </li>
+        </li> */}
 
         {user
           ? <>
