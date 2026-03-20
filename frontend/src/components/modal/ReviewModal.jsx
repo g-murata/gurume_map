@@ -69,6 +69,7 @@ export const ReviewModal = (props) => {
     event.preventDefault();
     const { content } = event.target.elements;
     setLocalIsLoading(true);
+    if (props.setIsLoading) props.setIsLoading(true);
     setLocalError('');
 
     try {
@@ -115,6 +116,7 @@ export const ReviewModal = (props) => {
       }
     } finally {
       setLocalIsLoading(false);
+      if (props.setIsLoading) props.setIsLoading(false);
     }
   };
 

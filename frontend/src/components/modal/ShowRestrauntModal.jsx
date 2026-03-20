@@ -23,6 +23,7 @@ export const ShowRestrauntModal = (props) => {
   const handleReviewDeleteSubmit = (index) => {
     const reviewId = props.reviews[index].id;
     if (window.confirm("本当にレビューを削除してもよろしいですか？")) {
+      if (props.setIsLoading) props.setIsLoading(true);
       deleteReview({
         id: reviewId
       })
@@ -31,9 +32,11 @@ export const ShowRestrauntModal = (props) => {
           newReviews.splice(index, 1)
           props.setReview(newReviews);
           props.setCheckUsersWithoutReviews(true);
+          if (props.setIsLoading) props.setIsLoading(false);
         })
         .catch((error) => {
           props.setError('通信エラーっす！バックエンド起きてる？');
+          if (props.setIsLoading) props.setIsLoading(false);
         });
     }
   }

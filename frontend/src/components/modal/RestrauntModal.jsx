@@ -33,6 +33,7 @@ export const RestrauntModal = (props) => {
   const [isTagListOpen, setIsTagListOpen] = useState(false);
   const [image, setImage] = useState(null);
   const [deleteImage, setDeleteImage] = useState(false);
+  const [localIsLoading, setLocalIsLoading] = useState(false);
   const [preview, setPreview] = useState(isEditMode ? (restaurant.image_url || '') : '');
 
   // 初期化: 編集モードの場合は既存のタグをセット
@@ -121,6 +122,7 @@ export const RestrauntModal = (props) => {
     event.preventDefault();
     const { name, url, description, lat, lng } = event.target.elements;    
     setIsLoading(true);
+    setLocalIsLoading(true);
 
     try {
       let res;
@@ -193,6 +195,7 @@ export const RestrauntModal = (props) => {
       }
     } finally {
       setIsLoading(false);
+      setLocalIsLoading(false);
     }
   };
 
@@ -354,10 +357,10 @@ export const RestrauntModal = (props) => {
 
         <div className='flex flex-col gap-3'>
           <button 
-            disabled={setIsLoading === true}
-            className={`w-full font-bold py-3 px-4 rounded-xl shadow-sm transition-colors duration-200 ${setIsLoading === true ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-500 hover:bg-primary-600 text-white'}`}
+            disabled={localIsLoading}
+            className={`w-full font-bold py-3 px-4 rounded-xl shadow-sm transition-colors duration-200 ${localIsLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-500 hover:bg-primary-600 text-white'}`}
           >
-            {setIsLoading === true ? '送信中...' : (isEditMode ? '更新する' : 'このお店を登録する')}
+            {localIsLoading ? '送信中...' : (isEditMode ? '更新する' : 'このお店を登録する')}
           </button>
           <button 
             type="button" 

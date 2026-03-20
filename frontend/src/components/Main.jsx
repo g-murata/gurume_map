@@ -67,6 +67,7 @@ export const Main = (props) => {
 
   const handleDeleteSubmit = (index) => {
     if (window.confirm("本当に削除してもよろしいですか？\n※このお店に登録されているレビューも全て削除されます。")) {
+      setIsLoading(true);
       deleteRestraunt({
         id: selectedItem
       })
@@ -76,9 +77,11 @@ export const Main = (props) => {
           const newRestaurants = restaurants.slice(0, restaurantsIndex).concat(restaurants.slice(restaurantsIndex + 1));
 
           setRestraunt(newRestaurants);
+          setIsLoading(false);
         })
         .catch((error) => {
           setError('通信エラーっす！バックエンド起きてる？');
+          setIsLoading(false);
         });
     }
   }
@@ -337,7 +340,7 @@ export const Main = (props) => {
   return (
     <>
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-primary-600 font-bold py-2">ユーザ登録完了！</h1>}
-      {isLoading && <Loading />}
+      {(isLoading || isReviewLoading || isCheckUserReviewLoading) && <Loading />}
       
       {/* 画像拡大表示用モーダル */}
       <Modal 
@@ -483,7 +486,7 @@ export const Main = (props) => {
 
                     <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem} onAfterOpen={afterOpenModal} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal">
                       {!editModalIsOpen ?
-                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReview} restaurant={filteredRestaurants[item].restaurant} item={item} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isLoading={isLoading} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} error={error} setError={setError} isDirty={isDirty} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
+                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReview} restaurant={filteredRestaurants[item].restaurant} item={item} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isLoading={isLoading} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} isDirty={isDirty} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
                         :
                         <RestrauntModal mode="edit" setIsLoading={setIsLoading} selectedItem={selectedItem} onSelect={onSelect} setEditModalIsOpen={setEditModalIsOpen} onCloseEditDialog={onCloseEditDialog} setError={setError} restaurants={restaurants} setRestraunt={setRestraunt} onCloseDialog={onCloseDialog} handleClear={handleClear} error={error} restaurant={filteredRestaurants[item].restaurant} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
                       }
