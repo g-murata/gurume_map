@@ -40,6 +40,10 @@ module Api
       def update
         restraunt = Restraunt.find(params[:id])
 
+        if params[:delete_image] == "true"
+          restraunt.image.purge
+        end
+
         if restraunt.update(restraunt_params)
           restraunt.reload
           render json: {

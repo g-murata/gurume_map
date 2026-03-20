@@ -42,6 +42,9 @@ export const updateReview = (params) => {
   if (params.image) {
     formData.append('image', params.image);
   }
+  if (params.delete_image) {
+    formData.append('delete_image', params.delete_image);
+  }
 
   return axios.patch(review(params.id), formData)
     .then(res => {

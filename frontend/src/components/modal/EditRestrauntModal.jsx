@@ -7,6 +7,7 @@ export const EditRestrauntModal = (props) => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [isTagListOpen, setIsTagListOpen] = useState(false); // アコーディオン用ステート
   const [image, setImage] = useState(null);
+  const [deleteImage, setDeleteImage] = useState(false);
   const [preview, setPreview] = useState(props.restaurant.image_url || '');
 
   const checkDirty = () => {
@@ -22,7 +23,7 @@ export const EditRestrauntModal = (props) => {
     const currentTagIds = [...selectedTags].sort();
     const isTagsDirty = JSON.stringify(initialTagIds) !== JSON.stringify(currentTagIds);
     
-    const isImageDirty = image !== null;
+    const isImageDirty = image !== null || deleteImage;
 
     props.setIsDirty(isTextDirty || isTagsDirty || isImageDirty);
   };
@@ -34,10 +35,12 @@ export const EditRestrauntModal = (props) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
+        setDeleteImage(false); // 新しい画像が選択されたら削除フラグはオフ
         props.setIsDirty(true);
       };
       reader.readAsDataURL(file);
     } else {
+      setPreview(props.restaurant.image_url || '');
       setTimeout(checkDirty, 0);
     }
   };
@@ -60,7 +63,7 @@ export const EditRestrauntModal = (props) => {
                         description !== (props.restaurant.description || '');
     const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id).sort();
     const isTagsDirty = JSON.stringify(initialTagIds) !== JSON.stringify([...newTags].sort());
-    const isImageDirty = image !== null;
+    const isImageDirty = image !== null || deleteImage;
     
     props.setIsDirty(isTextDirty || isTagsDirty || isImageDirty);
   };
@@ -77,6 +80,7 @@ export const EditRestrauntModal = (props) => {
         url: url.value,
         description: description.value,
         image: image,
+        delete_image: deleteImage,
       });
   
       await deleteTagsTaggedItem({tagged_item_id: props.restaurant.id});
@@ -246,8 +250,21 @@ export const EditRestrauntModal = (props) => {
               <img src={preview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110 group-hover:opacity-50 transition-opacity" />
               <img src={preview} alt="Preview" className="relative z-10 max-w-full max-h-full object-contain" />
               <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10">
-                <span className="text-white text-3xl">🔍</span>
+                <span className="text-white text-xs font-bold bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm">画像を拡大</span>
               </div>
+              <button 
+                type="button" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteImage(true);
+                  setImage(null);
+                  setPreview('');
+                  document.getElementById('image').value = '';
+                  props.setIsDirty(true);
+                }}
+                className="absolute top-2 right-2 z-30 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
+                title="画像を削除"
+              >✕</button>
             </div>
           )}
         </div>

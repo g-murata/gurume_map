@@ -38,6 +38,10 @@ module Api
       def update
         review = Review.find(params[:id])
 
+        if params[:delete_image] == "true"
+          review.image.purge
+        end
+
         if review.update(review_params)
           review.reload
           render json: {

@@ -10,17 +10,20 @@ export const ShowRestrauntModal = (props) => {
   const [editReviewModalIsOpen, setEditReviewModalIsOpen] = useState(false);
 
   const [reviewImage, setReviewImage] = useState(null);
+  const [deleteReviewImage, setDeleteReviewImage] = useState(false);
   const [reviewPreview, setReviewPreview] = useState('');
 
   const onReviewEditDialog = (item) => {
     setSelectedReviewItem(item)
     props.setEvaluation(props.reviews[item].evaluation)
     setReviewPreview(props.reviews[item].image_url || '')
+    setDeleteReviewImage(false)
     setEditReviewModalIsOpen(true)
   }
   const closeReviewEditModal = () => {
     props.setError('')
     setReviewImage(null)
+    setDeleteReviewImage(false)
     setReviewPreview('')
     setEditReviewModalIsOpen(false);
     props.setIsDirty(false);
@@ -44,10 +47,10 @@ export const ShowRestrauntModal = (props) => {
 
     const isEvaluationDirty = props.evaluation !== originalReview.evaluation;
     const isContentDirty = content !== (originalReview.content || '');
-    const isImageDirty = reviewImage !== null;
+    const isImageDirty = reviewImage !== null || deleteReviewImage;
 
     props.setIsDirty(isEvaluationDirty || isContentDirty || isImageDirty);
-  }, [props, selectedReviewItem, reviewImage]);
+  }, [props, selectedReviewItem, reviewImage, deleteReviewImage]);
 
   useEffect(() => {
     if (editReviewModalIsOpen) {
@@ -62,10 +65,12 @@ export const ShowRestrauntModal = (props) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setReviewPreview(reader.result);
+        setDeleteReviewImage(false); // 新しい画像が選択されたら削除フラグはオフ
         props.setIsDirty(true);
       };
       reader.readAsDataURL(file);
     } else {
+      setReviewPreview(props.reviews[selectedReviewItem].image_url || '');
       setTimeout(checkReviewDirty, 0);
     }
   };
@@ -77,7 +82,8 @@ export const ShowRestrauntModal = (props) => {
       id: props.reviews[selectedReviewItem].id,
       evaluation: props.evaluation,
       content: content.value,
-      image: reviewImage
+      image: reviewImage,
+      delete_image: deleteReviewImage
     })
       .then((res) => {
         const updateReviews = props.reviews.map((review) => {
@@ -180,6 +186,19 @@ export const ShowRestrauntModal = (props) => {
                   <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
                     <span className="text-white text-xs font-bold bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm">画像を拡大</span>
                   </div>
+                  <button 
+                    type="button" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setDeleteReviewImage(true);
+                      setReviewImage(null);
+                      setReviewPreview('');
+                      document.getElementById('edit_review_image').value = '';
+                      props.setIsDirty(true);
+                    }}
+                    className="absolute top-2 right-2 z-30 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
+                    title="画像を削除"
+                  >✕</button>
                 </div>
               )}
             </div>
@@ -280,29 +299,6 @@ export const ShowRestrauntModal = (props) => {
                           </svg>
                           レビュー投稿済みです
                         </div>
-                        <div className="flex gap-3">
-                          {(() => {
-                            const userReviewIndex = props.reviews.findIndex(r => r.email === auth.currentUser.email);
-                            if (userReviewIndex !== -1) {
-                              return (
-                                <>
-                                  <button 
-                                    className="px-4 py-2 text-sm font-bold text-primary-600 bg-white border border-primary-200 hover:bg-primary-50 rounded-xl transition-colors shadow-sm" 
-                                    onClick={() => onReviewEditDialog(userReviewIndex)}
-                                  >
-                                    ✍️ 編集する
-                                  </button>
-                                  <button 
-                                    className="px-4 py-2 text-sm font-bold text-red-600 bg-white border border-red-200 hover:bg-red-50 rounded-xl transition-colors shadow-sm" 
-                                    onClick={() => handleReviewDeleteSubmit(userReviewIndex)}
-                                  >
-                                    🗑️ 削除
-                                  </button>
-                                </>
-                              );
-                            }
-                          })()}
-                        </div>
                       </div>
                     )}
                   </>
@@ -357,13 +353,13 @@ export const ShowRestrauntModal = (props) => {
                                     className="px-3 py-1.5 text-xs font-bold text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors" 
                                     onClick={() => onReviewEditDialog((review_item))}
                                   >
-                                    編集
+                                    ✍️ 編集する
                                   </button>
                                   <button 
                                     className="px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" 
                                     onClick={() => handleReviewDeleteSubmit((review_item))}
                                   >
-                                    削除
+                                    🗑️ 削除
                                   </button>
                                 </div>
                               }

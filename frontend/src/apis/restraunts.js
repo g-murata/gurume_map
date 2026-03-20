@@ -37,6 +37,9 @@ export const updateRestraunt = (params) => {
   if (params.image) {
     formData.append('image', params.image);
   }
+  if (params.delete_image) {
+    formData.append('delete_image', params.delete_image);
+  }
 
   return axios.patch(`${restaurant(params.id)}`, formData)
     .then(res => {
