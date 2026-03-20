@@ -205,7 +205,7 @@ export const EditRestrauntModal = (props) => {
           />
           {preview && (
             <div className="mt-4 w-full h-64 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 relative flex items-center justify-center">
-              <img src={preview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-30 scale-110" />
+              <img src={preview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110" />
               <img src={preview} alt="Preview" className="relative z-10 max-w-full max-h-full object-contain" />
             </div>
           )}
