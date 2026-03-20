@@ -1,5 +1,5 @@
 import { auth } from '../../firebase';
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { updateReview, deleteReview } from '../../apis/reviews';
 
 import {TagList} from '../TagList';
@@ -36,16 +36,37 @@ export const ShowRestrauntModal = (props) => {
     }
   };
 
+  const checkReviewDirty = () => {
+    const content = document.getElementById('content')?.value || '';
+    const originalReview = props.reviews[selectedReviewItem];
+    
+    if (!originalReview) return;
+
+    const isEvaluationDirty = props.evaluation !== originalReview.evaluation;
+    const isContentDirty = content !== (originalReview.content || '');
+    const isImageDirty = reviewImage !== null;
+
+    props.setIsDirty(isEvaluationDirty || isContentDirty || isImageDirty);
+  };
+
+  useEffect(() => {
+    if (editReviewModalIsOpen) {
+      checkReviewDirty();
+    }
+  }, [props.evaluation]);
+
   const handleReviewImageChange = (e) => {
     const file = e.target.files[0];
     setReviewImage(file);
-    props.setIsDirty(true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setReviewPreview(reader.result);
+        props.setIsDirty(true);
       };
       reader.readAsDataURL(file);
+    } else {
+      setTimeout(checkReviewDirty, 0);
     }
   };
 
@@ -110,7 +131,7 @@ export const ShowRestrauntModal = (props) => {
       {props.error && <p className="mb-4 text-sm font-bold text-red-500 bg-red-50 p-3 rounded-lg">{props.error}</p>}
       
       {editReviewModalIsOpen ?
-        <form onSubmit={handleReviewUpdateSubmit} onChange={() => props.setIsDirty(true)}>
+        <form onSubmit={handleReviewUpdateSubmit} onChange={checkReviewDirty}>
           <div className="max-w-lg px-4 mx-auto md:px-8">
             <div className="mb-6 text-2xl font-bold text-center text-gray-800">
               レビュー編集

@@ -9,18 +9,31 @@ export const CreateRestrauntModal = (props) => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
 
+  const checkDirty = () => {
+    const name = document.getElementById('name')?.value || '';
+    const url = document.getElementById('url')?.value || '';
+    const description = document.getElementById('description')?.value || '';
+    
+    const hasText = name !== '' || url !== '' || description !== '';
+    const hasTags = selectedTags.length > 0;
+    const hasImage = image !== null;
+
+    props.setIsDirty(hasText || hasTags || hasImage);
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
-    props.setIsDirty(true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
+        props.setIsDirty(true);
       };
       reader.readAsDataURL(file);
     } else {
       setPreview('');
+      setTimeout(checkDirty, 0);
     }
   };
 
@@ -91,16 +104,24 @@ export const CreateRestrauntModal = (props) => {
 
   const handleTagClick = (tagId) => {
     setIsSelected(!isSelected)
-    props.setIsDirty(true)
+    let newTags;
     if (selectedTags.includes(tagId)) {
-      setSelectedTags(selectedTags.filter((id) => id !== tagId));
+      newTags = selectedTags.filter((id) => id !== tagId);
     } else {
-      setSelectedTags([...selectedTags, tagId]);
+      newTags = [...selectedTags, tagId];
     }
+    setSelectedTags(newTags);
+    
+    const name = document.getElementById('name')?.value || '';
+    const url = document.getElementById('url')?.value || '';
+    const description = document.getElementById('description')?.value || '';
+    const hasText = name !== '' || url !== '' || description !== '';
+    const hasImage = image !== null;
+    props.setIsDirty(hasText || newTags.length > 0 || hasImage);
   };
 
   return (
-    <form onSubmit={handleSubmit} onChange={() => props.setIsDirty(true)} className="bg-white p-6 md:p-8">
+    <form onSubmit={handleSubmit} onChange={checkDirty} className="bg-white p-6 md:p-8">
       <div className="max-w-lg mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="text-2xl font-bold text-gray-800">新規店名登録</div>

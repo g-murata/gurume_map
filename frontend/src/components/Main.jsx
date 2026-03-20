@@ -272,7 +272,6 @@ export const Main = (props) => {
 
   const onChange = (value) => {
     setEvaluation(value)
-    setIsDirty(true)
   };
 
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);

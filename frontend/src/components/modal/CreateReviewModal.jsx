@@ -1,25 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const CreateReviewModal = (props) => {
   const [preview, setPreview] = useState('');
 
+  const checkDirty = () => {
+    const content = document.getElementById('content')?.value || '';
+    const hasContent = content !== '';
+    const hasImage = props.reviewImage !== null;
+    const hasEvaluation = props.evaluation !== 3; // 初期値3以外なら変更ありとみなす
+
+    props.setIsDirty(hasContent || hasImage || hasEvaluation);
+  };
+
+  useEffect(() => {
+    checkDirty();
+  }, [props.evaluation]);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     props.setReviewImage(file);
-    props.setIsDirty(true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
+        props.setIsDirty(true);
       };
       reader.readAsDataURL(file);
     } else {
       setPreview('');
+      setTimeout(checkDirty, 0);
     }
   };
 
   return (
-    <form onSubmit={props.handleReviewSubmit} onChange={() => props.setIsDirty(true)} className="bg-white p-6 md:p-8">
+    <form onSubmit={props.handleReviewSubmit} onChange={checkDirty} className="bg-white p-6 md:p-8">
       <div className="max-w-lg mx-auto">
         
         {/* ヘッダーと閉じるボタン */}

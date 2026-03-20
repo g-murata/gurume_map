@@ -9,27 +9,60 @@ export const EditRestrauntModal = (props) => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(props.restaurant.image_url || '');
 
+  const checkDirty = () => {
+    const name = document.getElementById('name')?.value || '';
+    const url = document.getElementById('url')?.value || '';
+    const description = document.getElementById('description')?.value || '';
+    
+    const isTextDirty = name !== props.restaurant.name || 
+                        url !== (props.restaurant.url || '') || 
+                        description !== (props.restaurant.description || '');
+    
+    const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id).sort();
+    const currentTagIds = [...selectedTags].sort();
+    const isTagsDirty = JSON.stringify(initialTagIds) !== JSON.stringify(currentTagIds);
+    
+    const isImageDirty = image !== null;
+
+    props.setIsDirty(isTextDirty || isTagsDirty || isImageDirty);
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
-    props.setIsDirty(true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
+        props.setIsDirty(true);
       };
       reader.readAsDataURL(file);
+    } else {
+      setTimeout(checkDirty, 0);
     }
   };
 
   const handleTagClick = (tagId) => {
     setIsSelected(!isSelected)
-    props.setIsDirty(true)
+    let newTags;
     if (selectedTags.includes(tagId)) {
-      setSelectedTags(selectedTags.filter((id) => id !== tagId));
+      newTags = selectedTags.filter((id) => id !== tagId);
     } else {
-      setSelectedTags([...selectedTags, tagId]);
+      newTags = [...selectedTags, tagId];
     }
+    setSelectedTags(newTags);
+    
+    const name = document.getElementById('name')?.value || '';
+    const url = document.getElementById('url')?.value || '';
+    const description = document.getElementById('description')?.value || '';
+    const isTextDirty = name !== props.restaurant.name || 
+                        url !== (props.restaurant.url || '') || 
+                        description !== (props.restaurant.description || '');
+    const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id).sort();
+    const isTagsDirty = JSON.stringify(initialTagIds) !== JSON.stringify([...newTags].sort());
+    const isImageDirty = image !== null;
+    
+    props.setIsDirty(isTextDirty || isTagsDirty || isImageDirty);
   };
 
   const handleUpdateSubmit = async (event) => {
@@ -102,14 +135,13 @@ export const EditRestrauntModal = (props) => {
     const initialTagIds = Object.values(props.tags_tagged_items).map(value => value.tag_id);
     setSelectedTags(initialTagIds);
     
-    // すでにタグが設定されている場合は、最初からアコーディオンを開いておく親切設計
     if (initialTagIds.length > 0) {
       setIsTagListOpen(true);
     }
   }, [props.tags_tagged_items])  
 
   return (
-    <form onSubmit={handleUpdateSubmit} onChange={() => props.setIsDirty(true)} className="bg-white p-6 md:p-8">
+    <form onSubmit={handleUpdateSubmit} onChange={checkDirty} className="bg-white p-6 md:p-8">
       <div className="max-w-lg mx-auto">
         
         {/* ヘッダーと閉じるボタン */}
