@@ -43,7 +43,7 @@ export const updateReview = (params) => {
     formData.append('image', params.image);
   }
 
-  return axios.patch(`${review(params.id)}`, formData)
+  return axios.patch(review(params.id), formData)
     .then(res => {
       return res.data
     })
@@ -51,12 +51,7 @@ export const updateReview = (params) => {
 };
 
 export const deleteReview = (params) => {
-
-  return axios.delete(`${review(params.id)}`,
-    {
-      id: params.id
-    }
-  )
+  return axios.delete(review(params.id))
     .then(res => {
       return res.data
     })

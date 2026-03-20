@@ -50,20 +50,6 @@ module Api
         end       
       end
 
-
-      private
-
-      def restraunt_params
-        params.permit(:name, :lat, :lng, :url, :description, :area_id, :image)
-      end
-
-      def restraunt_with_image_url(restraunt)
-        data = restraunt.as_json
-        data["image_url"] = restraunt.image.attached? ? url_for(restraunt.image) : nil
-        data
-      end
-
-
       def destroy
         restraunt = Restraunt.find(params[:id])
 
@@ -75,6 +61,20 @@ module Api
           render json: restraunt.errors, status: :unprocessable_entity
         end       
 
+      end
+
+
+
+      private
+
+      def restraunt_params
+        params.permit(:name, :lat, :lng, :url, :description, :area_id, :image)
+      end
+
+      def restraunt_with_image_url(restraunt)
+        data = restraunt.as_json
+        data["image_url"] = restraunt.image.attached? ? url_for(restraunt.image) : nil
+        data
       end
 
     end

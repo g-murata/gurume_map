@@ -49,11 +49,12 @@ module Api
       end
 
       def destroy
+        puts "Destroying review with ID: #{params[:id]}"
         review = Review.find(params[:id])
 
         if review.destroy
           render json: {
-            reviews: review
+            review: review
           }, status: :ok
         else
           render json: review.errors, status: :unprocessable_entity

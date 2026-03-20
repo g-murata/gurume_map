@@ -71,17 +71,22 @@ export const ShowRestrauntModal = (props) => {
   }
 
   const handleReviewDeleteSubmit = (index) => {
+    console.log("Attempting to delete review at index:", index);
+    const reviewId = props.reviews[index].id;
+    console.log("Review ID to delete:", reviewId);
     if (window.confirm("本当にレビューを削除してもよろしいですか？")) {
       deleteReview({
-        id: props.reviews[index].id
+        id: reviewId
       })
         .then(() => {
+          console.log("Review deleted successfully");
           const newReviews = [...props.reviews]
           newReviews.splice(index, 1)
           props.setReview(newReviews);
           props.setCheckUsersWithoutReviews(true);
         })
         .catch((error) => {
+          console.error("Error deleting review:", error);
           props.setError('通信エラーっす！バックエンド起きてる？');
         });
     }
