@@ -16,7 +16,7 @@ export const Landing = () => {
           GurumeMap
         </h1>
         <p className="mb-10 text-lg font-medium text-gray-100 md:text-xl drop-shadow-md">
-          新橋周辺のお気に入りを見つけよう
+          お気に入りの飲食店を見つけよう
         </p>
         
         {/* ボタンエリア */}

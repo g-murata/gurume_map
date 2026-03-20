@@ -6,7 +6,7 @@ export const About = () => {
         {/* ページタイトル */}
         <div className="mb-12 text-center">
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-800 md:text-4xl">GurumeMapについて</h1>
-          <p className="mt-4 text-gray-500 text-lg">新橋周辺の飲食店レビューをみんなでシェアするアプリ</p>
+          <p className="mt-4 text-gray-500 text-lg">飲食店レビューをみんなでシェアするアプリ</p>
         </div>
 
         {/* セクション1: GurumeMapとは？ */}
