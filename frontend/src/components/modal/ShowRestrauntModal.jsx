@@ -137,8 +137,9 @@ export const ShowRestrauntModal = (props) => {
                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 text-sm focus:outline-none focus:border-primary-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700" 
               />
               {reviewPreview && (
-                <div className="mt-4 w-full h-40 rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
-                  <img src={reviewPreview} alt="Preview" className="w-full h-full object-cover" />
+                <div className="mt-4 w-full h-64 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 relative flex items-center justify-center">
+                  <img src={reviewPreview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110" />
+                  <img src={reviewPreview} alt="Preview" className="relative z-10 max-w-full max-h-full object-contain" />
                 </div>
               )}
             </div>
@@ -167,11 +168,14 @@ export const ShowRestrauntModal = (props) => {
                 </div>
               }
 
-              <div className="mb-6 overflow-hidden shadow-sm rounded-2xl bg-gray-50 flex justify-center">
+              <div className="mb-6 overflow-hidden shadow-sm rounded-2xl bg-gray-100 relative h-48 md:h-64 flex justify-center items-center">
                 {props.restaurant.image_url == null ?
-                  <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="object-cover w-1/2 h-48 md:h-64 opacity-50 py-4" alt="Logo" />
+                  <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="object-contain w-1/2 h-full opacity-50 py-4" alt="Logo" />
                   :
-                  <img src={props.restaurant.image_url} alt={props.restaurant.name} className="object-cover w-full h-48 md:h-64" />
+                  <>
+                    <img src={props.restaurant.image_url} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110" />
+                    <img src={props.restaurant.image_url} alt={props.restaurant.name} className="relative z-10 object-contain w-full h-full" />
+                  </>
                 }
               </div>
 
@@ -281,8 +285,9 @@ export const ShowRestrauntModal = (props) => {
                             </div>
                             
                             {props.reviews[review_item].image_url && (
-                              <div className="mb-3 w-full h-40 rounded-xl overflow-hidden border border-gray-100">
-                                <img src={props.reviews[review_item].image_url} alt="Review" className="w-full h-full object-cover" />
+                              <div className="mb-3 w-full h-48 rounded-xl overflow-hidden border border-gray-100 bg-gray-100 relative flex items-center justify-center">
+                                <img src={props.reviews[review_item].image_url} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110" />
+                                <img src={props.reviews[review_item].image_url} alt="Review" className="relative z-10 max-w-full max-h-full object-contain" />
                               </div>
                             )}
 
