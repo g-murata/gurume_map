@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export const CreateReviewModal = (props) => {
   const [preview, setPreview] = useState('');
 
-  const checkDirty = () => {
+  const checkDirty = useCallback(() => {
     const content = document.getElementById('content')?.value || '';
     const hasContent = content !== '';
     const hasImage = props.reviewImage !== null;
     const hasEvaluation = props.evaluation !== 3; // 初期値3以外なら変更ありとみなす
 
     props.setIsDirty(hasContent || hasImage || hasEvaluation);
-  };
+  }, [props]);
 
   useEffect(() => {
     checkDirty();
-  }, [props.evaluation]);
+  }, [props.evaluation, checkDirty]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

@@ -1,5 +1,5 @@
 import { auth } from '../../firebase';
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { updateReview, deleteReview } from '../../apis/reviews';
 
 import {TagList} from '../TagList';
@@ -36,7 +36,7 @@ export const ShowRestrauntModal = (props) => {
     }
   };
 
-  const checkReviewDirty = () => {
+  const checkReviewDirty = useCallback(() => {
     const content = document.getElementById('content')?.value || '';
     const originalReview = props.reviews[selectedReviewItem];
     
@@ -47,13 +47,13 @@ export const ShowRestrauntModal = (props) => {
     const isImageDirty = reviewImage !== null;
 
     props.setIsDirty(isEvaluationDirty || isContentDirty || isImageDirty);
-  };
+  }, [props, selectedReviewItem, reviewImage]);
 
   useEffect(() => {
     if (editReviewModalIsOpen) {
       checkReviewDirty();
     }
-  }, [props.evaluation]);
+  }, [props.evaluation, checkReviewDirty, editReviewModalIsOpen]);
 
   const handleReviewImageChange = (e) => {
     const file = e.target.files[0];
