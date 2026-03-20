@@ -23,11 +23,23 @@ export const ShowRestrauntModal = (props) => {
     setReviewImage(null)
     setReviewPreview('')
     setEditReviewModalIsOpen(false);
+    props.setIsDirty(false);
   }
+
+  const handleReviewEditCancel = () => {
+    if (props.isDirty) {
+      if (window.confirm("書きかけの内容がありますが、キャンセルしてもよろしいですか？")) {
+        closeReviewEditModal();
+      }
+    } else {
+      closeReviewEditModal();
+    }
+  };
 
   const handleReviewImageChange = (e) => {
     const file = e.target.files[0];
     setReviewImage(file);
+    props.setIsDirty(true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -59,6 +71,7 @@ export const ShowRestrauntModal = (props) => {
         props.setReview(updateReviews);
 
         props.setError('')
+        props.setIsDirty(false);
         closeReviewEditModal();
       })
       .catch((error) => {
@@ -97,7 +110,7 @@ export const ShowRestrauntModal = (props) => {
       {props.error && <p className="mb-4 text-sm font-bold text-red-500 bg-red-50 p-3 rounded-lg">{props.error}</p>}
       
       {editReviewModalIsOpen ?
-        <form onSubmit={handleReviewUpdateSubmit}>
+        <form onSubmit={handleReviewUpdateSubmit} onChange={() => props.setIsDirty(true)}>
           <div className="max-w-lg px-4 mx-auto md:px-8">
             <div className="mb-6 text-2xl font-bold text-center text-gray-800">
               レビュー編集
@@ -146,7 +159,7 @@ export const ShowRestrauntModal = (props) => {
             
             <div className='flex flex-col gap-3 justify-center mt-8'>
               <button className="w-full px-4 py-3 font-bold text-white transition-colors shadow-sm bg-primary-500 hover:bg-primary-600 rounded-xl">更新する</button>
-              <button type="button" className="w-full px-4 py-3 font-bold text-gray-500 transition-colors bg-gray-100 hover:bg-gray-200 rounded-xl" onClick={() => closeReviewEditModal()}>キャンセル</button>
+              <button type="button" className="w-full px-4 py-3 font-bold text-gray-500 transition-colors bg-gray-100 hover:bg-gray-200 rounded-xl" onClick={() => handleReviewEditCancel()}>キャンセル</button>
             </div>
           </div>
         </form>

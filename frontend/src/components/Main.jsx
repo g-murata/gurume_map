@@ -143,8 +143,22 @@ export const Main = (props) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
 
+  const [isDirty, setIsDirty] = useState(false);
+
+  const guardedClose = (closeFunction) => {
+    if (isDirty) {
+      if (window.confirm("書きかけの内容がありますが、閉じてもよろしいですか？")) {
+        setIsDirty(false);
+        closeFunction();
+      }
+    } else {
+      closeFunction();
+    }
+  };
+
   const OpenModal = () => {
     if (auth.currentUser.email !== "guest@guest.co.jp") {
+      setIsDirty(false);
       setIsOpen(true)
     }
   }
@@ -152,14 +166,17 @@ export const Main = (props) => {
     setError('')
     setEvaluation(3)
     setIsOpen(false);
+    setIsDirty(false);
   }
 
   const OpenReviewModal = () => {
+    setIsDirty(false);
     setIsReviewOpen(true)
   }
   const closeReviewModal = () => {
     setError('')
     setIsReviewOpen(false);
+    setIsDirty(false);
   }
 
   useEffect(() => {
@@ -207,6 +224,7 @@ export const Main = (props) => {
   const [getLatestReviewsRestraunt, setGetLatestReviewsRestraunt] = useState("");
 
   const onOpenDialog = (restaurant) => {
+    setIsDirty(false);
     setSelectedItem(restaurant.id)
     setIsReviewLoading(true)
     setIsCheckUserReviewLoading(true)
@@ -241,6 +259,7 @@ export const Main = (props) => {
     setEditModalIsOpen(false);
     setError('')
     setEvaluation(3)
+    setIsDirty(false);
   }
 
   const getLatLng = (event) => {
@@ -253,11 +272,13 @@ export const Main = (props) => {
 
   const onChange = (value) => {
     setEvaluation(value)
+    setIsDirty(true)
   };
 
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
   const onEditDialog = (value) => {
+    setIsDirty(false);
     setEditModalIsOpen(true)
     setEvaluation(value.evaluation)
   }
@@ -265,6 +286,7 @@ export const Main = (props) => {
   const onCloseEditDialog = () => {
     setEditModalIsOpen(false);
     setError('')
+    setIsDirty(false);
   }
   
   const TOKYO_BOUNDS = {
@@ -445,25 +467,26 @@ export const Main = (props) => {
                       </div>
                     </div>
 
-                    <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem} onAfterOpen={afterOpenModal} onRequestClose={onCloseDialog} style={customStyles} contentLabel="Show Restaurant Modal">
+                    <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem} onAfterOpen={afterOpenModal} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal">
                       {!editModalIsOpen ?
-                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={onCloseDialog} OpenReviewModal={OpenReviewModal} setReview={setReview} restaurant={filteredRestaurants[item].restaurant} item={item} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isLoading={isLoading} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} error={error} setError={setError} />
+                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReview} restaurant={filteredRestaurants[item].restaurant} item={item} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isLoading={isLoading} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} error={error} setError={setError} isDirty={isDirty} setIsDirty={setIsDirty} />
                         :
-                        <EditRestrauntModal setIsLoading={setIsLoading} selectedItem={selectedItem} onSelect={onSelect} setEditModalIsOpen={setEditModalIsOpen} onCloseEditDialog={onCloseEditDialog} setError={setError} restaurants={restaurants} setRestraunt={setRestraunt} onCloseDialog={onCloseDialog} handleClear={handleClear} error={error} restaurant={filteredRestaurants[item].restaurant} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} />
+                        <EditRestrauntModal setIsLoading={setIsLoading} selectedItem={selectedItem} onSelect={onSelect} setEditModalIsOpen={setEditModalIsOpen} onCloseEditDialog={() => guardedClose(onCloseEditDialog)} setError={setError} restaurants={restaurants} setRestraunt={setRestraunt} onCloseDialog={() => guardedClose(onCloseDialog)} handleClear={handleClear} error={error} restaurant={filteredRestaurants[item].restaurant} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} setIsDirty={setIsDirty} />
                       }
                     </Modal>
 
                     {reviewModalIsOpen &&
-                      <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem} onAfterOpen={afterReviewOpenModal} onRequestClose={closeReviewModal} style={customStyles} contentLabel="Review Modal">
+                      <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem} onAfterOpen={afterReviewOpenModal} onRequestClose={() => guardedClose(closeReviewModal)} style={customStyles} contentLabel="Review Modal">
                         <CreateReviewModal 
                           ReactStarsRating={ReactStarsRating} 
-                          closeReviewModal={closeReviewModal} 
+                          closeReviewModal={() => guardedClose(closeReviewModal)} 
                           handleReviewSubmit={handleReviewSubmit}
                           evaluation={evaluation} 
                           onChange={onChange} 
                           error={error} 
                           restaurant={filteredRestaurants[item].restaurant} 
                           setReviewImage={setReviewImage} 
+                          setIsDirty={setIsDirty}
                         />
                       </Modal>
                     }
@@ -516,8 +539,8 @@ export const Main = (props) => {
         </div>
 
         {/* 新規店名登録モーダル */}
-        <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={closeModal} style={customStyles} contentLabel="Create Restaurant Modal">
-          <CreateRestrauntModal setIsLoading={setIsLoading} restaurants={restaurants} setRestraunt={setRestraunt} user={user} onSelect={onSelect} closeModal={closeModal} handleClear={handleClear} setError={setError} error={error} coordinateLat={coordinateLat} coordinateLng={coordinateLng} tags={tags} areas={areas} selectedArea={selectedArea} />
+        <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={() => guardedClose(closeModal)} style={customStyles} contentLabel="Create Restaurant Modal">
+          <CreateRestrauntModal setIsLoading={setIsLoading} restaurants={restaurants} setRestraunt={setRestraunt} user={user} onSelect={onSelect} closeModal={() => guardedClose(closeModal)} handleClear={handleClear} setError={setError} error={error} coordinateLat={coordinateLat} coordinateLng={coordinateLng} tags={tags} areas={areas} selectedArea={selectedArea} setIsDirty={setIsDirty} />
         </Modal>
 
       </LoadScript >

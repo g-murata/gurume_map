@@ -6,6 +6,7 @@ export const CreateReviewModal = (props) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     props.setReviewImage(file);
+    props.setIsDirty(true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -18,7 +19,7 @@ export const CreateReviewModal = (props) => {
   };
 
   return (
-    <form onSubmit={props.handleReviewSubmit} className="bg-white p-6 md:p-8">
+    <form onSubmit={props.handleReviewSubmit} onChange={() => props.setIsDirty(true)} className="bg-white p-6 md:p-8">
       <div className="max-w-lg mx-auto">
         
         {/* ヘッダーと閉じるボタン */}
@@ -29,7 +30,7 @@ export const CreateReviewModal = (props) => {
           <button 
             type="button" 
             className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors" 
-            onClick={() => {props.closeReviewModal(); setPreview('');}}
+            onClick={() => props.closeReviewModal()}
           >
             ✕
           </button>

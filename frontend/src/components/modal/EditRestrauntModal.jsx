@@ -12,6 +12,7 @@ export const EditRestrauntModal = (props) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
+    props.setIsDirty(true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -23,6 +24,7 @@ export const EditRestrauntModal = (props) => {
 
   const handleTagClick = (tagId) => {
     setIsSelected(!isSelected)
+    props.setIsDirty(true)
     if (selectedTags.includes(tagId)) {
       setSelectedTags(selectedTags.filter((id) => id !== tagId));
     } else {
@@ -58,6 +60,7 @@ export const EditRestrauntModal = (props) => {
       let tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
   
       props.onSelect(res.restraunts)        
+      props.setIsDirty(false);
       props.setEditModalIsOpen(false);
       props.setError('');
   
@@ -106,7 +109,7 @@ export const EditRestrauntModal = (props) => {
   }, [props.tags_tagged_items])  
 
   return (
-    <form onSubmit={handleUpdateSubmit} className="bg-white p-6 md:p-8">
+    <form onSubmit={handleUpdateSubmit} onChange={() => props.setIsDirty(true)} className="bg-white p-6 md:p-8">
       <div className="max-w-lg mx-auto">
         
         {/* ヘッダーと閉じるボタン */}

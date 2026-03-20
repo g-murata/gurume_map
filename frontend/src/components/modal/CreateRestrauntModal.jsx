@@ -12,6 +12,7 @@ export const CreateRestrauntModal = (props) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
+    props.setIsDirty(true);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -46,6 +47,7 @@ export const CreateRestrauntModal = (props) => {
           }) 
         });
         props.onSelect(res.restraunts)
+        props.setIsDirty(false);
         props.closeModal();
 
         Promise.all(tagPromises)
@@ -89,6 +91,7 @@ export const CreateRestrauntModal = (props) => {
 
   const handleTagClick = (tagId) => {
     setIsSelected(!isSelected)
+    props.setIsDirty(true)
     if (selectedTags.includes(tagId)) {
       setSelectedTags(selectedTags.filter((id) => id !== tagId));
     } else {
@@ -97,7 +100,7 @@ export const CreateRestrauntModal = (props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8">
+    <form onSubmit={handleSubmit} onChange={() => props.setIsDirty(true)} className="bg-white p-6 md:p-8">
       <div className="max-w-lg mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="text-2xl font-bold text-gray-800">新規店名登録</div>
