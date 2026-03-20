@@ -239,9 +239,15 @@ export const EditRestrauntModal = (props) => {
             className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" 
           />
           {preview && (
-            <div className="mt-4 w-full h-64 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 relative flex items-center justify-center">
-              <img src={preview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110" />
+            <div 
+              className="mt-4 w-full h-64 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 relative flex items-center justify-center cursor-pointer group"
+              onClick={() => props.openImageLightbox(preview)}
+            >
+              <img src={preview} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110 group-hover:opacity-50 transition-opacity" />
               <img src={preview} alt="Preview" className="relative z-10 max-w-full max-h-full object-contain" />
+              <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10">
+                <span className="text-white text-3xl">🔍</span>
+              </div>
             </div>
           )}
         </div>

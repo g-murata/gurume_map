@@ -343,10 +343,69 @@ export const Main = (props) => {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   
+  const [enlargedImage, setEnlargedImage] = useState(null);
+  const openImageLightbox = (imageUrl) => {
+    setEnlargedImage(imageUrl);
+  };
+  const closeImageLightbox = () => {
+    setEnlargedImage(null);
+  };
+
+  const lightboxStyles = {
+    overlay: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      backgroundColor: "rgba(0,0,0,0.75)",
+      backdropFilter: "blur(4px)",
+      zIndex: 2000,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    content: {
+      position: "static",
+      inset: "auto",
+      background: "none",
+      border: "none",
+      padding: 0,
+      maxWidth: "90vw",
+      maxHeight: "90vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      overflow: "hidden"
+    }
+  };
+
   return (
     <>
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-primary-600 font-bold py-2">ユーザ登録完了！</h1>}
       {isLoading && <Loading />}
+      
+      {/* 画像拡大表示用モーダル */}
+      <Modal 
+        isOpen={!!enlargedImage} 
+        onRequestClose={closeImageLightbox} 
+        style={lightboxStyles} 
+        contentLabel="Image Lightbox"
+      >
+        <div className="relative group">
+          <img 
+            src={enlargedImage} 
+            alt="Enlarged" 
+            className="max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl"
+            onClick={closeImageLightbox}
+          />
+          <button 
+            onClick={closeImageLightbox}
+            className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors backdrop-blur-sm"
+          >
+            <span className="text-2xl">✕</span>
+          </button>
+        </div>
+      </Modal>
+
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         
         <div className="flex flex-col h-[90vh] md:h-[88vh] bg-gray-50/50">
@@ -468,9 +527,9 @@ export const Main = (props) => {
 
                     <Modal isOpen={filteredRestaurants[item].restaurant.id === selectedItem} onAfterOpen={afterOpenModal} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal">
                       {!editModalIsOpen ?
-                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReview} restaurant={filteredRestaurants[item].restaurant} item={item} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isLoading={isLoading} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} error={error} setError={setError} isDirty={isDirty} setIsDirty={setIsDirty} />
+                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReview} restaurant={filteredRestaurants[item].restaurant} item={item} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isLoading={isLoading} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} error={error} setError={setError} isDirty={isDirty} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
                         :
-                        <EditRestrauntModal setIsLoading={setIsLoading} selectedItem={selectedItem} onSelect={onSelect} setEditModalIsOpen={setEditModalIsOpen} onCloseEditDialog={() => guardedClose(onCloseEditDialog)} setError={setError} restaurants={restaurants} setRestraunt={setRestraunt} onCloseDialog={() => guardedClose(onCloseDialog)} handleClear={handleClear} error={error} restaurant={filteredRestaurants[item].restaurant} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} setIsDirty={setIsDirty} />
+                        <EditRestrauntModal setIsLoading={setIsLoading} selectedItem={selectedItem} onSelect={onSelect} setEditModalIsOpen={setEditModalIsOpen} onCloseEditDialog={() => guardedClose(onCloseEditDialog)} setError={setError} restaurants={restaurants} setRestraunt={setRestraunt} onCloseDialog={() => guardedClose(onCloseDialog)} handleClear={handleClear} error={error} restaurant={filteredRestaurants[item].restaurant} tags_tagged_items={filteredRestaurants[item].tags_tagged_items} tags={tags} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
                       }
                     </Modal>
 
@@ -486,6 +545,7 @@ export const Main = (props) => {
                           restaurant={filteredRestaurants[item].restaurant} 
                           setReviewImage={setReviewImage} 
                           setIsDirty={setIsDirty}
+                          openImageLightbox={openImageLightbox}
                         />
                       </Modal>
                     }
@@ -539,7 +599,7 @@ export const Main = (props) => {
 
         {/* 新規店名登録モーダル */}
         <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={() => guardedClose(closeModal)} style={customStyles} contentLabel="Create Restaurant Modal">
-          <CreateRestrauntModal setIsLoading={setIsLoading} restaurants={restaurants} setRestraunt={setRestraunt} user={user} onSelect={onSelect} closeModal={() => guardedClose(closeModal)} handleClear={handleClear} setError={setError} error={error} coordinateLat={coordinateLat} coordinateLng={coordinateLng} tags={tags} areas={areas} selectedArea={selectedArea} setIsDirty={setIsDirty} />
+          <CreateRestrauntModal setIsLoading={setIsLoading} restaurants={restaurants} setRestraunt={setRestraunt} user={user} onSelect={onSelect} closeModal={() => guardedClose(closeModal)} handleClear={handleClear} setError={setError} error={error} coordinateLat={coordinateLat} coordinateLng={coordinateLng} tags={tags} areas={areas} selectedArea={selectedArea} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
         </Modal>
 
       </LoadScript >
