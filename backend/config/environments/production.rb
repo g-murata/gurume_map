@@ -34,7 +34,9 @@ Rails.application.configure do
   config.active_storage.service = :fly
 
   # Set default host for Active Storage URLs
-  config.action_controller.default_url_options = { host: 'gurumemap.fly.dev' }
+  config.action_controller.default_url_options = { host: 'gurumemap.fly.dev', protocol: 'https' }
+  config.active_storage.draw_routes = true
+  Rails.application.routes.default_url_options = { host: 'gurumemap.fly.dev', protocol: 'https' }
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
