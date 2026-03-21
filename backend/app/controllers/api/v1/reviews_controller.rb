@@ -7,7 +7,13 @@ module Api
         reviews = Review.with_attached_image.includes(:user).order(created_at: :DESC)
 
         render json: {
-          reviews: reviews.map { |r| review_with_image_url(r).merge("user_name" => r.user.name, "email" => r.user.email, "user_image_url" => r.user.image_url) }
+          reviews: reviews.map { |r| review_with_image_url(r).merge(
+            "user_name" => r.user.name, 
+            "email" => r.user.email, 
+            "user_image_url" => r.user.image_url,
+            "reviews_count" => r.user.reviews_count,
+            "restraunts_count" => r.user.restraunts_count
+          ) }
         }, status: :ok
       end
 
@@ -15,7 +21,13 @@ module Api
         reviews = Review.with_attached_image.where(restraunt_id: params[:id]).includes(:user).order(created_at: :DESC)
 
         render json: {
-          review: reviews.map { |r| review_with_image_url(r).merge("user_name" => r.user.name, "email" => r.user.email, "user_image_url" => r.user.image_url) }
+          review: reviews.map { |r| review_with_image_url(r).merge(
+            "user_name" => r.user.name, 
+            "email" => r.user.email, 
+            "user_image_url" => r.user.image_url,
+            "reviews_count" => r.user.reviews_count,
+            "restraunts_count" => r.user.restraunts_count
+          ) }
         }, status: :ok
       end
 
@@ -26,7 +38,13 @@ module Api
         if review.save
           review.reload
           render json: {
-            review: review_with_image_url(review).merge("user_name" => review.user.name, "email" => review.user.email, "user_image_url" => review.user.image_url),
+            review: review_with_image_url(review).merge(
+              "user_name" => review.user.name, 
+              "email" => review.user.email, 
+              "user_image_url" => review.user.image_url,
+              "reviews_count" => review.user.reviews_count,
+              "restraunts_count" => review.user.restraunts_count
+            ),
             user_name: review.user.name
           }, status: :ok
         else
@@ -44,7 +62,13 @@ module Api
         if review.update(review_params)
           review.reload
           render json: {
-            reviews: review_with_image_url(review).merge("user_name" => review.user.name, "email" => review.user.email, "user_image_url" => review.user.image_url)
+            reviews: review_with_image_url(review).merge(
+              "user_name" => review.user.name, 
+              "email" => review.user.email, 
+              "user_image_url" => review.user.image_url,
+              "reviews_count" => review.user.reviews_count,
+              "restraunts_count" => review.user.restraunts_count
+            )
           }, status: :ok
         else
           render json: review.errors, status: :unprocessable_entity

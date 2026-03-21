@@ -15,7 +15,10 @@ module Api
               restaurant: restraunt_with_image_url(restaurant).merge(
                 "user_name" => restaurant.user_name,
                 "user_email" => restaurant.user_email,
-                "user_image_url" => restaurant.user.image_url
+                "user_image_url" => restaurant.user.image_url,
+                "user_id" => restaurant.user_id,
+                "reviews_count" => restaurant.user.reviews_count,
+                "restraunts_count" => restaurant.user.restraunts_count
               ),
               tags_tagged_items: restaurant.tags_tagged_items
             }

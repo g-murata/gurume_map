@@ -49,9 +49,9 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
       id: userData.user_id || userData.id || 0,
       name: name,
       email: email,
-      image_url: userData.user_image_url || userData.image_url,
-      reviews_count: userData.reviews_count,
-      restraunts_count: userData.restraunts_count
+      image_url: userData.user_image_url || null, // レビュー画像(image_url)とは明確に区別
+      reviews_count: userData.reviews_count || 0,
+      restraunts_count: userData.restraunts_count || 0
     } as User);
     setProfileModalIsOpen(true);
   };
