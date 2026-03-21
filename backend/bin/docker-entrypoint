@@ -3,6 +3,7 @@
 # If running the rails server then create or migrate existing database
 if [[ "${*}" == *"/rails server"* ]]; then
   mkdir -p /data/storage
+  rm -f tmp/pids/server.pid
   ./bin/rails db:prepare
 fi
 
