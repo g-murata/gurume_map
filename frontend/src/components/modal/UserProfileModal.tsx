@@ -176,7 +176,6 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
                 )}
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-gray-800">{currentUser.name}</h3>
-                  <p className="text-gray-400 text-sm font-medium mt-1">{currentUser.email}</p>
                 </div>
               </div>
 
