@@ -1,85 +1,84 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+# ==========================================
+# 開発者への注意点
+# ==========================================
+# このアプリケーションの認証は Firebase Authentication を使用しています。
+# Rails 側の User モデルはプロフィール情報の保存（名前、メールアドレス）のみを担当しており、
+# パスワードは保持していません。
+# 
+# ログインを伴うテストを行いたい場合は、以下のいずれかの方法をとってください：
+# 1. フロントエンドの「新規会員登録」からアカウントを作成する
+# 2. 既存のゲストユーザー（guest@guest.co.jp）を使用する
+# ==========================================
 
-user = User.create(name: "ゲスト太郎", email: "guest@guest.co.jp", password: "uso_no_password")
-user1 = User.create(name: "テスト太郎１", email: "testuser@test.co.jp", password: "uso_no_password")
-user2 = User.create(name: "ほげほげ君", email: "hogehoge@hoge.co.jp", password: "uso_no_password")
+# Areaデータの作成
+areas = [
+  { id: 1, name: "新橋" },
+  { id: 2, name: "赤坂見附" },
+  { id: 3, name: "新宿" },
+  { id: 4, name: "王子" }
+]
 
-restraunts = Restraunt.create(
-  name: "テストレストラン",
-  image: "https://2.bp.blogspot.com/-NSxv59ZcJfA/VpjCbp0555I/AAAAAAAA3AM/jVD3WGXyRlU/s800/group_kids.png",
-  lat: "35.66587105141782",
-  lng: "139.7545815170528",
-  user_id: user1.id,
-)
-
-review = Review.create(
-  evaluation: 3.5,
-  content: "うまーーい。",
-  user_id: user1.id,
-  restraunt_id: restraunts.id
-)
-review = Review.create(
-  evaluation: 1,
-  content: "期待外れだね。",
-  user_id: user2.id,
-  restraunt_id: restraunts.id
-)
-
-
-3.times do |n|  
-  blogs = Blog.new(
-    title: "サンプル#{n}",
-    content: "サンプル_#{n}",
-    image: "https://2.bp.blogspot.com/-NSxv59ZcJfA/VpjCbp0555I/AAAAAAAA3AM/jVD3WGXyRlU/s800/group_kids.png"
-  )
-  blogs.save!  
+areas.each do |area_data|
+  Area.find_or_create_by!(id: area_data[:id]) do |a|
+    a.name = area_data[:name]
+  end
 end
 
-tag1 = Tag.create(
-  name: "ラーメン",
-  category: "レストラン"
-)
+# ユーザーデータの作成
+user = User.find_or_create_by!(email: "guest@guest.co.jp") do |u|
+  u.name = "ゲスト太郎"
+end
 
-tag2 = Tag.create(
-  name: "うどん",
-  category: "レストラン"
-)
+user1 = User.find_or_create_by!(email: "testuser@test.co.jp") do |u|
+  u.name = "テスト太郎１"
+end
 
-tag3 = Tag.create(
-  name: "魚介",
-  category: "レストラン"
-)
+user2 = User.find_or_create_by!(email: "hogehoge@hoge.co.jp") do |u|
+  u.name = "ほげほげ君"
+end
 
-tag4 = Tag.create(
-  name: "居酒屋",
-  category: "レストラン"
-)
+# レストランデータの作成
+restaurant = Restraunt.find_or_create_by!(name: "テストレストラン") do |r|
+  r.lat = "35.66587105141782"
+  r.lng = "139.7545815170528"
+  r.user_id = user1.id
+  r.area_id = 1 # 新橋
+end
 
-tag5 = Tag.create(
-  name: "肉",
-  category: "レストラン"
-)
+# レビューデータの作成
+Review.find_or_create_by!(restraunt_id: restaurant.id, user_id: user1.id) do |rv|
+  rv.evaluation = 3.5
+  rv.content = "うまーーい。"
+end
 
-tag6 = Tag.create(
-  name: "パスタ",
-  category: "レストラン"
-)
+Review.find_or_create_by!(restraunt_id: restaurant.id, user_id: user2.id) do |rv|
+  rv.evaluation = 1
+  rv.content = "期待外れだね。"
+end
 
+# ブログデータの作成
+3.times do |n|  
+  Blog.find_or_create_by!(title: "サンプル#{n}") do |b|
+    b.content = "サンプル_#{n}"
+  end
+end
 
-tags_tagged_item1 = TagsTaggedItem.create(
-  tagged_item_type: "Restraunt",
-  tagged_item_id: restraunts.id,
-  tag_id: tag1.id
-)
+# タグデータの作成
+tags = [
+  { name: "ラーメン", category: "レストラン" },
+  { name: "うどん", category: "レストラン" },
+  { name: "魚介", category: "レストラン" },
+  { name: "居酒屋", category: "レストラン" },
+  { name: "肉", category: "レストラン" },
+  { name: "パスタ", category: "レストラン" }
+]
 
-tags_tagged_item2 = TagsTaggedItem.create(
-  tagged_item_type: "Restraunt",
-  tagged_item_id: restraunts.id,
-  tag_id: tag3.id
-)
+created_tags = tags.map do |tag_data|
+  Tag.find_or_create_by!(name: tag_data[:name]) do |t|
+    t.category = tag_data[:category]
+  end
+end
+
+# タグ付け
+TagsTaggedItem.find_or_create_by!(tagged_item_type: "Restraunt", tagged_item_id: restaurant.id, tag_id: created_tags[0].id)
+TagsTaggedItem.find_or_create_by!(tagged_item_type: "Restraunt", tagged_item_id: restaurant.id, tag_id: created_tags[2].id)

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -15,7 +14,7 @@ Rails.application.routes.draw do
         end
       end
       resources :blogs      
-      resources :users  do
+      resources :users, only: [:index, :create, :update] do
         collection do
           get 'get_user'
         end

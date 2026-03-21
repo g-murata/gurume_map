@@ -4,7 +4,7 @@ module Api
       include Rails.application.routes.url_helpers
 
       def index
-        restraunts = Restraunt.with_attached_image.includes(:tags_tagged_items).joins(:user)
+        restraunts = Restraunt.with_attached_image.includes(:tags_tagged_items, :user)
                       .select("restraunts.*, users.name as user_name, users.email as user_email")
                       .order(created_at: :DESC)
                       .order("tags_tagged_items.tag_id")
@@ -14,7 +14,8 @@ module Api
             {
               restaurant: restraunt_with_image_url(restaurant).merge(
                 "user_name" => restaurant.user_name,
-                "user_email" => restaurant.user_email
+                "user_email" => restaurant.user_email,
+                "user_image_url" => restaurant.user.image_url
               ),
               tags_tagged_items: restaurant.tags_tagged_items
             }
@@ -24,17 +25,33 @@ module Api
       end
 
       def create
-        restraunt = Restraunt.new(restraunt_params)
-        restraunt.user_id = User.where(email: params[:email]).pick(:id)
+        Restraunt.transaction do
+          @restraunt = Restraunt.new(restraunt_params.except(:email, :evaluation, :review_content, :review_image))
+          @restraunt.user_id = User.where(email: params[:email]).pick(:id)
+          @restraunt.save!
 
-        if restraunt.save
-          restraunt.reload
-          render json: {
-            restraunts: restraunt_with_image_url(restraunt).merge("user_name" => restraunt.user.name)
-          }, status: :ok
-        else
-          render json: restraunt.errors, status: :unprocessable_entity
-        end       
+          # レビュー情報があれば作成（本文がある、画像がある、または評価がデフォルトの3以外）
+          has_content = params[:review_content].present?
+          has_image = params[:review_image].present?
+          has_changed_evaluation = params[:evaluation].present? && params[:evaluation].to_i != 3
+
+          if has_content || has_image || has_changed_evaluation
+            Review.create!(
+              restraunt_id: @restraunt.id,
+              user_id: @restraunt.user_id,
+              evaluation: params[:evaluation] || 3,
+              content: params[:review_content] || "",
+              image: params[:review_image]
+            )
+          end
+        end
+
+        @restraunt.reload
+        render json: {
+          restraunts: restraunt_with_image_url(@restraunt).merge("user_name" => @restraunt.user.name)
+        }, status: :ok
+      rescue => e
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def update
@@ -72,7 +89,7 @@ module Api
       private
 
       def restraunt_params
-        params.permit(:name, :lat, :lng, :url, :description, :area_id, :image)
+        params.permit(:name, :lat, :lng, :url, :description, :area_id, :image, :email, :evaluation, :review_content, :review_image)
       end
 
       def restraunt_with_image_url(restraunt)

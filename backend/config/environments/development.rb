@@ -54,6 +54,8 @@ Rails.application.configure do
   config.active_record.verbose_query_logs = true
 
   config.action_controller.default_url_options = { host: 'localhost', port: 3001 }
+  config.active_storage.draw_routes = true
+  Rails.application.routes.default_url_options = { host: 'localhost', port: 3001 }
 
 
   # Raises error for missing translations.
