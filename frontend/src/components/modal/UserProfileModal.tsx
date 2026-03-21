@@ -82,6 +82,11 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // 10MB制限 (10 * 1024 * 1024 bytes)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('ファイルサイズが大きすぎます。10MB以内の画像を選択してください。');
+        return;
+      }
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -159,7 +164,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
                     className="relative group cursor-pointer"
                     onClick={() => openImageLightbox(currentUser.image_url!)}
                   >
-                    <img src={currentUser.image_url} alt={currentUser.name} className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg group-hover:opacity-90 transition-opacity" />
+                    <img src={currentUser.image_url} alt={currentUser.name} className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg group-hover:opacity-90 transition-opacity image-render-smooth" />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="bg-black/40 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm shadow-sm">拡大表示</div>
                     </div>
@@ -214,7 +219,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {previewUrl ? (
-                    <img src={previewUrl} alt="Preview" className="w-32 h-32 rounded-full object-cover border-4 border-primary-100 shadow-md group-hover:opacity-75 transition-all" />
+                    <img src={previewUrl} alt="Preview" className="w-32 h-32 rounded-full object-cover border-4 border-primary-100 shadow-md group-hover:opacity-75 transition-all image-render-smooth" />
                   ) : (
                     <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 text-5xl border-4 border-white group-hover:bg-gray-200 transition-all">
                       ?

@@ -54,6 +54,11 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // 10MB制限
+      if (file.size > 10 * 1024 * 1024) {
+        alert('ファイルサイズが大きすぎます。10MB以内の画像を選択してください。');
+        return;
+      }
       setLocalReviewImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {

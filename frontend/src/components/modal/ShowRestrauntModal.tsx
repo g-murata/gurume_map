@@ -156,18 +156,31 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                       id: props.restaurant.user_id, 
                       name: props.restaurant.user_name, 
                       email: props.restaurant.user_email,
-                      image_url: props.restaurant.user_image_url 
+                      user_image_url: props.restaurant.user_image_url 
                     } as any)}
                     className="flex items-center gap-2 px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
                   >
-                    {props.restaurant.user_image_url ? (
-                      <img src={props.restaurant.user_image_url} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm" />
+                    {/* 自分の投稿なら最新の画像を表示、そうでなければ投稿時の画像 */}
+                    {(props.currentUserInfo && (props.currentUserInfo as User).email === props.restaurant.user_email) ? (
+                      (props.currentUserInfo as User).image_url ? (
+                        <img src={(props.currentUserInfo as User).image_url} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm image-render-smooth" />
+                      ) : (
+                        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm text-white border-2 border-white shadow-sm">
+                          {(props.currentUserInfo as User).name.charAt(0)}
+                        </div>
+                      )
                     ) : (
-                      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm text-white border-2 border-white shadow-sm">
-                        {props.restaurant.user_name ? props.restaurant.user_name.charAt(0) : "?"}
-                      </div>
+                      props.restaurant.user_image_url ? (
+                        <img src={props.restaurant.user_image_url} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm image-render-smooth" />
+                      ) : (
+                        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm text-white border-2 border-white shadow-sm">
+                          {props.restaurant.user_name ? props.restaurant.user_name.charAt(0) : "?"}
+                        </div>
+                      )
                     )}
-                    <span className="font-bold">{props.restaurant.user_name}</span>
+                    <span className="font-bold">
+                      {(props.currentUserInfo && (props.currentUserInfo as User).email === props.restaurant.user_email) ? (props.currentUserInfo as User).name : props.restaurant.user_name}
+                    </span>
                   </button>
                 </div>
                 
@@ -242,17 +255,36 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                                 onClick={() => openUserProfile(props.reviews[review_item])}
                                 className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer text-left"
                               >
-                                {props.reviews[review_item].user_image_url ? (
-                                  <img src={props.reviews[review_item].user_image_url} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md" />
+                                {/* 自分のレビューなら最新の情報を表示 */}
+                                {(props.currentUserInfo && (props.currentUserInfo as User).email === props.reviews[review_item].email) ? (
+                                  <>
+                                    {(props.currentUserInfo as User).image_url ? (
+                                      <img src={(props.currentUserInfo as User).image_url} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md image-render-smooth" />
+                                    ) : (
+                                      <div className="flex items-center justify-center w-12 h-12 text-lg font-bold text-white bg-gray-300 rounded-full border-2 border-white shadow-md">
+                                        {(props.currentUserInfo as User).name.charAt(0)}
+                                      </div>
+                                    )}
+                                    <div className="flex flex-col">
+                                      <span className="font-bold text-gray-800 text-base">{(props.currentUserInfo as User).name}</span>
+                                      <span className="star5_rating text-xs" data-rate={props.reviews[review_item].evaluation}></span>
+                                    </div>
+                                  </>
                                 ) : (
-                                  <div className="flex items-center justify-center w-12 h-12 text-lg font-bold text-white bg-gray-300 rounded-full border-2 border-white shadow-md">
-                                    {props.reviews[review_item].user_name ? props.reviews[review_item].user_name.charAt(0) : "名"}
-                                  </div>
+                                  <>
+                                    {props.reviews[review_item].user_image_url ? (
+                                      <img src={props.reviews[review_item].user_image_url} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md image-render-smooth" />
+                                    ) : (
+                                      <div className="flex items-center justify-center w-12 h-12 text-lg font-bold text-white bg-gray-300 rounded-full border-2 border-white shadow-md">
+                                        {props.reviews[review_item].user_name ? props.reviews[review_item].user_name.charAt(0) : "名"}
+                                      </div>
+                                    )}
+                                    <div className="flex flex-col">
+                                      <span className="font-bold text-gray-800 text-base">{props.reviews[review_item].user_name}</span>
+                                      <span className="star5_rating text-xs" data-rate={props.reviews[review_item].evaluation}></span>
+                                    </div>
+                                  </>
                                 )}
-                                <div className="flex flex-col">
-                                  <span className="font-bold text-gray-800 text-base">{props.reviews[review_item].user_name}</span>
-                                  <span className="star5_rating text-xs" data-rate={props.reviews[review_item].evaluation}></span>
-                                </div>
                               </button>
                             </div>
                             

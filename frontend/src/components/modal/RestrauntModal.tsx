@@ -110,6 +110,12 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // 10MB制限
+      if (file.size > 10 * 1024 * 1024) {
+        alert('ファイルサイズが大きすぎます。10MB以内の画像を選択してください。');
+        e.target.value = '';
+        return;
+      }
       setImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -128,6 +134,12 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
   const handleReviewImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // 10MB制限
+      if (file.size > 10 * 1024 * 1024) {
+        alert('ファイルサイズが大きすぎます。10MB以内の画像を選択してください。');
+        e.target.value = '';
+        return;
+      }
       setReviewImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -311,7 +323,7 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} onChange={() => checkDirty()} className="bg-white p-6 md:p-8">
+    <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8">
       <div className="max-w-lg mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="text-2xl font-bold text-gray-800">
