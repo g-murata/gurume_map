@@ -242,7 +242,7 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
       const tagPromises = selectedTags.map((tag) => {
         return postTagsTaggedItem({
           tagged_item_type: "Restraunt",
-          tagged_item_id: res.restraunts.id,
+          tagged_item_id: res.restraunt.id,
           tag_id: tag
         });
       });
@@ -251,12 +251,12 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
       const new_tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
 
       if (isEditMode) {
-        onSelect(res.restraunts);
+        onSelect(res.restraunt);
         const updatedList = restaurants.map((item) => {
           if (Number(item.restaurant.id) === Number(restaurant.id)) {
             return {
               ...item,
-              restaurant: { ...item.restaurant, ...res.restraunts },
+              restaurant: res.restraunt,
               tags_tagged_items: new_tags_tagged_items
             };
           }
@@ -265,10 +265,10 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
         setRestraunt(updatedList);
       } else {
         const newEntry = {
-          restaurant: { ...res.restraunts, user_email: user.email, user_name: res.user_name },
+          restaurant: res.restraunt,
           tags_tagged_items: new_tags_tagged_items,
         };
-        onSelect(res.restraunts);
+        onSelect(newEntry.restaurant);
         setRestraunt([newEntry, ...restaurants]);
       }
 
