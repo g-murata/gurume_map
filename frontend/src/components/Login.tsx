@@ -81,6 +81,11 @@ export const Login: React.FC = () => {
               required
             />
           </div>
+          <div className="flex justify-end -mt-4">
+            <Link to="/forgot-password" title="パスワードを再設定する" className="text-gray-400 hover:text-primary-500 text-xs font-semibold transition-colors">
+              パスワードをお忘れですか？
+            </Link>
+          </div>
           <button className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:-translate-y-0.5 transition-all duration-200 mt-2">
             ログインする
           </button>

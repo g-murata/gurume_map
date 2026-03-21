@@ -1,3 +1,15 @@
+# ==========================================
+# 開発者への注意点
+# ==========================================
+# このアプリケーションの認証は Firebase Authentication を使用しています。
+# Rails 側の User モデルはプロフィール情報の保存（名前、メールアドレス）のみを担当しており、
+# パスワードは保持していません。
+# 
+# ログインを伴うテストを行いたい場合は、以下のいずれかの方法をとってください：
+# 1. フロントエンドの「新規会員登録」からアカウントを作成する
+# 2. 既存のゲストユーザー（guest@guest.co.jp）を使用する
+# ==========================================
+
 # Areaデータの作成
 areas = [
   { id: 1, name: "新橋" },
@@ -15,17 +27,14 @@ end
 # ユーザーデータの作成
 user = User.find_or_create_by!(email: "guest@guest.co.jp") do |u|
   u.name = "ゲスト太郎"
-  u.password = "uso_no_password" # コレでログインしてね★
 end
 
 user1 = User.find_or_create_by!(email: "testuser@test.co.jp") do |u|
   u.name = "テスト太郎１"
-  u.password = "uso_no_password" # コレでログインしてね★
 end
 
 user2 = User.find_or_create_by!(email: "hogehoge@hoge.co.jp") do |u|
   u.name = "ほげほげ君"
-  u.password = "uso_no_password" # コレでログインしてね★
 end
 
 # レストランデータの作成

@@ -48,6 +48,4 @@ end
 
 source 'https://rubygems.org'
  
-gem 'devise'
-
 gem "dockerfile-rails", ">= 1.2", :group => :development

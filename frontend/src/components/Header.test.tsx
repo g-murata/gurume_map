@@ -22,6 +22,7 @@ jest.mock('../firebase', () => ({
 
 describe('Header Component', () => {
   const mockSetUserRegistered = jest.fn();
+  const mockSetUserInfo = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -32,7 +33,7 @@ describe('Header Component', () => {
 
     render(
       <BrowserRouter>
-        <Header userInfo={false} setUserRegistered={mockSetUserRegistered} />
+        <Header userInfo={false} setUserInfo={mockSetUserInfo} setUserRegistered={mockSetUserRegistered} />
       </BrowserRouter>
     );
 
@@ -43,11 +44,11 @@ describe('Header Component', () => {
 
   test('ログイン時にユーザー名と「ログアウト」ボタンが表示されること', () => {
     (useAuthContext as jest.Mock).mockReturnValue({ user: { email: 'test@example.com' } });
-    const userInfo = { id: 1, name: 'テストユーザー', email: 'test@example.com' };
+    const userInfo = { id: 1, name: 'テストユーザー', email: 'test@example.com', reviews_count: 5 };
 
     render(
       <BrowserRouter>
-        <Header userInfo={userInfo} setUserRegistered={mockSetUserRegistered} />
+        <Header userInfo={userInfo} setUserInfo={mockSetUserInfo} setUserRegistered={mockSetUserRegistered} />
       </BrowserRouter>
     );
 
@@ -61,7 +62,7 @@ describe('Header Component', () => {
 
     render(
       <BrowserRouter>
-        <Header userInfo={null} setUserRegistered={mockSetUserRegistered} />
+        <Header userInfo={null} setUserInfo={mockSetUserInfo} setUserRegistered={mockSetUserRegistered} />
       </BrowserRouter>
     );
 
@@ -73,7 +74,7 @@ describe('Header Component', () => {
 
     render(
       <BrowserRouter>
-        <Header userInfo={null} setUserRegistered={mockSetUserRegistered} />
+        <Header userInfo={null} setUserInfo={mockSetUserInfo} setUserRegistered={mockSetUserRegistered} />
       </BrowserRouter>
     );
 
@@ -82,5 +83,26 @@ describe('Header Component', () => {
 
     expect(signOut).toHaveBeenCalled();
     expect(mockSetUserRegistered).toHaveBeenCalledWith(false);
+  });
+
+  test('ニックネームをクリックすると変更モーダルが開くこと', () => {
+    (useAuthContext as jest.Mock).mockReturnValue({ user: { email: 'test@example.com' } });
+    const userInfo = { id: 1, name: 'テストユーザー', email: 'test@example.com', reviews_count: 5 };
+
+    render(
+      <BrowserRouter>
+        <Header userInfo={userInfo} setUserInfo={mockSetUserInfo} setUserRegistered={mockSetUserRegistered} />
+      </BrowserRouter>
+    );
+
+    const nameButton = screen.getByText('テストユーザー');
+    fireEvent.click(nameButton);
+
+    expect(screen.getByText('ユーザープロフィール')).toBeInTheDocument();
+    expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    expect(screen.getByText((content, element) => {
+      return element?.tagName.toLowerCase() === 'p' && content.includes('5') && element.textContent?.includes('件') === true;
+    })).toBeInTheDocument();
+    expect(screen.getByText('ニックネームを変更する')).toBeInTheDocument();
   });
 });

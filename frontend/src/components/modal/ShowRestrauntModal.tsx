@@ -1,14 +1,14 @@
 import React, { useState } from "react"
 import { auth } from '../../firebase';
 import { deleteReview } from '../../apis/reviews';
-import { Restraunt, Review, Tag, TagsTaggedItem } from '../../types/index';
-
-import {TagList} from '../TagList';
-import {DateTimeConverter} from '../DateTimeConverter'
+import { TagList } from '../TagList';
+import { DateTimeConverter } from '../DateTimeConverter'
 import ReviewModal from './ReviewModal';
+import { UserProfileModal } from './UserProfileModal';
+import { User, Restraunt, Review, Tag, TagsTaggedItem } from '../../types/index';
 
 interface ShowRestrauntModalProps {
-  restaurant: Restraunt & { user_email?: string; user_name?: string; image_url?: string; created_at: string };
+  restaurant: Restraunt & { user_email?: string; user_name?: string; user_image_url?: string; image_url?: string; created_at: string };
   reviews: Review[] & any[]; // reviews is an array but accessed by index in some places
   setReview: (reviews: Review[]) => void;
   tags: Tag[];
@@ -36,6 +36,25 @@ interface ShowRestrauntModalProps {
 export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<number | null>(null)
   const [editReviewModalIsOpen, setEditReviewModalIsOpen] = useState(false);
+  
+  const [profileModalUser, setProfileModalUser] = useState<User | null>(null);
+  const [profileModalIsOpen, setProfileModalIsOpen] = useState(false);
+
+  const openUserProfile = (userData: any) => {
+    const name = userData.name || userData.user_name;
+    const email = userData.email;
+    if (!email || !name) return;
+
+    setProfileModalUser({
+      id: userData.user_id || userData.id || 0,
+      name: name,
+      email: email,
+      image_url: userData.user_image_url || userData.image_url,
+      reviews_count: userData.reviews_count,
+      restraunts_count: userData.restraunts_count
+    } as User);
+    setProfileModalIsOpen(true);
+  };
 
   const onReviewEditDialog = (index: number) => {
     setSelectedReviewItem(index)
@@ -126,7 +145,24 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
               <div className="space-y-4">
                 <div className='flex items-center gap-2 text-sm text-gray-600'>
                   <span className="font-semibold">このお店を登録した人:</span>
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">{props.restaurant.user_name}</span>
+                  <button 
+                    onClick={() => openUserProfile({ 
+                      id: props.restaurant.user_id, 
+                      name: props.restaurant.user_name, 
+                      email: props.restaurant.user_email,
+                      image_url: props.restaurant.user_image_url 
+                    } as any)}
+                    className="flex items-center gap-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
+                  >
+                    {props.restaurant.user_image_url ? (
+                      <img src={props.restaurant.user_image_url} alt="" className="w-5 h-5 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-[10px] text-white">
+                        {props.restaurant.user_name ? props.restaurant.user_name.charAt(0) : "?"}
+                      </div>
+                    )}
+                    <span>{props.restaurant.user_name}</span>
+                  </button>
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
@@ -196,12 +232,19 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                         return (
                           <div key={review_item} className="p-5 mb-4 transition-all border border-gray-100 shadow-sm bg-gray-50 rounded-2xl hover:shadow-md">
                             <div className="flex items-start justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-gray-300 rounded-full">
-                                  {props.reviews[review_item].user_name ? props.reviews[review_item].user_name.charAt(0) : "名"}
-                                </div>
+                              <button 
+                                onClick={() => openUserProfile(props.reviews[review_item])}
+                                className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer text-left"
+                              >
+                                {props.reviews[review_item].user_image_url ? (
+                                  <img src={props.reviews[review_item].user_image_url} alt="" className="w-8 h-8 rounded-full object-cover border border-gray-200" />
+                                ) : (
+                                  <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-gray-300 rounded-full">
+                                    {props.reviews[review_item].user_name ? props.reviews[review_item].user_name.charAt(0) : "名"}
+                                  </div>
+                                )}
                                 <span className="font-semibold text-gray-700">{props.reviews[review_item].user_name}</span>
-                              </div>
+                              </button>
                               <span className="star5_rating text-sm" data-rate={props.reviews[review_item].evaluation}></span>
                             </div>
                             
@@ -258,6 +301,16 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
           </div>
         </>
       }
+
+      {profileModalUser && (
+        <UserProfileModal
+          isOpen={profileModalIsOpen}
+          onClose={() => setProfileModalIsOpen(false)}
+          userInfo={profileModalUser}
+          setUserInfo={() => {}} // Read-only, no need to update
+          isReadOnly={profileModalUser.email !== auth.currentUser?.email}
+        />
+      )}
     </div>
   )
 }

@@ -3,6 +3,9 @@ export interface User {
   name: string;
   email: string;
   image?: string;
+  image_url?: string;
+  reviews_count?: number;
+  restraunts_count?: number;
 }
 
 export interface Area {
@@ -39,6 +42,7 @@ export interface Review {
   user?: User;
   user_name?: string;
   email?: string;
+  user_image_url?: string;
   created_at: string;
   updated_at: string;
 }

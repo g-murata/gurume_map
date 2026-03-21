@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { get_user, createUser } from '../urls/index';
+import { get_user, createUser, updateUser } from '../urls/index';
 import { User } from '../types/index';
 
 export const fetchShowUser = (email: string, name?: string | null): Promise<{ user: User }> => {
@@ -29,4 +29,20 @@ export const postCreateUser = (params: Pick<User, 'name' | 'email'> & { password
       return res.data
     })
     .catch((e) => { throw e; })
+};
+
+export const patchUpdateUser = (userId: number, name: string, image?: File | null): Promise<{ user: User }> => {
+  const formData = new FormData();
+  formData.append('name', name);
+  if (image) {
+    formData.append('image', image);
+  }
+
+  return axios.patch(updateUser(userId), formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+    .then(res => res.data)
+    .catch((e) => { throw e; });
 };

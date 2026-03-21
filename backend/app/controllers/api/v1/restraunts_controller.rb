@@ -4,7 +4,7 @@ module Api
       include Rails.application.routes.url_helpers
 
       def index
-        restraunts = Restraunt.with_attached_image.includes(:tags_tagged_items).joins(:user)
+        restraunts = Restraunt.with_attached_image.includes(:tags_tagged_items, :user)
                       .select("restraunts.*, users.name as user_name, users.email as user_email")
                       .order(created_at: :DESC)
                       .order("tags_tagged_items.tag_id")
@@ -14,7 +14,8 @@ module Api
             {
               restaurant: restraunt_with_image_url(restaurant).merge(
                 "user_name" => restaurant.user_name,
-                "user_email" => restaurant.user_email
+                "user_email" => restaurant.user_email,
+                "user_image_url" => restaurant.user.image_url
               ),
               tags_tagged_items: restaurant.tags_tagged_items
             }

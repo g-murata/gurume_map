@@ -10,6 +10,7 @@ export const blogsIndex = `${DEFAULT_API_LOCALHOST}/blogs`;
 export const blogShow = (blogsId: number | string) => `${DEFAULT_API_LOCALHOST}/blogs/${blogsId}`;
 export const get_user = `${DEFAULT_API_LOCALHOST}/users/get_user`;
 export const createUser = `${DEFAULT_API_LOCALHOST}/users`;
+export const updateUser = (userId: number | string) => `${DEFAULT_API_LOCALHOST}/users/${userId}`;
 export const tags = `${DEFAULT_API_LOCALHOST}/tags`;
 export const areas = `${DEFAULT_API_LOCALHOST}/areas`;
 export const tags_tagged_items = `${DEFAULT_API_LOCALHOST}/tags_tagged_items`;

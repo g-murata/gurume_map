@@ -4,15 +4,23 @@ import { Link } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { useAuthContext } from '../context/AuthContext';
+import { UserProfileModal } from './modal/UserProfileModal';
 import { User } from '../types/index';
 
 interface HeaderProps {
   userInfo: User | false | null;
+  setUserInfo: (user: User) => void;
   setUserRegistered: (registered: boolean) => void;
 }
 
 export const Header: React.FC<HeaderProps> = (props) => {
   const { user } = useAuthContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleUpdateName = () => {
+    if (!props.userInfo) return;
+    setIsModalOpen(true);
+  };
 
   const handleLogout = () => {
     signOut(auth);
@@ -46,9 +54,20 @@ export const Header: React.FC<HeaderProps> = (props) => {
         {user
           ? <>
             <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none md:ml-4'>
-              <span className="block px-3 py-1 text-sm font-semibold text-primary-600 bg-primary-50 rounded-full">
-                {props.userInfo ? props.userInfo.name : "名無しさん"}
-              </span>
+              <button 
+                onClick={handleUpdateName}
+                title={props.userInfo && props.userInfo.email !== 'guest@guest.co.jp' ? "クリックしてプロフィールを変更" : ""}
+                className="flex items-center gap-2 px-3 py-1 text-sm font-semibold text-primary-600 bg-primary-50 rounded-full hover:bg-primary-100 transition-colors"
+              >
+                {props.userInfo && (props.userInfo as User).image_url ? (
+                  <img src={(props.userInfo as User).image_url} alt="" className="w-8 h-8 rounded-full object-cover border-2 border-primary-200 shadow-sm" />
+                ) : (
+                  <div className="w-8 h-8 bg-primary-200 rounded-full flex items-center justify-center text-xs text-white border-2 border-white shadow-sm">
+                    {props.userInfo ? (props.userInfo as User).name.charAt(0) : "?"}
+                  </div>
+                )}
+                <span>{props.userInfo ? props.userInfo.name : "名無しさん"}</span>
+              </button>
             </li>
             <li className='p-4 list-none md:p-2 md:border-none'>
               <Link to="/landing" className="block text-base font-semibold text-gray-500 transition-colors hover:text-red-500" onClick={handleLogout} >ログアウト</Link>
@@ -106,6 +125,15 @@ export const Header: React.FC<HeaderProps> = (props) => {
           </header>
         </div>
       </div>
+
+      {props.userInfo && (
+        <UserProfileModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          userInfo={props.userInfo}
+          setUserInfo={props.setUserInfo}
+        />
+      )}
     </>
   )
 }

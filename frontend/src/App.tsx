@@ -6,6 +6,7 @@ import { About } from './components/About';
 import { Blog } from './components/Blog';
 import { SignUp } from './components/SignUp';
 import { Login } from './components/Login';
+import { ForgotPassword } from './components/ForgotPassword';
 import { Landing } from "./components/Landing";
 import { Post } from './components/blogs/Post';
 import { AuthProvider } from './context/AuthContext';
@@ -40,6 +41,7 @@ function App() {
         <AuthProvider>
           <Header
             userInfo={userInfo}
+            setUserInfo={setUserInfo}
             setUserRegistered={setUserRegistered}
           />
 
@@ -50,6 +52,7 @@ function App() {
             <Route path="/blog/:id" element={<Post />} />
             <Route path="/signup" element={<SignUp setUserInfo={setUserInfo} setUserRegistered={setUserRegistered} />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/landing" element={<Landing />} />
           </Routes>
 

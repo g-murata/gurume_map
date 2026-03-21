@@ -11,6 +11,8 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
     assert_equal @user.id, json["user"]["id"]
     assert_equal @user.email, json["user"]["email"]
+    assert_not_nil json["user"]["reviews_count"]
+    assert_not_nil json["user"]["restraunts_count"]
   end
 
   test "get_user: ユーザーが存在しない場合、新しく作成されること" do
