@@ -60,9 +60,9 @@ export const Header: React.FC<HeaderProps> = (props) => {
                 className="flex items-center gap-2 px-3 py-1 text-sm font-semibold text-primary-600 bg-primary-50 rounded-full hover:bg-primary-100 transition-colors"
               >
                 {props.userInfo && (props.userInfo as User).image_url ? (
-                  <img src={(props.userInfo as User).image_url} alt="" className="w-8 h-8 rounded-full object-cover border-2 border-primary-200 shadow-sm" />
+                  <img src={(props.userInfo as User).image_url} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm" />
                 ) : (
-                  <div className="w-8 h-8 bg-primary-200 rounded-full flex items-center justify-center text-xs text-white border-2 border-white shadow-sm">
+                  <div className="w-10 h-10 bg-primary-200 rounded-full flex items-center justify-center text-sm text-white border-2 border-white shadow-sm">
                     {props.userInfo ? (props.userInfo as User).name.charAt(0) : "?"}
                   </div>
                 )}

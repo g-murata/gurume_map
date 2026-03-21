@@ -135,9 +135,9 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
               {/* User Info Display */}
               <div className="flex flex-col items-center gap-4 mb-8">
                 {userInfo.image_url ? (
-                  <img src={userInfo.image_url} alt={userInfo.name} className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg" />
+                  <img src={userInfo.image_url} alt={userInfo.name} className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg" />
                 ) : (
-                  <div className="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 text-4xl font-bold shadow-inner border-4 border-white">
+                  <div className="w-32 h-32 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 text-5xl font-bold shadow-inner border-4 border-white">
                     {userInfo.name.charAt(0)}
                   </div>
                 )}
@@ -186,14 +186,14 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {previewUrl ? (
-                    <img src={previewUrl} alt="Preview" className="w-24 h-24 rounded-full object-cover border-4 border-primary-100 shadow-md group-hover:opacity-75 transition-all" />
+                    <img src={previewUrl} alt="Preview" className="w-32 h-32 rounded-full object-cover border-4 border-primary-100 shadow-md group-hover:opacity-75 transition-all" />
                   ) : (
-                    <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 text-4xl border-4 border-white group-hover:bg-gray-200 transition-all">
+                    <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 text-5xl border-4 border-white group-hover:bg-gray-200 transition-all">
                       ?
                     </div>
                   )}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg className="w-8 h-8 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <svg className="w-10 h-10 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                   </div>
                 </div>
                 <input 

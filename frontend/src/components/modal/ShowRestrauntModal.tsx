@@ -152,16 +152,16 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                       email: props.restaurant.user_email,
                       image_url: props.restaurant.user_image_url 
                     } as any)}
-                    className="flex items-center gap-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
+                    className="flex items-center gap-2 px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
                   >
                     {props.restaurant.user_image_url ? (
-                      <img src={props.restaurant.user_image_url} alt="" className="w-5 h-5 rounded-full object-cover" />
+                      <img src={props.restaurant.user_image_url} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm" />
                     ) : (
-                      <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-[10px] text-white">
+                      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm text-white border-2 border-white shadow-sm">
                         {props.restaurant.user_name ? props.restaurant.user_name.charAt(0) : "?"}
                       </div>
                     )}
-                    <span>{props.restaurant.user_name}</span>
+                    <span className="font-bold">{props.restaurant.user_name}</span>
                   </button>
                 </div>
                 
@@ -231,21 +231,23 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                         const review_item = Number(review_item_str);
                         return (
                           <div key={review_item} className="p-5 mb-4 transition-all border border-gray-100 shadow-sm bg-gray-50 rounded-2xl hover:shadow-md">
-                            <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-start justify-between mb-4">
                               <button 
                                 onClick={() => openUserProfile(props.reviews[review_item])}
-                                className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer text-left"
+                                className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer text-left"
                               >
                                 {props.reviews[review_item].user_image_url ? (
-                                  <img src={props.reviews[review_item].user_image_url} alt="" className="w-8 h-8 rounded-full object-cover border border-gray-200" />
+                                  <img src={props.reviews[review_item].user_image_url} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md" />
                                 ) : (
-                                  <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-gray-300 rounded-full">
+                                  <div className="flex items-center justify-center w-12 h-12 text-lg font-bold text-white bg-gray-300 rounded-full border-2 border-white shadow-md">
                                     {props.reviews[review_item].user_name ? props.reviews[review_item].user_name.charAt(0) : "名"}
                                   </div>
                                 )}
-                                <span className="font-semibold text-gray-700">{props.reviews[review_item].user_name}</span>
+                                <div className="flex flex-col">
+                                  <span className="font-bold text-gray-800 text-base">{props.reviews[review_item].user_name}</span>
+                                  <span className="star5_rating text-xs" data-rate={props.reviews[review_item].evaluation}></span>
+                                </div>
                               </button>
-                              <span className="star5_rating text-sm" data-rate={props.reviews[review_item].evaluation}></span>
                             </div>
                             
                             {props.reviews[review_item].image_url && (
