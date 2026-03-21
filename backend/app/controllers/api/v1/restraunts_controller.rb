@@ -43,7 +43,7 @@ module Api
 
         @restraunt.reload
         render json: {
-          restraunt: serialized_restraunt(@restraunt)
+          restraunts: serialized_restraunt(@restraunt)
         }, status: :ok
       rescue => e
         render json: { error: e.message }, status: :unprocessable_entity
@@ -59,7 +59,7 @@ module Api
         if restraunt.update(restraunt_params)
           restraunt.reload
           render json: {
-            restraunt: serialized_restraunt(restraunt)
+            restraunts: serialized_restraunt(restraunt)
           }, status: :ok
         else
           render json: restraunt.errors, status: :unprocessable_entity
@@ -86,7 +86,7 @@ module Api
 
       def serialized_restraunt(restraunt)
         data = restraunt.as_json
-        data["image_url"] = restraunt.image.attached? ? rails_blob_url(restraunt.image, only_path: false) : nil
+        data["image_url"] = restraunt.image.attached? ? url_for(restraunt.image) : nil
         
         # userが存在する場合のみマージ（destroyなどでnilになる可能性を考慮）
         if restraunt.user

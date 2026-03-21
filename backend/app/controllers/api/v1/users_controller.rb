@@ -15,10 +15,11 @@ module Api
         user = User.new(params.permit(:name, :email))
 
         if user.save
-          render json: { user: user.as_json(methods: [:reviews_count, :restraunts_count, :image_url]) }, status: :ok
+          render json: user
         else
-          render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+          render json: user.errors
         end       
+
       end
 
       def update

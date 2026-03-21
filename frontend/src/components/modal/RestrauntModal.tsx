@@ -251,12 +251,12 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
       const new_tags_tagged_items = tagResponses.map(response => response.tags_tagged_item);
 
       if (isEditMode) {
-        onSelect(res.restraunt);
+        onSelect(res.restraunts);
         const updatedList = restaurants.map((item) => {
           if (Number(item.restaurant.id) === Number(restaurant.id)) {
             return {
               ...item,
-              restaurant: res.restraunt,
+              restaurant: res.restraunts,
               tags_tagged_items: new_tags_tagged_items
             };
           }
@@ -265,7 +265,7 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
         setRestraunt(updatedList);
       } else {
         const newEntry = {
-          restaurant: res.restraunt,
+          restaurant: res.restraunts,
           tags_tagged_items: new_tags_tagged_items,
         };
         onSelect(newEntry.restaurant);
