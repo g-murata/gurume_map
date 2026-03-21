@@ -11,6 +11,7 @@ interface HeaderProps {
   userInfo: User | false | null;
   setUserInfo: (user: User) => void;
   setUserRegistered: (registered: boolean) => void;
+  openImageLightbox: (url: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = (props) => {
@@ -132,6 +133,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
           onClose={() => setIsModalOpen(false)}
           userInfo={props.userInfo}
           setUserInfo={props.setUserInfo}
+          openImageLightbox={props.openImageLightbox}
         />
       )}
     </>

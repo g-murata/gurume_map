@@ -46,6 +46,7 @@ jest.mock('react-modal', () => {
 });
 
 const mockUserInfo = { id: 1, name: 'テストユーザー', email: 'test@example.com' };
+const mockOpenImageLightbox = jest.fn();
 
 describe('Unsaved Changes Warning', () => {
   const mockRestaurants = { restraunts: [] };
@@ -65,7 +66,7 @@ describe('Unsaved Changes Warning', () => {
   test('入力がある場合にモーダルを閉じようとすると確認ダイアログが表示されること', async () => {
     (window.confirm as jest.Mock).mockReturnValue(false); // 「キャンセル」を選択
     
-    render(<Main userInfo={mockUserInfo} />);
+    render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
     
     // ローディングが消えるのを待つ
     await waitFor(() => expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument());
@@ -90,7 +91,7 @@ describe('Unsaved Changes Warning', () => {
   test('確認ダイアログでOKを押すとモーダルが閉じること', async () => {
     (window.confirm as jest.Mock).mockReturnValue(true); // 「OK」を選択
     
-    render(<Main userInfo={mockUserInfo} />);
+    render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
     
     await waitFor(() => expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument());
     fireEvent.click(screen.getByTestId('google-map'));
@@ -105,7 +106,7 @@ describe('Unsaved Changes Warning', () => {
   });
 
   test('何も入力していない場合は確認ダイアログが出ずに閉じること', async () => {
-    render(<Main userInfo={mockUserInfo} />);
+    render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
     
     await waitFor(() => expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument());
     fireEvent.click(screen.getByTestId('google-map'));

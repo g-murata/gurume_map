@@ -317,6 +317,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
           userInfo={profileModalUser}
           setUserInfo={() => {}} // Read-only, no need to update
           isReadOnly={profileModalUser.email !== auth.currentUser?.email}
+          openImageLightbox={props.openImageLightbox}
         />
       )}
     </div>

@@ -34,9 +34,10 @@ interface UserProfileModalProps {
   userInfo: User;
   setUserInfo: (user: User) => void;
   isReadOnly?: boolean;
+  openImageLightbox: (url: string) => void;
 }
 
-export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onClose, userInfo, setUserInfo, isReadOnly = false }) => {
+export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onClose, userInfo, setUserInfo, isReadOnly = false, openImageLightbox }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [currentUser, setCurrentUser] = useState<User>(userInfo);
   const [newName, setNewName] = useState(userInfo.name);
@@ -154,7 +155,15 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
               {/* User Info Display */}
               <div className="flex flex-col items-center gap-4 mb-8">
                 {currentUser.image_url ? (
-                  <img src={currentUser.image_url} alt={currentUser.name} className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg" />
+                  <div 
+                    className="relative group cursor-pointer"
+                    onClick={() => openImageLightbox(currentUser.image_url!)}
+                  >
+                    <img src={currentUser.image_url} alt={currentUser.name} className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg group-hover:opacity-90 transition-opacity" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="bg-black/40 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm shadow-sm">拡大表示</div>
+                    </div>
+                  </div>
                 ) : (
                   <div className="w-32 h-32 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 text-5xl font-bold shadow-inner border-4 border-white">
                     {currentUser.name.charAt(0)}

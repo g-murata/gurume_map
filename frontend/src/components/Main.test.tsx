@@ -49,6 +49,7 @@ const mockRestaurants = {
 const mockTags = { tags: [{ id: 1, name: '和食' }, { id: 2, name: '洋食' }] };
 const mockAreas = { areas: [{ id: 1, name: '新橋' }, { id: 2, name: '赤坂見附' }] };
 const mockUserInfo = { id: 1, name: 'テストユーザー', email: 'test@example.com' };
+const mockOpenImageLightbox = jest.fn();
 
 describe('Main Component', () => {
   beforeEach(() => {
@@ -59,7 +60,7 @@ describe('Main Component', () => {
   });
 
   test('初期表示でレストランのリストが表示されること', async () => {
-    render(<Main userInfo={mockUserInfo} />);
+    render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
 
     // ローディングが表示されることを確認
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
@@ -72,7 +73,7 @@ describe('Main Component', () => {
   });
 
   test('店名でフィルタリングができること', async () => {
-    render(<Main userInfo={mockUserInfo} />);
+    render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
 
     await waitFor(() => expect(screen.getByText('テストレストランA')).toBeInTheDocument());
 
@@ -100,7 +101,7 @@ describe('Main Component', () => {
     };
     (fetchRestaurants as jest.Mock).mockResolvedValue(extendedRestaurants);
 
-    render(<Main userInfo={mockUserInfo} />);
+    render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
 
     await waitFor(() => expect(screen.getByText('テストレストランA')).toBeInTheDocument());
 
