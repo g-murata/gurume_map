@@ -25,7 +25,7 @@ interface ShowRestrauntModalProps {
   checkUsersWithoutReviews: boolean;
   setCheckUsersWithoutReviews: (val: boolean) => void;
   OpenReviewModal: (id: number) => void;
-  openImageLightbox: (url: string) => void;
+  openImageLightbox: (url: string, isProfile?: boolean) => void;
   setIsDirty: (dirty: boolean) => void;
   evaluation: number;
   setEvaluation: (val: number) => void;
@@ -140,7 +140,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                     onClick={() => props.openImageLightbox(props.restaurant.image_url!)}
                   >
                     <img src={props.restaurant.image_url} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110 group-hover:opacity-50 transition-opacity" />
-                    <img src={props.restaurant.image_url} alt={props.restaurant.name} className="relative z-10 object-contain w-full h-full" />
+                    <img src={props.restaurant.image_url} alt={props.restaurant.name} className="relative z-10 object-contain w-full h-full image-render-smooth" />
                     <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
                       <span className="text-white text-sm font-bold bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm">画像を拡大</span>
                     </div>
@@ -294,7 +294,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                                 onClick={() => props.openImageLightbox(props.reviews[review_item].image_url)}
                               >
                                 <img src={props.reviews[review_item].image_url} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-110 group-hover:opacity-50 transition-opacity" />
-                                <img src={props.reviews[review_item].image_url} alt="Review" className="relative z-10 max-w-full max-h-full object-contain" />
+                                <img src={props.reviews[review_item].image_url} alt="Review" className="relative z-10 max-w-full max-h-full object-contain image-render-smooth" />
                                 <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
                                   <span className="text-white text-xs font-bold bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm">画像を拡大</span>
                                 </div>

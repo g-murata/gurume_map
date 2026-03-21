@@ -11,7 +11,7 @@ interface HeaderProps {
   userInfo: User | false | null;
   setUserInfo: (user: User) => void;
   setUserRegistered: (registered: boolean) => void;
-  openImageLightbox: (url: string) => void;
+  openImageLightbox: (url: string, isProfile?: boolean) => void;
 }
 
 export const Header: React.FC<HeaderProps> = (props) => {

@@ -36,9 +36,9 @@ function App() {
     return unsubscribe;
   }, []);
 
-  const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
-  const openImageLightbox = (imageUrl: string) => {
-    setEnlargedImage(imageUrl);
+  const [enlargedImageData, setEnlargedImage] = useState<{ url: string, isProfile: boolean } | null>(null);
+  const openImageLightbox = (imageUrl: string, isProfile: boolean = false) => {
+    setEnlargedImage({ url: imageUrl, isProfile });
   };
   const closeImageLightbox = () => {
     setEnlargedImage(null);
@@ -49,8 +49,8 @@ function App() {
       position: "fixed",
       top: 0,
       left: 0,
-      backgroundColor: "rgba(0,0,0,0.75)",
-      backdropFilter: "blur(4px)",
+      backgroundColor: "rgba(0,0,0,0.85)",
+      backdropFilter: "blur(8px)",
       zIndex: 2000,
       display: "flex",
       alignItems: "center",
@@ -62,8 +62,8 @@ function App() {
       background: "none",
       border: "none",
       padding: 0,
-      maxWidth: "90vw",
-      maxHeight: "90vh",
+      maxWidth: "95vw",
+      maxHeight: "95vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -83,26 +83,32 @@ function App() {
           />
 
           <Modal 
-            isOpen={!!enlargedImage} 
+            isOpen={!!enlargedImageData} 
             onRequestClose={closeImageLightbox} 
             style={lightboxStyles} 
             contentLabel="Image Lightbox"
           >
-            <div className="relative group">
-              {enlargedImage && (
-                <img 
-                  src={enlargedImage} 
-                  alt="Enlarged" 
-                  className="max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl"
-                  onClick={closeImageLightbox}
-                />
+            <div className="relative flex items-center justify-center w-full h-full">
+              {enlargedImageData && (
+                <div className="relative animate-in zoom-in duration-300">
+                  <img 
+                    src={enlargedImageData.url} 
+                    alt="Enlarged" 
+                    className={`${
+                      enlargedImageData.isProfile 
+                        ? "w-64 h-64 md:w-[400px] md:h-[400px] rounded-full border-[6px] border-white shadow-2xl object-cover" 
+                        : "max-w-[95vw] max-h-[90vh] object-contain rounded-2xl shadow-2xl"
+                    } image-render-smooth`}
+                    onClick={closeImageLightbox}
+                  />
+                  <button 
+                    onClick={closeImageLightbox}
+                    className="absolute -top-12 right-0 md:-right-12 md:top-0 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all backdrop-blur-md border border-white/20"
+                  >
+                    <span className="text-xl">✕</span>
+                  </button>
+                </div>
               )}
-              <button 
-                onClick={closeImageLightbox}
-                className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors backdrop-blur-sm"
-              >
-                <span className="text-2xl">✕</span>
-              </button>
             </div>
           </Modal>
 
