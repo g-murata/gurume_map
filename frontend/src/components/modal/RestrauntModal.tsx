@@ -256,7 +256,7 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
           if (Number(item.restaurant.id) === Number(restaurant.id)) {
             return {
               ...item,
-              restaurant: { ...item.restaurant, ...res.restraunts },
+              restaurant: res.restraunts,
               tags_tagged_items: new_tags_tagged_items
             };
           }
@@ -265,10 +265,10 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
         setRestraunt(updatedList);
       } else {
         const newEntry = {
-          restaurant: { ...res.restraunts, user_email: user.email, user_name: res.user_name },
+          restaurant: res.restraunts,
           tags_tagged_items: new_tags_tagged_items,
         };
-        onSelect(res.restraunts);
+        onSelect(newEntry.restaurant);
         setRestraunt([newEntry, ...restaurants]);
       }
 
