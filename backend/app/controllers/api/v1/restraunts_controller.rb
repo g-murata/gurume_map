@@ -12,11 +12,19 @@ module Api
         render json: {
           restraunts: restraunts.map do |restaurant|
             {
-              restaurant: serialized_restraunt(restaurant),
+              restaurant: restraunt_with_image_url(restaurant).merge(
+                "user_name" => restaurant.user_name,
+                "user_email" => restaurant.user_email,
+                "user_image_url" => restaurant.user.image_url,
+                "user_id" => restaurant.user_id,
+                "reviews_count" => restaurant.user.reviews_count,
+                "restraunts_count" => restaurant.user.restraunts_count
+              ),
               tags_tagged_items: restaurant.tags_tagged_items
             }
           end
         }, status: :ok
+
       end
 
       def create
@@ -43,7 +51,7 @@ module Api
 
         @restraunt.reload
         render json: {
-          restraunts: serialized_restraunt(@restraunt)
+          restraunts: restraunt_with_image_url(@restraunt).merge("user_name" => @restraunt.user.name)
         }, status: :ok
       rescue => e
         render json: { error: e.message }, status: :unprocessable_entity
@@ -59,7 +67,7 @@ module Api
         if restraunt.update(restraunt_params)
           restraunt.reload
           render json: {
-            restraunts: serialized_restraunt(restraunt)
+            restraunts: restraunt_with_image_url(restraunt)
           }, status: :ok
         else
           render json: restraunt.errors, status: :unprocessable_entity
@@ -76,7 +84,10 @@ module Api
         else
           render json: restraunt.errors, status: :unprocessable_entity
         end       
+
       end
+
+
 
       private
 
@@ -84,21 +95,9 @@ module Api
         params.permit(:name, :lat, :lng, :url, :description, :area_id, :image, :email, :evaluation, :review_content, :review_image)
       end
 
-      def serialized_restraunt(restraunt)
+      def restraunt_with_image_url(restraunt)
         data = restraunt.as_json
         data["image_url"] = restraunt.image.attached? ? url_for(restraunt.image) : nil
-        
-        # userが存在する場合のみマージ（destroyなどでnilになる可能性を考慮）
-        if restraunt.user
-          data = data.merge(
-            "user_name" => restraunt.user.name,
-            "user_email" => restraunt.user.email,
-            "user_image_url" => restraunt.user.image_url,
-            "user_id" => restraunt.user_id,
-            "reviews_count" => restraunt.user.reviews_count,
-            "restraunts_count" => restraunt.user.restraunts_count
-          )
-        end
         data
       end
 
