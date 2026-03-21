@@ -36,7 +36,7 @@ export const fetchRestaurants = (): Promise<{ restraunts: Restraunt[] }> => {
     })
 }
 
-export const postRestraunt = (params: PostRestrauntParams): Promise<{ restraunt: Restraunt }> => {
+export const postRestraunt = (params: PostRestrauntParams): Promise<{ restraunts: Restraunt }> => {
   const formData = new FormData();
   formData.append('name', params.name);
   formData.append('lat', String(params.lat));
@@ -65,7 +65,7 @@ export const postRestraunt = (params: PostRestrauntParams): Promise<{ restraunt:
     .catch((e) => { throw e; })
 };
 
-export const updateRestraunt = (params: UpdateRestrauntParams): Promise<{ restraunt: Restraunt }> => {
+export const updateRestraunt = (params: UpdateRestrauntParams): Promise<{ restraunts: Restraunt }> => {
   const formData = new FormData();
   formData.append('name', params.name);
   if (params.url) formData.append('url', params.url);
