@@ -83,7 +83,7 @@ export const About: React.FC = () => {
               <img src={`${process.env.PUBLIC_URL}/RoadMap_1済.jpg`} className="w-full object-cover" alt="ロードマップ1" />
             </div>
             <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-              <img src={`${process.env.PUBLIC_URL}/RoadMap_2.jpg`} className="w-full object-cover" alt="ロードマップ2" />
+              <img src={`${process.env.PUBLIC_URL}/RoadMap_2済.jpg`} className="w-full object-cover" alt="ロードマップ2" />
             </div>
           </div>
         </section>
