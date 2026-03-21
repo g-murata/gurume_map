@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Modal from 'react-modal';
 import { User } from '../../types/index';
-import { patchUpdateUser } from '../../apis/users';
+import { patchUpdateUser, fetchShowUser } from '../../apis/users';
 
 const customStyles: any = {
   overlay: {
@@ -38,6 +38,7 @@ interface UserProfileModalProps {
 
 export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onClose, userInfo, setUserInfo, isReadOnly = false }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
+  const [currentUser, setCurrentUser] = useState<User>(userInfo);
   const [newName, setNewName] = useState(userInfo.name);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(userInfo.image_url || null);
@@ -48,17 +49,34 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
   const handleClose = () => {
     setMode('view');
     setError('');
-    setNewName(userInfo.name);
+    setNewName(currentUser.name);
     setImageFile(null);
-    setPreviewUrl(userInfo.image_url || null);
+    setPreviewUrl(currentUser.image_url || null);
     onClose();
   };
 
   const handleEditClick = () => {
     setMode('edit');
-    setNewName(userInfo.name);
-    setPreviewUrl(userInfo.image_url || null);
+    setNewName(currentUser.name);
+    setPreviewUrl(currentUser.image_url || null);
   };
+
+  // モーダルが開いた時に最新情報を取得
+  useEffect(() => {
+    if (isOpen && userInfo.email) {
+      fetchShowUser(userInfo.email)
+        .then((data: any) => {
+          setCurrentUser(data.user);
+          setNewName(data.user.name);
+          setPreviewUrl(data.user.image_url || null);
+          // 自分の情報なら親コンポーネントも更新して同期
+          if (!isReadOnly) {
+            setUserInfo(data.user);
+          }
+        })
+        .catch(err => console.error("Failed to fetch user stats", err));
+    }
+  }, [isOpen, userInfo.email, isReadOnly, setUserInfo]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -74,7 +92,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const isNameChanged = newName !== userInfo.name;
+    const isNameChanged = newName !== currentUser.name;
     const isImageChanged = imageFile !== null;
 
     if (!isNameChanged && !isImageChanged) {
@@ -91,7 +109,8 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
     setError('');
 
     try {
-      const response = await patchUpdateUser(userInfo.id, newName, imageFile);
+      const response = await patchUpdateUser(currentUser.id, newName, imageFile);
+      setCurrentUser(response.user);
       setUserInfo(response.user);
       setMode('view');
       setImageFile(null);
@@ -134,16 +153,16 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
             <div className="space-y-8">
               {/* User Info Display */}
               <div className="flex flex-col items-center gap-4 mb-8">
-                {userInfo.image_url ? (
-                  <img src={userInfo.image_url} alt={userInfo.name} className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg" />
+                {currentUser.image_url ? (
+                  <img src={currentUser.image_url} alt={currentUser.name} className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg" />
                 ) : (
                   <div className="w-32 h-32 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 text-5xl font-bold shadow-inner border-4 border-white">
-                    {userInfo.name.charAt(0)}
+                    {currentUser.name.charAt(0)}
                   </div>
                 )}
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-gray-800">{userInfo.name}</h3>
-                  <p className="text-gray-400 text-sm font-medium mt-1">{userInfo.email}</p>
+                  <h3 className="text-2xl font-bold text-gray-800">{currentUser.name}</h3>
+                  <p className="text-gray-400 text-sm font-medium mt-1">{currentUser.email}</p>
                 </div>
               </div>
 
@@ -151,11 +170,11 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-5 rounded-3xl text-center border border-gray-100">
                   <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">投稿したレビュー</p>
-                  <p className="text-2xl font-black text-gray-800">{userInfo.reviews_count || 0} <span className="text-sm font-bold text-gray-400">件</span></p>
+                  <p className="text-2xl font-black text-gray-800">{currentUser.reviews_count || 0} <span className="text-sm font-bold text-gray-400">件</span></p>
                 </div>
                 <div className="bg-gray-50 p-5 rounded-3xl text-center border border-gray-100">
                   <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">登録したお店</p>
-                  <p className="text-2xl font-black text-gray-800">{userInfo.restraunts_count || 0} <span className="text-sm font-bold text-gray-400">店</span></p>
+                  <p className="text-2xl font-black text-gray-800">{currentUser.restraunts_count || 0} <span className="text-sm font-bold text-gray-400">店</span></p>
                 </div>
                 <div className="bg-gray-50 p-5 rounded-3xl text-center border border-gray-100 relative overflow-hidden col-span-2">
                   <div className="absolute top-2 right-[-20px] bg-yellow-400 text-[8px] font-black text-white px-6 py-0.5 rotate-45 shadow-sm">
@@ -167,7 +186,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
               </div>
 
               <div className="pt-2 flex justify-center">
-                {!isReadOnly && userInfo.email !== 'guest@guest.co.jp' && (
+                {!isReadOnly && currentUser.email !== 'guest@guest.co.jp' && (
                   <button 
                     onClick={handleEditClick}
                     className="bg-white hover:bg-gray-50 text-gray-500 font-bold py-2.5 px-6 rounded-xl border border-gray-200 text-sm transition-all hover:shadow-sm active:translate-y-0"
@@ -224,9 +243,9 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
               <div className="flex flex-col gap-3 pt-4">
                 <button
                   type="submit"
-                  disabled={loading || (newName === userInfo.name && !imageFile)}
+                  disabled={loading || (newName === currentUser.name && !imageFile)}
                   className={`w-full font-bold py-4 px-6 rounded-2xl shadow-lg transition-all ${
-                    loading || (newName === userInfo.name && !imageFile)
+                    loading || (newName === currentUser.name && !imageFile)
                       ? 'bg-gray-100 text-gray-300 cursor-not-allowed shadow-none'
                       : 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/20 hover:-translate-y-1'
                   }`}

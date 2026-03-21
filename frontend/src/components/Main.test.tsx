@@ -4,7 +4,6 @@ import { Main } from './Main';
 import { fetchRestaurants } from '../apis/restraunts';
 import { fetchTags } from '../apis/tags';
 import { fetchAreas } from '../apis/areas';
-import { GetLatestReviews } from '../apis/reviews';
 
 // 各種APIのモック
 jest.mock('../apis/restraunts');
@@ -49,6 +48,7 @@ const mockRestaurants = {
 
 const mockTags = { tags: [{ id: 1, name: '和食' }, { id: 2, name: '洋食' }] };
 const mockAreas = { areas: [{ id: 1, name: '新橋' }, { id: 2, name: '赤坂見附' }] };
+const mockUserInfo = { id: 1, name: 'テストユーザー', email: 'test@example.com' };
 
 describe('Main Component', () => {
   beforeEach(() => {
@@ -56,11 +56,10 @@ describe('Main Component', () => {
     (fetchRestaurants as jest.Mock).mockResolvedValue(mockRestaurants);
     (fetchTags as jest.Mock).mockResolvedValue(mockTags);
     (fetchAreas as jest.Mock).mockResolvedValue(mockAreas);
-    (GetLatestReviews as jest.Mock).mockResolvedValue({ review: {}, restraunt: {} });
   });
 
   test('初期表示でレストランのリストが表示されること', async () => {
-    render(<Main />);
+    render(<Main userInfo={mockUserInfo} />);
 
     // ローディングが表示されることを確認
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
@@ -73,7 +72,7 @@ describe('Main Component', () => {
   });
 
   test('店名でフィルタリングができること', async () => {
-    render(<Main />);
+    render(<Main userInfo={mockUserInfo} />);
 
     await waitFor(() => expect(screen.getByText('テストレストランA')).toBeInTheDocument());
 
@@ -101,7 +100,7 @@ describe('Main Component', () => {
     };
     (fetchRestaurants as jest.Mock).mockResolvedValue(extendedRestaurants);
 
-    render(<Main />);
+    render(<Main userInfo={mockUserInfo} />);
 
     await waitFor(() => expect(screen.getByText('テストレストランA')).toBeInTheDocument());
 

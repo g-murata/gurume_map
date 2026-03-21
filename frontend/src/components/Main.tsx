@@ -24,7 +24,7 @@ import { RestrauntModal } from './modal/RestrauntModal';
 import {TagList} from './TagList';
 import {DateTimeConverter} from './DateTimeConverter'
 import { AreaList } from './AreaList';
-import { Restraunt, Review, Tag, TagsTaggedItem, Area } from '../types/index';
+import { User, Restraunt, Review, Tag, TagsTaggedItem, Area } from '../types/index';
 
 const customStyles: any = {
   overlay: {
@@ -63,6 +63,7 @@ interface RestaurantEntry {
 
 interface MainProps {
   userRegistered?: boolean;
+  userInfo: User | false | null;
 }
 
 export const Main: React.FC<MainProps> = (props) => {
@@ -492,7 +493,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
                     <Modal isOpen={restaurant.id === selectedItem} onAfterOpen={() => {}} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal">
                       {!editModalIsOpen ?
-                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={restaurant} item={restaurant.id} tags_tagged_items={entry.tags_tagged_items as any} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} />
+                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={restaurant} item={restaurant.id} tags_tagged_items={entry.tags_tagged_items as any} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={openImageLightbox} currentUserInfo={props.userInfo} />
                         :
                         <RestrauntModal mode="edit" setIsLoading={setIsLoading} restaurant={restaurant} tags_tagged_items={entry.tags_tagged_items as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={restaurant.lat} coordinateLng={restaurant.lng} setIsDirty={setIsDirty} onSelect={onSelect} setRestraunt={setRestaurants} handleClear={handleClear} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={openImageLightbox} />
                       }

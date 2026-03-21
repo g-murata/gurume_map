@@ -31,6 +31,7 @@ interface ShowRestrauntModalProps {
   setEvaluation: (val: number) => void;
   onChange: (e: any) => void;
   ReactStarsRating: any;
+  currentUserInfo: User | false | null;
 }
 
 export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => {
@@ -45,14 +46,19 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
     const email = userData.email;
     if (!email || !name) return;
 
-    setProfileModalUser({
-      id: userData.user_id || userData.id || 0,
-      name: name,
-      email: email,
-      image_url: userData.user_image_url || null, // レビュー画像(image_url)とは明確に区別
-      reviews_count: userData.reviews_count || 0,
-      restraunts_count: userData.restraunts_count || 0
-    } as User);
+    // もし開こうとしているのが「自分」なら、最新の currentUserInfo を使う
+    if (props.currentUserInfo && (props.currentUserInfo as User).email === email) {
+      setProfileModalUser(props.currentUserInfo as User);
+    } else {
+      setProfileModalUser({
+        id: userData.user_id || userData.id || 0,
+        name: name,
+        email: email,
+        image_url: userData.user_image_url || null, // レビュー画像(image_url)とは明確に区別
+        reviews_count: userData.reviews_count || 0,
+        restraunts_count: userData.restraunts_count || 0
+      } as User);
+    }
     setProfileModalIsOpen(true);
   };
 

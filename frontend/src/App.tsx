@@ -46,7 +46,7 @@ function App() {
           />
 
           <Routes>
-            <Route path="/" element={<PrivateRoute><Main userRegistered={userRegistered} /></PrivateRoute>} />
+            <Route path="/" element={<PrivateRoute><Main userRegistered={userRegistered} userInfo={userInfo} /></PrivateRoute>} />
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<Post />} />

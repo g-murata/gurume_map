@@ -4,7 +4,6 @@ import { Main } from '../Main';
 import { fetchRestaurants } from '../../apis/restraunts';
 import { fetchTags } from '../../apis/tags';
 import { fetchAreas } from '../../apis/areas';
-import { GetLatestReviews } from '../../apis/reviews';
 
 // APIのモック
 jest.mock('../../apis/restraunts');
@@ -46,6 +45,8 @@ jest.mock('react-modal', () => {
   return Modal;
 });
 
+const mockUserInfo = { id: 1, name: 'テストユーザー', email: 'test@example.com' };
+
 describe('Unsaved Changes Warning', () => {
   const mockRestaurants = { restraunts: [] };
   const mockTags = { tags: [{ id: 1, name: '和食' }] };
@@ -56,7 +57,6 @@ describe('Unsaved Changes Warning', () => {
     (fetchRestaurants as jest.Mock).mockResolvedValue(mockRestaurants);
     (fetchTags as jest.Mock).mockResolvedValue(mockTags);
     (fetchAreas as jest.Mock).mockResolvedValue(mockAreas);
-    (GetLatestReviews as jest.Mock).mockResolvedValue({ review: {}, restraunt: {} });
     
     // window.confirmのモック
     window.confirm = jest.fn();
@@ -65,7 +65,7 @@ describe('Unsaved Changes Warning', () => {
   test('入力がある場合にモーダルを閉じようとすると確認ダイアログが表示されること', async () => {
     (window.confirm as jest.Mock).mockReturnValue(false); // 「キャンセル」を選択
     
-    render(<Main />);
+    render(<Main userInfo={mockUserInfo} />);
     
     // ローディングが消えるのを待つ
     await waitFor(() => expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument());
@@ -90,7 +90,7 @@ describe('Unsaved Changes Warning', () => {
   test('確認ダイアログでOKを押すとモーダルが閉じること', async () => {
     (window.confirm as jest.Mock).mockReturnValue(true); // 「OK」を選択
     
-    render(<Main />);
+    render(<Main userInfo={mockUserInfo} />);
     
     await waitFor(() => expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument());
     fireEvent.click(screen.getByTestId('google-map'));
@@ -105,7 +105,7 @@ describe('Unsaved Changes Warning', () => {
   });
 
   test('何も入力していない場合は確認ダイアログが出ずに閉じること', async () => {
-    render(<Main />);
+    render(<Main userInfo={mockUserInfo} />);
     
     await waitFor(() => expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument());
     fireEvent.click(screen.getByTestId('google-map'));
