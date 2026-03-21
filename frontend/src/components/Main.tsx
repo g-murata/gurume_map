@@ -163,13 +163,6 @@ export const Main: React.FC<MainProps> = (props) => {
       setAreas(data.areas)
     })
     .catch((error) => console.log(error))
-
-    GetLatestReviews()
-      .then((data: any) => {
-        setGetLatestReviews(data.review)
-        setGetLatestReviewsRestraunt(data.restraunt)
-      })
-      .catch((error) => console.log(error))    
   }, [])
 
   const [size, setSize] = useState<google.maps.Size | undefined>(undefined);
@@ -183,8 +176,6 @@ export const Main: React.FC<MainProps> = (props) => {
   const [selectedItem, setSelectedItem] = useState<number | false>(false)
 
   const [checkUsersWithoutReviews, setCheckUsersWithoutReviews] = useState(false);
-  const [getLatestReviews, setGetLatestReviews] = useState<any>("");
-  const [getLatestReviewsRestraunt, setGetLatestReviewsRestraunt] = useState<any>("");
 
   const onOpenDialog = (restaurant: any) => {
     setIsDirty(false);
