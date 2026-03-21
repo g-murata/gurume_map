@@ -14,10 +14,11 @@ RUN bundle install
 COPY . .
 
 # Ensure bin files are executable
-RUN chmod +x bin/*
+RUN chmod +x bin/* && \
+    chmod +x /usr/bin/docker-entrypoint
 
 # Add a script to be executed every time the container starts.
-ENTRYPOINT ["./bin/docker-entrypoint"]
+ENTRYPOINT ["docker-entrypoint"]
 
 EXPOSE 3000
 
