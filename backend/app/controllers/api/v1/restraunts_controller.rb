@@ -29,14 +29,18 @@ module Api
           @restraunt.user_id = User.where(email: params[:email]).pick(:id)
           @restraunt.save!
 
-          # レビュー情報があれば作成
-          if params[:evaluation].present? || params[:review_content].present? || params[:review_image].present?
+          # レビュー情報があれば作成（本文がある、画像がある、または評価がデフォルトの3以外）
+          has_content = params[:review_content].present?
+          has_image = params[:review_image].present?
+          has_changed_evaluation = params[:evaluation].present? && params[:evaluation].to_i != 3
+
+          if has_content || has_image || has_changed_evaluation
             Review.create!(
               restraunt_id: @restraunt.id,
               user_id: @restraunt.user_id,
               evaluation: params[:evaluation] || 3,
               content: params[:review_content] || "",
-              image: params[:review_image] # レビュー用画像
+              image: params[:review_image]
             )
           end
         end

@@ -43,23 +43,37 @@ class Api::V1::RestrauntsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "最高のお店を見つけました！", last_review.content
   end
 
-  test "POST create: レビュー本文が空でも同時作成できること" do
+  test "POST create: デフォルト値（星3, 本文なし）の場合はレビューを作成しないこと" do
+    assert_difference("Restraunt.count", 1) do
+      assert_no_difference("Review.count") do
+        post api_v1_restraunts_url, params: {
+          name: "レビューなしのお店",
+          lat: 35.7,
+          lng: 139.8,
+          area_id: @area.id,
+          email: @user.email,
+          evaluation: 3, # デフォルト値
+          review_content: "" # 空
+        }
+      end
+    end
+    assert_response :success
+  end
+
+  test "POST create: 星評価が変更されている場合はレビューも作成すること" do
     assert_difference(["Restraunt.count", "Review.count"], 1) do
       post api_v1_restraunts_url, params: {
-        name: "星のみ投稿のお店",
+        name: "星4評価のお店",
         lat: 35.7,
         lng: 139.8,
         area_id: @area.id,
         email: @user.email,
-        evaluation: 4,
-        review_content: "" # 本文なし
+        evaluation: 4, # デフォルト以外
+        review_content: ""
       }
     end
-
     assert_response :success
-    last_review = Review.last
-    assert_equal 4, last_review.evaluation
-    assert_equal "", last_review.content
+    assert_equal 4, Review.last.evaluation
   end
 
   test "PATCH update: レストラン情報を更新できること" do

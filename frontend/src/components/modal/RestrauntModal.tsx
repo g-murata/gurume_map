@@ -207,6 +207,11 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
         });
         await deleteTagsTaggedItem({tagged_item_id: restaurant.id});
       } else {
+        const reviewContent = reviewContentInput?.value;
+        const hasReviewData = (reviewContent && reviewContent.trim() !== '') || 
+                              reviewImageFile !== null || 
+                              initialEvaluation !== 3;
+
         res = await postRestraunt({
           name: nameInput.value,
           lat: Number(latInput.value),
@@ -216,9 +221,9 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
           area_id: Number(selectedArea + 1),
           email: user.email,
           image: image,
-          evaluation: initialEvaluation,
-          review_content: reviewContentInput?.value,
-          review_image: reviewImageFile
+          evaluation: hasReviewData ? initialEvaluation : undefined,
+          review_content: hasReviewData ? reviewContent : undefined,
+          review_image: hasReviewData ? reviewImageFile : undefined
         });
       }
 
