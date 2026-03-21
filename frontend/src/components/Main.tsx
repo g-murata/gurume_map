@@ -575,7 +575,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
         {/* 新規店名登録モーダル */}
         <Modal isOpen={modalIsOpen} onAfterOpen={() => {}} onRequestClose={() => guardedClose(closeModal)} style={customStyles} contentLabel="Create Restaurant Modal">
-          <RestrauntModal mode="new" setIsLoading={setIsLoading} restaurant={{} as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={Number(coordinateLat)} coordinateLng={Number(coordinateLng)} setIsDirty={setIsDirty} onSelect={onSelect} setRestraunt={setRestaurants} handleClear={handleClear} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={openImageLightbox} />
+          <RestrauntModal mode="new" setIsLoading={setIsLoading} restaurant={{} as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={Number(coordinateLat)} coordinateLng={Number(coordinateLng)} setIsDirty={setIsDirty} onSelect={onSelect} setRestraunt={setRestaurants} handleClear={handleClear} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={openImageLightbox} ReactStarsRating={ReactStarsRating} />
         </Modal>
 
       </LoadScript >

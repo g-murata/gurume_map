@@ -20,23 +20,46 @@ class Api::V1::RestrauntsControllerTest < ActionDispatch::IntegrationTest
     assert json_response["restraunts"][0].key?("tags_tagged_items")
   end
 
-  test "POST create: 新しいレストランを作成できること" do
-    assert_difference("Restraunt.count", 1) do
+  test "POST create: レストランとレビューを同時に作成できること" do
+    assert_difference(["Restraunt.count", "Review.count"], 1) do
       post api_v1_restraunts_url, params: {
-        name: "新しくオープンしたお店",
+        name: "レビュー同時投稿のお店",
         lat: 35.7,
         lng: 139.8,
         area_id: @area.id,
         email: @user.email,
-        url: "http://example.com",
-        description: "最高です"
+        evaluation: 5,
+        review_content: "最高のお店を見つけました！"
       }
     end
 
     assert_response :success
     json_response = JSON.parse(response.body)
-    assert_equal "新しくオープンしたお店", json_response["restraunts"]["name"]
-    assert_equal @user.name, json_response["user_name"]
+    assert_equal "レビュー同時投稿のお店", json_response["restraunts"]["name"]
+    
+    # 作成されたレビューの内容を確認
+    last_review = Review.last
+    assert_equal 5, last_review.evaluation
+    assert_equal "最高のお店を見つけました！", last_review.content
+  end
+
+  test "POST create: レビュー本文が空でも同時作成できること" do
+    assert_difference(["Restraunt.count", "Review.count"], 1) do
+      post api_v1_restraunts_url, params: {
+        name: "星のみ投稿のお店",
+        lat: 35.7,
+        lng: 139.8,
+        area_id: @area.id,
+        email: @user.email,
+        evaluation: 4,
+        review_content: "" # 本文なし
+      }
+    end
+
+    assert_response :success
+    last_review = Review.last
+    assert_equal 4, last_review.evaluation
+    assert_equal "", last_review.content
   end
 
   test "PATCH update: レストラン情報を更新できること" do

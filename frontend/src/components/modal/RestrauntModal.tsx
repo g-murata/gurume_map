@@ -24,6 +24,7 @@ interface RestrauntModalProps {
   closeModal: () => void;
   onCloseEditDialog: () => void;
   openImageLightbox: (url: string) => void;
+  ReactStarsRating?: any;
 }
 
 export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
@@ -47,7 +48,8 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
     restaurants, 
     closeModal, 
     onCloseEditDialog, 
-    openImageLightbox 
+    openImageLightbox,
+    ReactStarsRating
   } = props;
   
   const isEditMode = mode === 'edit';
@@ -56,9 +58,12 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [isTagListOpen, setIsTagListOpen] = useState(false);
   const [image, setImage] = useState<File | null>(null);
+  const [reviewImageFile, setReviewImageFile] = useState<File | null>(null);
   const [deleteImage, setDeleteImage] = useState(false);
   const [localIsLoading, setLocalIsLoading] = useState(false);
   const [preview, setPreview] = useState(isEditMode ? (restaurant.image_url || '') : '');
+  const [reviewPreview, setReviewPreview] = useState('');
+  const [initialEvaluation, setInitialEvaluation] = useState(3);
 
   // 初期化: 編集モードの場合は既存のタグをセット
   useEffect(() => {
@@ -78,10 +83,12 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
     const nameInput = document.getElementById('name') as HTMLInputElement | null;
     const urlInput = document.getElementById('url') as HTMLInputElement | null;
     const descriptionInput = document.getElementById('description') as HTMLTextAreaElement | null;
+    const reviewContentInput = document.getElementById('review_content') as HTMLTextAreaElement | null;
     
     const name = nameInput?.value || '';
     const url = urlInput?.value || '';
     const description = descriptionInput?.value || '';
+    const reviewContent = reviewContentInput?.value || '';
     
     if (isEditMode) {
       const isTextDirty = name !== restaurant.name || 
@@ -93,9 +100,10 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
       setIsDirty(isTextDirty || isTagsDirty || isImageDirty);
     } else {
       const hasText = name !== '' || url !== '' || description !== '';
+      const hasReview = reviewContent !== '' || initialEvaluation !== 3;
       const hasTags = selectedTags.length > 0;
       const hasImage = image !== null;
-      setIsDirty(hasText || hasTags || hasImage);
+      setIsDirty(hasText || hasTags || hasImage || hasReview);
     }
   };
 
@@ -117,6 +125,23 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
     }
   };
 
+  const handleReviewImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setReviewImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setReviewPreview(reader.result as string);
+        setIsDirty(true);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setReviewImageFile(null);
+      setReviewPreview('');
+      setTimeout(checkDirty, 0);
+    }
+  };
+
   const handleRemoveImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (image) {
@@ -129,6 +154,15 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
       setPreview('');
     }
     const fileInput = document.getElementById('image') as HTMLInputElement | null;
+    if (fileInput) fileInput.value = '';
+    setTimeout(checkDirty, 0);
+  };
+
+  const handleRemoveReviewImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setReviewImageFile(null);
+    setReviewPreview('');
+    const fileInput = document.getElementById('review_image') as HTMLInputElement | null;
     if (fileInput) fileInput.value = '';
     setTimeout(checkDirty, 0);
   };
@@ -153,6 +187,7 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
     const nameInput = form.elements.namedItem('name') as HTMLInputElement;
     const urlInput = form.elements.namedItem('url') as HTMLInputElement;
     const descriptionInput = form.elements.namedItem('description') as HTMLTextAreaElement;
+    const reviewContentInput = form.elements.namedItem('review_content') as HTMLTextAreaElement | null;
     const latInput = form.elements.namedItem('lat') as HTMLInputElement;
     const lngInput = form.elements.namedItem('lng') as HTMLInputElement;
 
@@ -180,7 +215,10 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
           description: descriptionInput.value,
           area_id: Number(selectedArea + 1),
           email: user.email,
-          image: image
+          image: image,
+          evaluation: initialEvaluation,
+          review_content: reviewContentInput?.value,
+          review_image: reviewImageFile
         });
       }
 
@@ -238,10 +276,12 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
     const nameInput = document.getElementById('name') as HTMLInputElement | null;
     const urlInput = document.getElementById('url') as HTMLInputElement | null;
     const descriptionInput = document.getElementById('description') as HTMLTextAreaElement | null;
+    const reviewContentInput = document.getElementById('review_content') as HTMLTextAreaElement | null;
     
     const name = nameInput?.value || '';
     const url = urlInput?.value || '';
     const description = descriptionInput?.value || '';
+    const reviewContent = reviewContentInput?.value || '';
     
     let isCurrentlyDirty = false;
     if (isEditMode) {
@@ -253,7 +293,7 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
       const isImageDirty = image !== null || deleteImage;
       isCurrentlyDirty = isTextDirty || isTagsDirty || isImageDirty;
     } else {
-      isCurrentlyDirty = name !== '' || url !== '' || description !== '' || selectedTags.length > 0 || image !== null;
+      isCurrentlyDirty = name !== '' || url !== '' || description !== '' || selectedTags.length > 0 || image !== null || reviewContent !== '' || initialEvaluation !== 3;
     }
 
     if (isCurrentlyDirty) {
@@ -337,7 +377,7 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
 
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="url">
-            お店のURL <span className="text-xs text-gray-400 font-normal ml-1">(食べログなど)</span>
+            お店の公式URL <span className="text-xs text-gray-400 font-normal ml-1">(食べログなど)</span>
           </label>
           <input 
             className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" 
@@ -347,6 +387,71 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
             defaultValue={isEditMode ? restaurant.url : ''}
           />
         </div>
+
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+            お店の紹介・特徴 <span className="text-xs text-gray-400 font-normal ml-1">(公式情報や客観的な特徴)</span>
+          </label>
+          <textarea 
+            id="description" 
+            name="description" 
+            rows={2} 
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" 
+            placeholder="例：公園の近くにあるカレー屋。テイクアウト可。"
+            defaultValue={isEditMode ? restaurant.description : ''}
+          ></textarea>
+        </div>
+
+        {!isEditMode && (
+          <div className="mb-8 p-6 bg-yellow-50 rounded-2xl border-2 border-yellow-100 shadow-inner">
+            <h3 className="text-yellow-800 font-bold mb-4 flex items-center gap-2">
+              ✍️ あなたの最初のレビュー <span className="text-[10px] bg-yellow-200 px-2 py-0.5 rounded text-yellow-700 font-normal">任意</span>
+            </h3>
+            
+            <div className="mb-4">
+              <label className="block text-yellow-700 text-xs font-bold mb-1">評価</label>
+              {ReactStarsRating && (
+                <ReactStarsRating 
+                  onChange={(val: number) => {
+                    setInitialEvaluation(val);
+                    setTimeout(checkDirty, 0);
+                  }} 
+                  value={initialEvaluation} 
+                  className="flex gap-1"
+                />
+              )}
+            </div>
+
+            <div>
+              <label className="block text-yellow-700 text-xs font-bold mb-1">感想</label>
+              <textarea 
+                id="review_content" 
+                name="review_content" 
+                rows={3} 
+                className="w-full bg-white border border-yellow-200 rounded-xl px-4 py-3 text-gray-800 placeholder-yellow-300/60 focus:outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10 transition-all mb-4" 
+                placeholder="「ここのランチはコスパ最強！」など..."
+              ></textarea>
+            </div>
+
+            <div>
+              <label className="block text-yellow-700 text-xs font-bold mb-2">レビューの写真 <span className="text-[10px] font-normal ml-1">(今日食べた料理など)</span></label>
+              <input 
+                type="file" 
+                id="review_image" 
+                name="review_image" 
+                accept="image/*"
+                onChange={handleReviewImageChange}
+                className="w-full bg-white/50 border border-yellow-200 rounded-xl px-4 py-2 text-gray-800 text-xs focus:outline-none file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-yellow-100 file:text-yellow-700 hover:file:bg-yellow-200" 
+              />
+              {reviewPreview && (
+                <div className="mt-3 relative w-full h-40 rounded-xl overflow-hidden border border-yellow-200 bg-white flex items-center justify-center cursor-pointer group" onClick={() => openImageLightbox(reviewPreview)}>
+                  <img src={reviewPreview} alt="Review Preview" className="max-w-full max-h-full object-contain" />
+                  <button type="button" onClick={handleRemoveReviewImage} className="absolute top-2 right-2 bg-black/50 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs hover:bg-black/70">✕</button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
@@ -380,31 +485,17 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
           )}
         </div>
 
-        <div className="mb-8">
-          <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">
-            お店について一言 <span className="text-xs text-gray-400 font-normal ml-1">{isEditMode ? '(100文字まで)' : '※レビューではない'}</span>
-          </label>
-          <textarea 
-            id="description" 
-            name="description" 
-            rows={4} 
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20 transition-all duration-200" 
-            placeholder="例：&#13;&#10;・公園の近くにあるカレー屋。&#13;&#10;・週3で食べに行ってます。"
-            defaultValue={isEditMode ? restaurant.description : ''}
-          ></textarea>
-        </div>
-
         <div className='flex flex-col gap-3'>
           <button 
             type="submit"
             disabled={localIsLoading}
-            className={`w-full font-bold py-3 px-4 rounded-xl shadow-sm transition-colors duration-200 ${localIsLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-500 hover:bg-primary-600 text-white'}`}
+            className={`w-full font-bold py-3.5 px-4 rounded-xl shadow-md transition-all duration-200 ${localIsLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-500 hover:bg-primary-600 text-white hover:-translate-y-0.5'}`}
           >
             {localIsLoading ? '送信中...' : (isEditMode ? '更新する' : 'このお店を登録する')}
           </button>
           <button 
             type="button" 
-            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold py-3 px-4 rounded-xl transition-colors duration-200" 
+            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold py-3.5 px-4 rounded-xl transition-colors duration-200" 
             onClick={handleCancel}
           >
             {isEditMode ? '詳細画面に戻る' : 'キャンセル'}

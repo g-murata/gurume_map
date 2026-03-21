@@ -24,17 +24,29 @@ module Api
       end
 
       def create
-        restraunt = Restraunt.new(restraunt_params.except(:email))
-        restraunt.user_id = User.where(email: params[:email]).pick(:id)
+        Restraunt.transaction do
+          @restraunt = Restraunt.new(restraunt_params.except(:email, :evaluation, :review_content, :review_image))
+          @restraunt.user_id = User.where(email: params[:email]).pick(:id)
+          @restraunt.save!
 
-        if restraunt.save
-          restraunt.reload
-          render json: {
-            restraunts: restraunt_with_image_url(restraunt).merge("user_name" => restraunt.user.name)
-          }, status: :ok
-        else
-          render json: restraunt.errors, status: :unprocessable_entity
-        end       
+          # レビュー情報があれば作成
+          if params[:evaluation].present? || params[:review_content].present? || params[:review_image].present?
+            Review.create!(
+              restraunt_id: @restraunt.id,
+              user_id: @restraunt.user_id,
+              evaluation: params[:evaluation] || 3,
+              content: params[:review_content] || "",
+              image: params[:review_image] # レビュー用画像
+            )
+          end
+        end
+
+        @restraunt.reload
+        render json: {
+          restraunts: restraunt_with_image_url(@restraunt).merge("user_name" => @restraunt.user.name)
+        }, status: :ok
+      rescue => e
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def update
@@ -72,7 +84,7 @@ module Api
       private
 
       def restraunt_params
-        params.permit(:name, :lat, :lng, :url, :description, :area_id, :image, :email)
+        params.permit(:name, :lat, :lng, :url, :description, :area_id, :image, :email, :evaluation, :review_content, :review_image)
       end
 
       def restraunt_with_image_url(restraunt)

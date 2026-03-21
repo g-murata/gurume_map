@@ -11,6 +11,9 @@ export interface PostRestrauntParams {
   description?: string;
   area_id: number;
   image?: File | null;
+  evaluation?: number;
+  review_content?: string;
+  review_image?: File | null;
 }
 
 export interface UpdateRestrauntParams {
@@ -44,6 +47,15 @@ export const postRestraunt = (params: PostRestrauntParams): Promise<{ restraunt:
   formData.append('area_id', String(params.area_id));
   if (params.image) {
     formData.append('image', params.image);
+  }
+  if (params.evaluation) {
+    formData.append('evaluation', String(params.evaluation));
+  }
+  if (params.review_content) {
+    formData.append('review_content', params.review_content);
+  }
+  if (params.review_image) {
+    formData.append('review_image', params.review_image);
   }
 
   return axios.post(restaurants, formData)
