@@ -16,6 +16,6 @@ class User < ApplicationRecord
   end
 
   def image_url
-    image.attached? ? url_for(image) : nil
+    image.attached? ? rails_blob_url(image, only_path: false) : nil
   end
 end
