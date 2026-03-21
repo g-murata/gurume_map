@@ -23,12 +23,16 @@ module Api
       end
 
       def get_user
-        user = User.find_by(email: params[:email])      
+        # メールアドレスで検索し、なければ新規作成する
+        user = User.find_or_create_by(email: params[:email]) do |u|
+          # 名前があればそれを使い、なければメールの@より前を名前にする
+          u.name = params[:name].presence || params[:email].split('@').first
+          u.password = SecureRandom.hex(10) # ダミーパスワード
+        end
 
         render json: {
           user: user
         }, status: :ok
-
       end
 
 

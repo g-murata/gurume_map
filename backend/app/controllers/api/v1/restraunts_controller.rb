@@ -24,7 +24,7 @@ module Api
       end
 
       def create
-        restraunt = Restraunt.new(restraunt_params)
+        restraunt = Restraunt.new(restraunt_params.except(:email))
         restraunt.user_id = User.where(email: params[:email]).pick(:id)
 
         if restraunt.save
@@ -72,7 +72,7 @@ module Api
       private
 
       def restraunt_params
-        params.permit(:name, :lat, :lng, :url, :description, :area_id, :image)
+        params.permit(:name, :lat, :lng, :url, :description, :area_id, :image, :email)
       end
 
       def restraunt_with_image_url(restraunt)
