@@ -51,14 +51,7 @@ module Api
 
         @restraunt.reload
         render json: {
-          restraunts: restraunt_with_image_url(@restraunt).merge(
-            "user_name" => @restraunt.user.name,
-            "user_email" => @restraunt.user.email,
-            "user_image_url" => @restraunt.user.image_url,
-            "user_id" => @restraunt.user_id,
-            "reviews_count" => @restraunt.user.reviews_count,
-            "restraunts_count" => @restraunt.user.restraunts_count
-          )
+          restraunts: restraunt_with_image_url(@restraunt).merge("user_name" => @restraunt.user.name)
         }, status: :ok
       rescue => e
         render json: { error: e.message }, status: :unprocessable_entity
