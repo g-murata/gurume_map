@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { auth } from '../firebase';
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, CheckUsersWithoutReviews, GetLatestReviews} from '../apis/reviews';
+import { fetchShowReview, CheckUsersWithoutReviews } from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
 import { fetchAreas } from '../apis/areas';
 import {
