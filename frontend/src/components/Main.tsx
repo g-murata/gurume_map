@@ -583,7 +583,7 @@ export const Main: React.FC<MainProps> = (props) => {
                       {selectedRestaurant.image_url ? (
                         <img src={selectedRestaurant.image_url} className="w-full h-full object-cover" alt={selectedRestaurant.name} />
                       ) : (
-                        <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-full h-full object-cover opacity-50 p-2" alt="no-image" />
+                        <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-full h-full object-cover opacity-50 p-2" alt="no_gazou" />
                       )}
                     </div>
                     <div className="p-3 flex flex-col justify-center flex-1 min-w-0">
