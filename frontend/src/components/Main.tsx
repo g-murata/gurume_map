@@ -168,7 +168,10 @@ export const Main: React.FC<MainProps> = (props) => {
   }, [])
 
   const [size, setSize] = useState<google.maps.Size | undefined>(undefined);
-  const infoWindowOptions = { pixelOffset: size };
+  const infoWindowOptions = { 
+    pixelOffset: size,
+    disableAutoPan: true // これで勝手に動かなくなります
+  };
   const createOffsetSize = () => {
     if (window.google) {
       return setSize(new window.google.maps.Size(0, -45));
