@@ -574,9 +574,9 @@ export const Main: React.FC<MainProps> = (props) => {
 
               {/* スマホ用：マップ上の浮遊カード */}
               {viewMode === 'map' && selectedRestaurant && (
-                <div className="md:hidden absolute bottom-24 left-4 right-4 animate-in slide-in-from-bottom-4 duration-300">
+                <div className="md:hidden absolute bottom-28 left-4 right-4 z-[100]">
                   <div 
-                    className="bg-white rounded-2xl shadow-2xl flex overflow-hidden border border-gray-100"
+                    className="bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] flex overflow-hidden border border-gray-100 active:scale-95 transition-transform"
                     onClick={() => onOpenDialog(selectedRestaurant)}
                   >
                     <div className="w-24 h-24 flex-shrink-0">
@@ -594,26 +594,26 @@ export const Main: React.FC<MainProps> = (props) => {
                 </div>
               )}
             </div>
+          </div>
 
-            {/* スマホ用表示切り替えボタン */}
-            <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-              <button
-                onClick={() => setViewMode(viewMode === 'list' ? 'map' : 'list')}
-                className="bg-gray-800/90 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold active:scale-95 transition-all border border-white/10"
-              >
-                {viewMode === 'list' ? (
-                  <>
-                    <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.447-1.894L9 1m0 19l6 3m-6-3V1m6 22l5.447-2.724A2 2 0 0121 18.618V8.382a2 2 0 01-1.447-1.894L15 1m0 22V1m0 0L9 4"></path></svg>
-                    マップを表示
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    リストを表示
-                  </>
-                )}
-              </button>
-            </div>
+          {/* スマホ用表示切り替えボタン - overflow-hiddenの外側に配置 */}
+          <div className="md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-[100]">
+            <button
+              onClick={() => setViewMode(viewMode === 'list' ? 'map' : 'list')}
+              className="bg-gray-900/95 backdrop-blur-md text-white px-7 py-3.5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.3)] flex items-center gap-2 font-bold active:scale-95 transition-all border border-white/10"
+            >
+              {viewMode === 'list' ? (
+                <>
+                  <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.447-1.894L9 1m0 19l6 3m-6-3V1m6 22l5.447-2.724A2 2 0 0121 18.618V8.382a2 2 0 01-1.447-1.894L15 1m0 22V1m0 0L9 4"></path></svg>
+                  マップを表示
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                  リストを表示
+                </>
+              )}
+            </button>
           </div>
         </div>
 
