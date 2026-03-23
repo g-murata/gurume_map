@@ -567,7 +567,7 @@ export const Main: React.FC<MainProps> = (props) => {
                 </div>
                 
                 {
-                  (selectedRestaurant !== undefined) && (
+                  (selectedRestaurant !== undefined && window.innerWidth > 768) && (
                     <InfoWindow 
                       position={{ lat: selectedRestaurant.lat, lng: selectedRestaurant.lng }} 
                       options={infoWindowOptions}
