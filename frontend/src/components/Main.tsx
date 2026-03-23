@@ -479,9 +479,9 @@ export const Main: React.FC<MainProps> = (props) => {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row flex-1 overflow-hidden w-full relative">
+          <div className="flex flex-col md:flex-row flex-1 min-h-0 overflow-hidden w-full relative">
             
-            <div className={`flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[420px] flex flex-col border-r border-gray-200 bg-white ${viewMode === 'map' ? 'hidden md:flex' : 'flex'}`}>
+            <div className={`flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[420px] flex flex-col min-h-0 border-r border-gray-200 bg-white ${viewMode === 'map' ? 'hidden md:flex' : 'flex'}`}>
               
               <div className="hidden md:block px-6 py-4 border-b border-gray-50 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
                 <div className="flex items-center justify-between">
@@ -492,7 +492,7 @@ export const Main: React.FC<MainProps> = (props) => {
                 </div>
               </div>
 
-              <div className="overflow-y-auto flex-1 px-4 py-4 scrollbar-hide">
+              <div className="overflow-y-auto flex-1 min-h-0 px-4 py-4 scrollbar-hide">
                 {filteredRestaurants.map((entry) => {
                   const restaurant = entry.restaurant;
                   const isSelected = selectedRestaurant?.id === restaurant.id;
