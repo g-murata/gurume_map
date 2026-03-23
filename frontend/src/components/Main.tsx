@@ -290,9 +290,15 @@ export const Main: React.FC<MainProps> = (props) => {
 
   const onSelect = (item: any) => {
     setSelectedLocation(item);
+    // 選択時にレビューも取得しておく（スマホのカード表示用）
+    fetchShowReview(item.id)
+      .then((data: any) => {
+        setReviews(data.review)
+      })
   }
   const onDeselect = () => {
     setSelectedLocation({});
+    setReviews([]); // クリア
   }
 
   const selectedRestaurant = selectedLocation.id ? 
@@ -576,20 +582,40 @@ export const Main: React.FC<MainProps> = (props) => {
               {viewMode === 'map' && selectedRestaurant && (
                 <div className="md:hidden absolute bottom-24 left-4 right-4 animate-in slide-in-from-bottom-4 duration-300">
                   <div 
-                    className="bg-white rounded-2xl shadow-2xl flex overflow-hidden border border-gray-100"
+                    className="bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-100"
                     onClick={() => onOpenDialog(selectedRestaurant)}
                   >
-                    <div className="w-24 h-24 flex-shrink-0">
-                      {selectedRestaurant.image_url ? (
-                        <img src={selectedRestaurant.image_url} className="w-full h-full object-cover" alt={selectedRestaurant.name} />
-                      ) : (
-                        <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-full h-full object-cover opacity-50 p-2" alt="no_gazou" />
-                      )}
+                    <div className="flex">
+                      <div className="w-24 h-24 flex-shrink-0">
+                        {selectedRestaurant.image_url ? (
+                          <img src={selectedRestaurant.image_url} className="w-full h-full object-cover" alt={selectedRestaurant.name} />
+                        ) : (
+                          <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-full h-full object-cover opacity-50 p-2" alt="no_gazou" />
+                        )}
+                      </div>
+                      <div className="p-3 flex flex-col justify-center flex-1 min-w-0">
+                        <h3 className="font-bold text-gray-800 truncate">{selectedRestaurant.name}</h3>
+                        <p className="text-xs text-gray-400 mt-0.5 truncate">{selectedRestaurant.description}</p>
+                        {/* 星評価を表示（もし最新レビューがあればその評価） */}
+                        {reviews.length > 0 && (
+                          <div className="flex items-center gap-1 mt-1">
+                            <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
+                            <span className="text-[10px] text-gray-400">({reviews.length})</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="p-3 flex flex-col justify-center flex-1 min-w-0">
-                      <h3 className="font-bold text-gray-800 truncate">{selectedRestaurant.name}</h3>
-                      <p className="text-xs text-gray-400 mt-1 truncate">{selectedRestaurant.description}</p>
-                    </div>
+                    {/* 最新レビューのチラ見せ */}
+                    {reviews.length > 0 && (
+                      <div className="px-3 pb-3 pt-1 border-t border-gray-50">
+                        <div className="flex items-start gap-2 bg-gray-50/50 p-2 rounded-lg">
+                          <span className="text-primary-500 text-xs mt-0.5">💬</span>
+                          <p className="text-[11px] text-gray-600 line-clamp-1 italic">
+                            {reviews[0].content}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
