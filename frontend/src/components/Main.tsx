@@ -300,6 +300,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
   const openImageLightbox = (imageUrl: string) => {
@@ -449,10 +450,10 @@ export const Main: React.FC<MainProps> = (props) => {
           </div>
 
           {/* === メインコンテンツ === */}
-          <div className="flex flex-col-reverse md:flex-row flex-1 overflow-hidden w-full">
+          <div className="flex flex-col md:flex-row flex-1 overflow-hidden w-full relative">
             
             {/* 左側：レストランリスト */}
-            <div className="overflow-y-auto flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[400px] px-4 py-4 scrollbar-hide border-r border-gray-200 bg-gray-50/50">
+            <div className={`overflow-y-auto flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[400px] px-4 py-4 scrollbar-hide border-r border-gray-200 bg-gray-50/50 ${viewMode === 'map' ? 'hidden md:block' : 'block'}`}>
               {filteredRestaurants.map((entry) => {
                 const restaurant = entry.restaurant;
                 return (
@@ -526,7 +527,7 @@ export const Main: React.FC<MainProps> = (props) => {
             </div>
             
             {/* 右側：マップ */}
-            <div className="h-[40vh] md:h-full w-full flex-1 relative">
+            <div className={`h-full w-full flex-1 relative ${viewMode === 'list' ? 'hidden md:block' : 'block'}`}>
               <GoogleMap
                 mapContainerClassName="w-full h-full"
                 center={area_kari.find((area) => area.id === Number(selectedArea) + 1)}
@@ -564,6 +565,26 @@ export const Main: React.FC<MainProps> = (props) => {
                   )              
                 }
               </GoogleMap>
+            </div>
+
+            {/* スマホ用表示切り替えボタン */}
+            <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+              <button
+                onClick={() => setViewMode(viewMode === 'list' ? 'map' : 'list')}
+                className="bg-gray-800 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold active:scale-95 transition-transform"
+              >
+                {viewMode === 'list' ? (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.447-1.894L9 1m0 19l6 3m-6-3V1m6 22l5.447-2.724A2 2 0 0121 18.618V8.382a2 2 0 01-1.447-1.894L15 1m0 22V1m0 0L9 4"></path></svg>
+                    マップを表示
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    リストを表示
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
