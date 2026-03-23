@@ -309,7 +309,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
   const openImageLightbox = (imageUrl: string) => {
