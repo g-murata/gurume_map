@@ -133,7 +133,7 @@
 
 /* 星0 */
 
-/* 画像の縮小時などのジャギー対策 */
+/* 縮小時などのジャギー対策 */
 .image-render-smooth {
     image-rendering: -webkit-optimize-contrast; /* Webkit (Safari/Chrome) 用 */
     image-rendering: crisp-edges; /* Firefox 用 */
@@ -141,4 +141,20 @@
     /* ハードウェアアクセラレーションを強制して滑らかにする */
     transform: translateZ(0);
     backface-visibility: hidden;
+}
+
+/* ニュースティッカー用のアニメーション */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+    display: flex;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
 }

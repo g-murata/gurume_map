@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { auth } from '../firebase';
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, CheckUsersWithoutReviews } from '../apis/reviews';
+import { fetchShowReview, CheckUsersWithoutReviews, GetLatestReviews } from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
 import { fetchAreas } from '../apis/areas';
 import {
@@ -165,6 +165,12 @@ export const Main: React.FC<MainProps> = (props) => {
       setAreas(data.areas)
     })
     .catch((error) => console.log(error))
+
+    GetLatestReviews()
+    .then((data: any) => {
+      setLatestReview(data)
+    })
+    .catch((error) => console.log(error))
   }, [])
 
   const [size, setSize] = useState<google.maps.Size | undefined>(undefined);
@@ -301,6 +307,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [latestReview, setLatestReview] = useState<{review: Review, restraunt: Restraunt} | null>(null);
   
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
   const openImageLightbox = (imageUrl: string) => {
@@ -381,6 +388,25 @@ export const Main: React.FC<MainProps> = (props) => {
 
           {/* === 検索・フィルターエリア === */}
           <div className="bg-white border-b border-gray-100 shadow-sm z-10 flex-none relative">
+            {latestReview && (
+              <div className="bg-primary-600 text-white overflow-hidden h-9 flex items-center relative group">
+                <div className="animate-marquee whitespace-nowrap flex items-center">
+                  {/* 同じ内容を2回並べてシームレスにループさせる */}
+                  <div className="flex items-center">
+                    <span className="font-bold text-[10px] bg-white text-primary-600 px-1.5 py-0.5 rounded ml-4 mr-2">NEW</span>
+                    <span className="text-sm font-medium mr-12">
+                      「{latestReview.restraunt.name}」へのレビュー: {latestReview.review.content}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-bold text-[10px] bg-white text-primary-600 px-1.5 py-0.5 rounded ml-4 mr-2">NEW</span>
+                    <span className="text-sm font-medium mr-12">
+                      「{latestReview.restraunt.name}」へのレビュー: {latestReview.review.content}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="w-full px-4 lg:px-6 py-3 flex justify-between items-center">
               
               <AreaList 
