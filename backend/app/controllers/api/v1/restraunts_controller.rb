@@ -4,7 +4,7 @@ module Api
       include Rails.application.routes.url_helpers
 
       def index
-        restraunts = Restraunt.with_attached_image.includes(:tags_tagged_items, :user)
+        restraunts = Restraunt.with_attached_image.includes(:tags_tagged_items, :user, :reviews)
                       .select("restraunts.*, users.name as user_name, users.email as user_email")
                       .order(created_at: :DESC)
                       .order("tags_tagged_items.tag_id")
@@ -90,6 +90,15 @@ module Api
         data = restraunt.as_json
         data["image_url"] = restraunt.image.attached? ? rails_blob_url(restraunt.image, only_path: false) : nil
         
+        # レストランのレビュー統計
+        reviews = restraunt.reviews
+        data["average_evaluation"] = reviews.empty? ? 0 : (reviews.sum(:evaluation).to_f / reviews.size).round(1)
+        data["total_reviews_count"] = reviews.size
+        
+        latest_review = reviews.order(created_at: :desc).first
+        data["latest_review_content"] = latest_review&.content
+        data["latest_review_evaluation"] = latest_review&.evaluation
+
         # userが存在する場合のみマージ（destroyなどでnilになる可能性を考慮）
         if restraunt.user
           data = data.merge(
@@ -97,8 +106,8 @@ module Api
             "user_email" => restraunt.user.email,
             "user_image_url" => restraunt.user.image_url,
             "user_id" => restraunt.user_id,
-            "reviews_count" => restraunt.user.reviews_count,
-            "restraunts_count" => restraunt.user.restraunts_count
+            "user_reviews_count" => restraunt.user.reviews_count,
+            "user_restraunts_count" => restraunt.user.restraunts_count
           )
         end
         data

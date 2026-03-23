@@ -50,6 +50,13 @@ const customStyles: any = {
   },
 };
 
+const AREA_DEFINITIONS = [
+  { id: 1, name: "新橋", lat: 35.66630562620729, lng: 139.7581500275268 },
+  { id: 2, name: "赤坂見附", lat: 35.676607396575264, lng: 139.73728881531363 },
+  { id: 3, name: "新宿", lat: 35.68953440195192, lng: 139.70075664056398 },
+  { id: 4, name: "王子", lat: 35.752229730596184, lng: 139.7381560725481 }
+];
+
 const TOKYO_BOUNDS = {
   north: 35.802229730596184,
   south: 35.613797,
@@ -60,7 +67,17 @@ const TOKYO_BOUNDS = {
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY as string;
 
 interface RestaurantEntry {
-  restaurant: Restraunt & { user_email?: string; user_name?: string; image_url?: string; created_at: string; updated_at?: string };
+  restaurant: Restraunt & { 
+    user_email?: string; 
+    user_name?: string; 
+    image_url?: string; 
+    created_at: string; 
+    updated_at?: string;
+    average_evaluation?: number;
+    total_reviews_count?: number;
+    latest_review_content?: string;
+    latest_review_evaluation?: number;
+  };
   tags_tagged_items: TagsTaggedItem[];
 }
 
@@ -97,10 +114,13 @@ export const Main: React.FC<MainProps> = (props) => {
   const [reviews, setReviews] = useState<Review[]>([])
   const [selectedArea, setSelectedArea] = useState(1);
 
-  // エリアが変更された時だけマップの中心を更新するためのメモ化された座標
+  // エリア変更時またはお店選択時にマップの中心を更新
   const mapCenter = useMemo(() => {
+    if (selectedLocation.lat && selectedLocation.lng) {
+      return { lat: selectedLocation.lat, lng: selectedLocation.lng };
+    }
     return AREA_DEFINITIONS.find((area) => area.id === Number(selectedArea) + 1) || AREA_DEFINITIONS[0];
-  }, [selectedArea]);
+  }, [selectedArea, selectedLocation]);
 
   const [coordinateLat, setCoordinateLat] = useState<number | string>('');
   const [coordinateLng, setCoordinateLng] = useState<number | string>('');
@@ -292,6 +312,11 @@ export const Main: React.FC<MainProps> = (props) => {
   })
 
   const [selectedLocation, setSelectedLocation] = useState<any>({});
+
+  // エリアが変更された時だけマップの中心を更新するためのメモ化された座標
+  const mapCenter = useMemo(() => {
+    return AREA_DEFINITIONS.find((area) => area.id === Number(selectedArea) + 1) || AREA_DEFINITIONS[0];
+  }, [selectedArea]);
 
   const onSelect = (item: any) => {
     setSelectedLocation(item);
@@ -509,24 +534,27 @@ export const Main: React.FC<MainProps> = (props) => {
                         
                         <div className="flex flex-col justify-between w-2/3 p-4">
                           <div className="flex-1 min-w-0">
-                            <div className={`mb-1.5 text-lg font-bold transition-colors duration-300 truncate ${isSelected ? 'text-primary-600' : 'text-gray-800'}`}>
+                            <div className={`mb-1 text-lg font-bold transition-colors duration-300 truncate ${isSelected ? 'text-primary-600' : 'text-gray-800'}`}>
                               {restaurant.name}
                             </div>
 
-                            {/* PC用：選択/ホバー時に最新レビューを一文表示 */}
-                            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isSelected ? 'max-h-20 opacity-100 mb-3' : 'max-h-0 opacity-0'}`}>
-                              {reviews.length > 0 ? (
-                                <div className="flex flex-col gap-0.5">
-                                  <div className="flex items-center gap-1">
-                                    <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
-                                    <span className="text-[9px] text-gray-400">({reviews.length})</span>
-                                  </div>
-                                  <p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">
-                                    "{reviews[0].content}"
-                                  </p>
-                                </div>
-                              ) : (
-                                <p className="text-[9px] text-gray-400 mt-1 italic">レビュー未投稿</p>
+                            {/* レビュー概要（平均評価と最新レビュー1行） */}
+                            <div className="flex flex-col gap-0.5 mb-3">
+                              <div className="flex items-center gap-1.5">
+                                {restaurant.total_reviews_count && restaurant.total_reviews_count > 0 ? (
+                                  <>
+                                    <ReactStarsRating value={restaurant.average_evaluation || 0} size={10} isEdit={false} className="flex" />
+                                    <span className="text-[10px] text-gray-400 font-bold">({restaurant.total_reviews_count})</span>
+                                  </>
+                                ) : (
+                                  <span className="text-[10px] text-gray-300 italic">No reviews</span>
+                                )}
+                              </div>
+                              
+                              {restaurant.latest_review_content && (
+                                <p className="text-[10px] text-gray-500 truncate italic leading-tight">
+                                  "{restaurant.latest_review_content}"
+                                </p>
                               )}
                             </div>
 
@@ -625,14 +653,14 @@ export const Main: React.FC<MainProps> = (props) => {
                     >
                       <div className="cursor-pointer p-1 min-w-[140px]" onClick={() => onOpenDialog(selectedRestaurant)}>
                         <h2 className="text-sm font-bold text-gray-800 mb-1">{selectedRestaurant.name}</h2>
-                        {reviews.length > 0 ? (
+                        {(selectedRestaurant as any).total_reviews_count > 0 ? (
                           <div className="flex flex-col gap-0.5">
                             <div className="flex items-center gap-1">
-                              <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
-                              <span className="text-[9px] text-gray-400">({reviews.length})</span>
+                              <ReactStarsRating value={(selectedRestaurant as any).average_evaluation} size={10} isEdit={false} className="flex" />
+                              <span className="text-[9px] text-gray-400">({(selectedRestaurant as any).total_reviews_count})</span>
                             </div>
                             <p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">
-                              "{reviews[0].content}"
+                              "{(selectedRestaurant as any).latest_review_content}"
                             </p>
                           </div>
                         ) : (
@@ -674,14 +702,14 @@ export const Main: React.FC<MainProps> = (props) => {
                         <p className="text-[10px] text-gray-400 truncate">{selectedRestaurant.description}</p>
                         
                         {/* 評価と最新レビューを1行ずつコンパクトに表示 */}
-                        {reviews.length > 0 ? (
+                        {(selectedRestaurant as any).total_reviews_count > 0 ? (
                           <div className="mt-1.5 flex flex-col gap-0.5">
                             <div className="flex items-center gap-1">
-                              <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
-                              <span className="text-[9px] text-gray-400">({reviews.length})</span>
+                              <ReactStarsRating value={(selectedRestaurant as any).average_evaluation} size={10} isEdit={false} className="flex" />
+                              <span className="text-[9px] text-gray-400">({(selectedRestaurant as any).total_reviews_count})</span>
                             </div>
                             <p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">
-                              "{reviews[0].content}"
+                              "{(selectedRestaurant as any).latest_review_content}"
                             </p>
                           </div>
                         ) : (
