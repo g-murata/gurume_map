@@ -462,77 +462,104 @@ export const Main: React.FC<MainProps> = (props) => {
           <div className="flex flex-col md:flex-row flex-1 overflow-hidden w-full relative">
             
             {/* 左側：レストランリスト */}
-            <div className={`overflow-y-auto flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[400px] px-4 py-4 scrollbar-hide border-r border-gray-200 bg-gray-50/50 ${viewMode === 'map' ? 'hidden md:block' : 'block'}`}>
-              {filteredRestaurants.map((entry) => {
-                const restaurant = entry.restaurant;
-                return (
-                  <div key={restaurant.id}>
-                    
-                    <div 
-                      className="flex mb-4 bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-                      onClick={() => onOpenDialog(restaurant)}
-                      onMouseOver={() => onSelect(restaurant)}
-                    >
-                      <div className="w-1/3 min-w-[120px] bg-gray-50 flex-shrink-0">
-                        {restaurant.image_url == null ?
-                           <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="object-cover w-full h-full opacity-50 p-2" alt="no_image" />
-                           :
-                           <img src={restaurant.image_url} className="object-cover w-full h-full" alt={restaurant.name} />
-                        }
-                      </div>
-                      
-                      <div className="flex flex-col justify-between w-2/3 p-4">
-                        <div>
-                          <div className="mb-2 text-lg font-bold text-gray-800 line-clamp-1">
-                            {restaurant.name}
-                          </div>
-                          <div className="mb-2">
-                            <TagList 
-                              // @ts-ignore
-                              tags_tagged_items={entry.tags_tagged_items}
-                              tags={tags}
-                            />
-                          </div>
-                        </div>
-                        <div className="text-xs text-gray-400 font-medium">
-                          <DateTimeConverter 
-                            created_at={restaurant.created_at}
-                          />
-                        </div>
-                      </div>
-                    </div>
+            <div className={`flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[420px] flex flex-col border-r border-gray-200 bg-white ${viewMode === 'map' ? 'hidden md:flex' : 'flex'}`}>
+              
+              {/* リストヘッダー（PCのみ） */}
+              <div className="hidden md:block px-6 py-4 border-b border-gray-50 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Results</h2>
+                  <span className="bg-primary-50 text-primary-600 text-xs font-bold px-2.5 py-1 rounded-full">
+                    {filteredRestaurants.length}件のお店
+                  </span>
+                </div>
+              </div>
 
-                    <Modal isOpen={restaurant.id === selectedItem} onAfterOpen={() => {}} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal">
-                      {!editModalIsOpen ?
-                        <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={restaurant} item={restaurant.id} tags_tagged_items={entry.tags_tagged_items as any} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} />
-                        :
-                        <RestrauntModal mode="edit" setIsLoading={setIsLoading} restaurant={restaurant} tags_tagged_items={entry.tags_tagged_items as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={restaurant.lat} coordinateLng={restaurant.lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={handleClear} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={openImageLightbox} />
-                      }
-                    </Modal>
-
-                    {reviewModalIsOpen &&
-                      <Modal isOpen={restaurant.id === selectedItem} onAfterOpen={() => {}} onRequestClose={() => guardedClose(closeReviewModal)} style={customStyles} contentLabel="Review Modal">
-                        <ReviewModal 
-                          mode="new"
-                          restaurant={restaurant}
-                          setIsDirty={setIsDirty}
-                          openImageLightbox={openImageLightbox}
-                          closeReviewModal={closeReviewModal}
-                          error={error}
-                          setError={setError}
-                          setIsLoading={setIsLoading}
-                          user={user as any}
-                          reviews={reviews}
-                          setReview={setReviews}
-                          setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
-                          ReactStarsRating={ReactStarsRating}
-                        />
-                      </Modal>
-                    }
+              <div className="overflow-y-auto flex-1 px-4 py-4 scrollbar-hide">
+                {filteredRestaurants.map((entry) => {
+                  const restaurant = entry.restaurant;
+                  const isSelected = selectedRestaurant?.id === restaurant.id;
                   
-                  </div>
-                )
-              })}
+                  return (
+                    <div key={restaurant.id} className="mb-4">
+                      
+                      <div 
+                        className={`flex bg-white border rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden group ${
+                          isSelected 
+                            ? 'border-primary-500 ring-2 ring-primary-500/10 shadow-lg' 
+                            : 'border-gray-100 hover:border-primary-200 hover:shadow-md hover:-translate-y-0.5 shadow-sm'
+                        }`}
+                        onClick={() => onOpenDialog(restaurant)}
+                        onMouseOver={() => onSelect(restaurant)}
+                      >
+                        <div className="w-1/3 min-w-[130px] bg-gray-50 flex-shrink-0 relative overflow-hidden">
+                          {restaurant.image_url == null ?
+                             <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="object-cover w-full h-full opacity-50 p-4 group-hover:scale-110 transition-transform duration-500" alt="no_image" />
+                             :
+                             <img src={restaurant.image_url} className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" alt={restaurant.name} />
+                          }
+                          <div className={`absolute inset-0 bg-primary-600/10 transition-opacity duration-300 ${isSelected ? 'opacity-100' : 'opacity-0'}`} />
+                        </div>
+                        
+                        <div className="flex flex-col justify-between w-2/3 p-4">
+                          <div>
+                            <div className={`mb-1.5 text-lg font-bold transition-colors duration-300 ${isSelected ? 'text-primary-600' : 'text-gray-800'}`}>
+                              {restaurant.name}
+                            </div>
+                            <div className="mb-3">
+                              <TagList 
+                                // @ts-ignore
+                                tags_tagged_items={entry.tags_tagged_items}
+                                tags={tags}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between mt-auto">
+                            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
+                              <DateTimeConverter 
+                                created_at={restaurant.created_at}
+                              />
+                            </div>
+                            {isSelected && (
+                              <span className="text-primary-500 animate-pulse">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clipRule="evenodd"></path><path fillRule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <Modal isOpen={restaurant.id === selectedItem} onAfterOpen={() => {}} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal">
+                        {!editModalIsOpen ?
+                          <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={evaluation} setEvaluation={setEvaluation} onChange={onChange} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={restaurant} item={restaurant.id} tags_tagged_items={entry.tags_tagged_items as any} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} />
+                          :
+                          <RestrauntModal mode="edit" setIsLoading={setIsLoading} restaurant={restaurant} tags_tagged_items={entry.tags_tagged_items as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={restaurant.lat} coordinateLng={restaurant.lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={handleClear} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={openImageLightbox} />
+                        }
+                      </Modal>
+
+                      {reviewModalIsOpen &&
+                        <Modal isOpen={restaurant.id === selectedItem} onAfterOpen={() => {}} onRequestClose={() => guardedClose(closeReviewModal)} style={customStyles} contentLabel="Review Modal">
+                          <ReviewModal 
+                            mode="new"
+                            restaurant={restaurant}
+                            setIsDirty={setIsDirty}
+                            openImageLightbox={openImageLightbox}
+                            closeReviewModal={closeReviewModal}
+                            error={error}
+                            setError={setError}
+                            setIsLoading={setIsLoading}
+                            user={user as any}
+                            reviews={reviews}
+                            setReview={setReviews}
+                            setCheckUsersWithoutReviews={setCheckUsersWithoutReviews}
+                            ReactStarsRating={ReactStarsRating}
+                          />
+                        </Modal>
+                      }
+                    
+                    </div>
+                  )
+                })}
+              </div>
             </div>
             
             {/* 右側：マップ */}
