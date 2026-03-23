@@ -50,18 +50,6 @@ const customStyles: any = {
   },
 };
 
-const divStyle = {
-  background: "white",
-  fontSize: 7.5,
-};
-
-const AREA_DEFINITIONS = [
-  { id: 1, name: "新橋", lat: 35.66630562620729, lng: 139.7581500275268 },
-  { id: 2, name: "赤坂見附", lat: 35.676607396575264, lng: 139.73728881531363 },
-  { id: 3, name: "新宿", lat: 35.68953440195192, lng: 139.70075664056398 },
-  { id: 4, name: "王子", lat: 35.752229730596184, lng: 139.7381560725481 }
-];
-
 const TOKYO_BOUNDS = {
   north: 35.802229730596184,
   south: 35.613797,
@@ -307,6 +295,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
   const onSelect = (item: any) => {
     setSelectedLocation(item);
+    setReviews([]); // 前のレビューをクリアして誤表示を防ぐ
     fetchShowReview(item.id)
       .then((data: any) => {
         setReviews(data.review)
@@ -519,10 +508,28 @@ export const Main: React.FC<MainProps> = (props) => {
                         </div>
                         
                         <div className="flex flex-col justify-between w-2/3 p-4">
-                          <div>
-                            <div className={`mb-1.5 text-lg font-bold transition-colors duration-300 ${isSelected ? 'text-primary-600' : 'text-gray-800'}`}>
+                          <div className="flex-1 min-w-0">
+                            <div className={`mb-1.5 text-lg font-bold transition-colors duration-300 truncate ${isSelected ? 'text-primary-600' : 'text-gray-800'}`}>
                               {restaurant.name}
                             </div>
+
+                            {/* PC用：選択/ホバー時に最新レビューを一文表示 */}
+                            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isSelected ? 'max-h-20 opacity-100 mb-3' : 'max-h-0 opacity-0'}`}>
+                              {reviews.length > 0 ? (
+                                <div className="flex flex-col gap-0.5">
+                                  <div className="flex items-center gap-1">
+                                    <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
+                                    <span className="text-[9px] text-gray-400">({reviews.length})</span>
+                                  </div>
+                                  <p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">
+                                    "{reviews[0].content}"
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="text-[9px] text-gray-400 mt-1 italic">レビュー未投稿</p>
+                              )}
+                            </div>
+
                             <div className="mb-3">
                               <TagList 
                                 // @ts-ignore
@@ -616,8 +623,21 @@ export const Main: React.FC<MainProps> = (props) => {
                       options={infoWindowOptions}
                       onCloseClick={() => onDeselect()}
                     >
-                      <div style={divStyle} className="cursor-pointer font-bold px-2 py-1" onClick={() => onOpenDialog(selectedRestaurant)}>
-                        <h2 className="text-xs md:text-sm text-gray-800">{selectedRestaurant.name}</h2>                    
+                      <div className="cursor-pointer p-1 min-w-[140px]" onClick={() => onOpenDialog(selectedRestaurant)}>
+                        <h2 className="text-sm font-bold text-gray-800 mb-1">{selectedRestaurant.name}</h2>
+                        {reviews.length > 0 ? (
+                          <div className="flex flex-col gap-0.5">
+                            <div className="flex items-center gap-1">
+                              <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
+                              <span className="text-[9px] text-gray-400">({reviews.length})</span>
+                            </div>
+                            <p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">
+                              "{reviews[0].content}"
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="text-[9px] text-gray-400 mt-0.5">レビュー未投稿</p>
+                        )}
                       </div>
                     </InfoWindow>
                   )              
