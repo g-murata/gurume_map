@@ -660,26 +660,25 @@ export const Main: React.FC<MainProps> = (props) => {
                         )}
                       </div>
                     </div>
-                    <div className="px-3 pb-3 pt-1 border-t border-gray-50">
-                      <div className="flex items-start gap-2 bg-gray-50/50 p-2.5 rounded-lg relative">
-                        <span className="text-primary-500 text-xs mt-0.5">💬</span>
+                    <div className="px-3 pb-2 pt-1 border-t border-gray-50">
+                      <div className="flex items-center gap-2 bg-gray-50/50 px-2 py-1.5 rounded-lg relative">
+                        <span className="text-primary-500 text-[10px]">💬</span>
                         {reviews.length > 0 ? (
-                          <div className="flex flex-col flex-1 min-w-0">
-                            <p className="text-[11px] text-gray-600 line-clamp-3 italic leading-relaxed">
+                          <div className="flex items-center flex-1 min-w-0 gap-2">
+                            <p className="text-[11px] text-gray-500 line-clamp-1 italic flex-1">
                               {reviews[0].content}
                             </p>
-                            <span className="text-[10px] text-primary-600 font-bold mt-1.5 flex items-center">
-                              もっと詳しく見る
-                              <svg className="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                            <span className="text-[10px] text-primary-600 font-bold whitespace-nowrap">
+                              詳細
                             </span>
                           </div>
                         ) : (
-                          <div className="flex flex-col flex-1">
+                          <div className="flex items-center flex-1">
                             <p className="text-[11px] text-gray-400">
-                              まだレビューがありません。
+                              レビューなし
                             </p>
-                            <span className="text-[10px] text-primary-600 font-bold mt-1">
-                              詳細を見る
+                            <span className="text-[10px] text-primary-600 font-bold ml-auto">
+                              詳細
                             </span>
                           </div>
                         )}
