@@ -583,7 +583,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
               {/* スマホ用：マップ上の浮遊カード */}
               {viewMode === 'map' && selectedRestaurant && (
-                <div className="md:hidden absolute bottom-24 left-4 right-4 animate-in slide-in-from-bottom-4 duration-300">
+                <div className="md:hidden absolute bottom-28 left-4 right-4 animate-in slide-in-from-bottom-4 duration-300">
                   <div 
                     className="bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-100"
                     onClick={() => onOpenDialog(selectedRestaurant)}
@@ -597,7 +597,18 @@ export const Main: React.FC<MainProps> = (props) => {
                         )}
                       </div>
                       <div className="p-3 flex flex-col justify-center flex-1 min-w-0">
-                        <h3 className="font-bold text-gray-800 truncate">{selectedRestaurant.name}</h3>
+                        <div className="flex items-start justify-between">
+                          <h3 className="font-bold text-gray-800 truncate pr-2">{selectedRestaurant.name}</h3>
+                          <button 
+                            className="text-gray-400 p-1"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDeselect();
+                            }}
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                          </button>
+                        </div>
                         <p className="text-xs text-gray-400 mt-0.5 truncate">{selectedRestaurant.description}</p>
                         {/* 星評価を表示（もし最新レビューがあればその評価） */}
                         {reviews.length > 0 && (
@@ -609,16 +620,20 @@ export const Main: React.FC<MainProps> = (props) => {
                       </div>
                     </div>
                     {/* 最新レビューのチラ見せ */}
-                    {reviews.length > 0 && (
-                      <div className="px-3 pb-3 pt-1 border-t border-gray-50">
-                        <div className="flex items-start gap-2 bg-gray-50/50 p-2 rounded-lg">
-                          <span className="text-primary-500 text-xs mt-0.5">💬</span>
+                    <div className="px-3 pb-3 pt-1 border-t border-gray-50">
+                      <div className="flex items-start gap-2 bg-gray-50/50 p-2 rounded-lg">
+                        <span className="text-primary-500 text-xs mt-0.5">💬</span>
+                        {reviews.length > 0 ? (
                           <p className="text-[11px] text-gray-600 line-clamp-1 italic">
                             {reviews[0].content}
                           </p>
-                        </div>
+                        ) : (
+                          <p className="text-[11px] text-gray-400 line-clamp-1">
+                            まだレビューがありません。
+                          </p>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               )}
