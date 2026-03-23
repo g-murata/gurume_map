@@ -651,36 +651,21 @@ export const Main: React.FC<MainProps> = (props) => {
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           </button>
                         </div>
-                        <p className="text-xs text-gray-400 mt-0.5 truncate">{selectedRestaurant.description}</p>
-                        {reviews.length > 0 && (
-                          <div className="flex items-center gap-1 mt-1">
-                            <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
-                            <span className="text-[10px] text-gray-400">({reviews.length})</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="px-3 pb-2 pt-1 border-t border-gray-50">
-                      <div className="flex items-center gap-2 bg-gray-50/50 px-2 py-1.5 rounded-lg relative">
-                        <span className="text-primary-500 text-[10px]">💬</span>
+                        <p className="text-[10px] text-gray-400 line-clamp-3 leading-tight mb-1">{selectedRestaurant.description}</p>
+                        
+                        {/* 評価と最新レビューを1行ずつコンパクトに表示 */}
                         {reviews.length > 0 ? (
-                          <div className="flex items-center flex-1 min-w-0 gap-2">
-                            <p className="text-[11px] text-gray-500 line-clamp-1 italic flex-1">
-                              {reviews[0].content}
+                          <div className="mt-1.5 flex flex-col gap-0.5">
+                            <div className="flex items-center gap-1">
+                              <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
+                              <span className="text-[9px] text-gray-400">({reviews.length})</span>
+                            </div>
+                            <p className="text-[10px] text-gray-500 line-clamp-3 italic leading-tight mt-0.5">
+                              "{reviews[0].content}"
                             </p>
-                            <span className="text-[10px] text-primary-600 font-bold whitespace-nowrap">
-                              詳細
-                            </span>
                           </div>
                         ) : (
-                          <div className="flex items-center flex-1">
-                            <p className="text-[11px] text-gray-400">
-                              レビューなし
-                            </p>
-                            <span className="text-[10px] text-primary-600 font-bold ml-auto">
-                              詳細
-                            </span>
-                          </div>
+                          <p className="text-[9px] text-gray-400 mt-1">レビュー未投稿</p>
                         )}
                       </div>
                     </div>
