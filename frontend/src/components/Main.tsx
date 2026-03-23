@@ -461,6 +461,7 @@ export const Main: React.FC<MainProps> = (props) => {
                     <div 
                       className="flex mb-4 bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                       onClick={() => onOpenDialog(restaurant)}
+                      onMouseOver={() => onSelect(restaurant)}
                     >
                       <div className="w-1/3 min-w-[120px] bg-gray-50 flex-shrink-0">
                         {restaurant.image_url == null ?
