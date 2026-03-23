@@ -461,7 +461,6 @@ export const Main: React.FC<MainProps> = (props) => {
                     <div 
                       className="flex mb-4 bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                       onClick={() => onOpenDialog(restaurant)}
-                      onMouseOver={() => onSelect(restaurant)} 
                     >
                       <div className="w-1/3 min-w-[120px] bg-gray-50 flex-shrink-0">
                         {restaurant.image_url == null ?
@@ -543,9 +542,7 @@ export const Main: React.FC<MainProps> = (props) => {
                     return (
                       <Marker
                         key={restaurant.id}
-                        onClick={() => onOpenDialog(restaurant)}
-                        onMouseOver={() => onSelect(restaurant)} 
-                        onMouseOut={onDeselect}
+                        onClick={() => onSelect(restaurant)}
                         position={{ lat: restaurant.lat, lng: restaurant.lng }} 
                       />                    
                     )
@@ -554,7 +551,11 @@ export const Main: React.FC<MainProps> = (props) => {
                 
                 {
                   (selectedRestaurant !== undefined) && (
-                    <InfoWindow position={{ lat: selectedRestaurant.lat, lng: selectedRestaurant.lng }} options={infoWindowOptions}>
+                    <InfoWindow 
+                      position={{ lat: selectedRestaurant.lat, lng: selectedRestaurant.lng }} 
+                      options={infoWindowOptions}
+                      onCloseClick={() => onDeselect()}
+                    >
                       <div style={divStyle} className="cursor-pointer font-bold px-2 py-1" onClick={() => onOpenDialog(selectedRestaurant)}>
                         <h2 className="text-xs md:text-sm text-gray-800">{selectedRestaurant.name}</h2>                    
                       </div>
