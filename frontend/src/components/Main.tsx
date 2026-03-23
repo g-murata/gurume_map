@@ -498,7 +498,7 @@ export const Main: React.FC<MainProps> = (props) => {
                 </div>
               </div>
 
-              <div className="overflow-y-auto flex-1 min-h-0 px-4 py-4 scrollbar-hide">
+              <div className="overflow-y-auto flex-1 min-h-0 px-4 pt-4 pb-32 scrollbar-hide">
                 {filteredRestaurants.map((entry) => {
                   const restaurant = entry.restaurant;
                   const isSelected = selectedRestaurant?.id === restaurant.id;
