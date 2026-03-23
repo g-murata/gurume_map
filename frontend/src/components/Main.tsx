@@ -651,7 +651,7 @@ export const Main: React.FC<MainProps> = (props) => {
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           </button>
                         </div>
-                        <p className="text-[10px] text-gray-400 truncate whitespace-nowrap">{selectedRestaurant.description}</p>
+                        <p className="text-[10px] text-gray-400 truncate">{selectedRestaurant.description}</p>
                         
                         {/* 評価と最新レビューを1行ずつコンパクトに表示 */}
                         {reviews.length > 0 ? (
@@ -660,13 +660,19 @@ export const Main: React.FC<MainProps> = (props) => {
                               <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
                               <span className="text-[9px] text-gray-400">({reviews.length})</span>
                             </div>
-                            <p className="text-[10px] text-gray-500 line-clamp-3 italic leading-tight mt-0.5">
+                            <p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">
                               "{reviews[0].content}"
                             </p>
                           </div>
                         ) : (
                           <p className="text-[9px] text-gray-400 mt-1">レビュー未投稿</p>
                         )}
+                        <div className="mt-1 flex justify-end">
+                          <span className="text-[9px] font-bold text-primary-500 flex items-center gap-0.5">
+                            もっと詳しく
+                            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
