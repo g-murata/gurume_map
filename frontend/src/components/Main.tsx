@@ -390,7 +390,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         
-        <div className="flex flex-col h-screen bg-gray-50/50 overflow-hidden">
+        <div className="flex flex-col h-screen h-[100dvh] bg-gray-50/50 overflow-hidden">
 
           <div className="bg-white border-b border-gray-100 shadow-sm z-10 flex-none relative">
             <div className="w-full px-4 lg:px-6 py-3 flex justify-between items-center gap-3">

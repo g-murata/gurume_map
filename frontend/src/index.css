@@ -154,10 +154,18 @@
 
 html, body {
     height: 100%;
+    height: 100dvh; /* 動的なビューポート高さを優先 */
     margin: 0;
-    overflow: hidden; /* 全体のスクロールを禁止 */
+    padding: 0;
+    overflow: hidden;
 }
 
 #root {
     height: 100%;
+    height: 100dvh;
+}
+
+/* モバイルでの底部の余白（セーフエリア）を考慮したクラス */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
 }
