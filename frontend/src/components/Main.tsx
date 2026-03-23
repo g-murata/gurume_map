@@ -114,14 +114,6 @@ export const Main: React.FC<MainProps> = (props) => {
   const [reviews, setReviews] = useState<Review[]>([])
   const [selectedArea, setSelectedArea] = useState(1);
 
-  // エリア変更時またはお店選択時にマップの中心を更新
-  const mapCenter = useMemo(() => {
-    if (selectedLocation.lat && selectedLocation.lng) {
-      return { lat: selectedLocation.lat, lng: selectedLocation.lng };
-    }
-    return AREA_DEFINITIONS.find((area) => area.id === Number(selectedArea) + 1) || AREA_DEFINITIONS[0];
-  }, [selectedArea, selectedLocation]);
-
   const [coordinateLat, setCoordinateLat] = useState<number | string>('');
   const [coordinateLng, setCoordinateLng] = useState<number | string>('');
 
