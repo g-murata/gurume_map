@@ -588,11 +588,7 @@ export const Main: React.FC<MainProps> = (props) => {
                     </div>
                     <div className="p-3 flex flex-col justify-center flex-1 min-w-0">
                       <h3 className="font-bold text-gray-800 truncate">{selectedRestaurant.name}</h3>
-                      <div className="flex items-center gap-1 mt-1">
-                        <ReactStarsRating value={selectedRestaurant.star_point} size={12} isEdit={false} className="flex" />
-                        <span className="text-xs text-gray-500">{selectedRestaurant.star_point}</span>
-                      </div>
-                      <p className="text-xs text-gray-400 mt-1 truncate">{selectedRestaurant.explanation}</p>
+                      <p className="text-xs text-gray-400 mt-1 truncate">{selectedRestaurant.description}</p>
                     </div>
                   </div>
                 </div>
