@@ -390,7 +390,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
       <LoadScript googleMapsApiKey={url} onLoad={() => createOffsetSize()}>
         
-        <div className="flex flex-col h-[90vh] md:h-[88vh] bg-gray-50/50">
+        <div className="flex flex-col h-screen bg-gray-50/50 overflow-hidden">
 
           <div className="bg-white border-b border-gray-100 shadow-sm z-10 flex-none relative">
             <div className="w-full px-4 lg:px-6 py-3 flex justify-between items-center">
@@ -643,16 +643,27 @@ export const Main: React.FC<MainProps> = (props) => {
                       </div>
                     </div>
                     <div className="px-3 pb-3 pt-1 border-t border-gray-50">
-                      <div className="flex items-start gap-2 bg-gray-50/50 p-2 rounded-lg">
+                      <div className="flex items-start gap-2 bg-gray-50/50 p-2 rounded-lg relative">
                         <span className="text-primary-500 text-xs mt-0.5">💬</span>
                         {reviews.length > 0 ? (
-                          <p className="text-[11px] text-gray-600 line-clamp-1 italic">
-                            {reviews[0].content}
-                          </p>
+                          <div className="flex flex-col flex-1 min-w-0">
+                            <p className="text-[11px] text-gray-600 line-clamp-1 italic">
+                              {reviews[0].content}
+                            </p>
+                            <span className="text-[10px] text-primary-600 font-bold mt-1 flex items-center">
+                              もっと詳しく見る
+                              <svg className="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                            </span>
+                          </div>
                         ) : (
-                          <p className="text-[11px] text-gray-400 line-clamp-1">
-                            まだレビューがありません。
-                          </p>
+                          <div className="flex flex-col flex-1">
+                            <p className="text-[11px] text-gray-400 line-clamp-1">
+                              まだレビューがありません。
+                            </p>
+                            <span className="text-[10px] text-primary-600 font-bold mt-1">
+                              詳細を見る
+                            </span>
+                          </div>
                         )}
                       </div>
                     </div>

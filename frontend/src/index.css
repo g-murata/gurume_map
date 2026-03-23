@@ -142,3 +142,22 @@
     transform: translateZ(0);
     backface-visibility: hidden;
 }
+
+/* アプリのような体験のためのスクロールバー非表示設定 */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* 全体のスクロールを禁止 */
+}
+
+#root {
+    height: 100%;
+}
