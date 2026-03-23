@@ -393,25 +393,43 @@ export const Main: React.FC<MainProps> = (props) => {
         <div className="flex flex-col h-screen bg-gray-50/50 overflow-hidden">
 
           <div className="bg-white border-b border-gray-100 shadow-sm z-10 flex-none relative">
-            <div className="w-full px-4 lg:px-6 py-3 flex justify-between items-center">
+            <div className="w-full px-4 lg:px-6 py-3 flex justify-between items-center gap-3">
               
-              <AreaList 
-                // @ts-ignore
-                areas={areas}
-                selectedArea={selectedArea}
-                setSelectedArea={setSelectedArea}
-              />
+              <div className="flex-1 min-w-0">
+                <AreaList 
+                  // @ts-ignore
+                  areas={areas}
+                  selectedArea={selectedArea}
+                  setSelectedArea={setSelectedArea}
+                />
+              </div>
+
+              {/* スマホ用：リスト/マップ切り替えスイッチ */}
+              <div className="md:hidden flex bg-gray-100 p-1 rounded-xl">
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-primary-600' : 'text-gray-400'}`}
+                >
+                  リスト
+                </button>
+                <button
+                  onClick={() => setViewMode('map')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'map' ? 'bg-white shadow-sm text-primary-600' : 'text-gray-400'}`}
+                >
+                  マップ
+                </button>
+              </div>
 
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-full transition-all duration-200 shadow-sm ${
+                className={`flex items-center justify-center gap-2 h-10 px-4 text-sm font-bold rounded-xl transition-all duration-200 shadow-sm ${
                   isSearchOpen || searchTerm || selectedTags.length > 0
                     ? 'bg-primary-50 text-primary-600 border border-primary-200'
                     : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
                 }`}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                {searchTerm || selectedTags.length > 0 ? '絞り込み中' : '検索・フィルター'}
+                <span className="hidden sm:inline">{searchTerm || selectedTags.length > 0 ? '絞り込み中' : '検索'}</span>
               </button>
             </div>
 
@@ -670,25 +688,6 @@ export const Main: React.FC<MainProps> = (props) => {
                   </div>
                 </div>
               )}
-            </div>
-
-            <div className="md:hidden fixed top-24 left-1/2 -translate-x-1/2 z-50">
-              <button
-                onClick={() => setViewMode(viewMode === 'list' ? 'map' : 'list')}
-                className="bg-gray-900/90 backdrop-blur-md text-white px-6 py-2.5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex items-center gap-2 font-bold active:scale-95 transition-all border border-white/10 text-sm"
-              >
-                {viewMode === 'list' ? (
-                  <>
-                    <svg className="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.447-1.894L9 1m0 19l6 3m-6-3V1m6 22l5.447-2.724A2 2 0 0121 18.618V8.382a2 2 0 01-1.447-1.894L15 1m0 22V1m0 0L9 4"></path></svg>
-                    マップを表示
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    リストを表示
-                  </>
-                )}
-              </button>
             </div>
           </div>
         </div>
