@@ -661,21 +661,21 @@ export const Main: React.FC<MainProps> = (props) => {
                       </div>
                     </div>
                     <div className="px-3 pb-3 pt-1 border-t border-gray-50">
-                      <div className="flex items-start gap-2 bg-gray-50/50 p-2 rounded-lg relative">
+                      <div className="flex items-start gap-2 bg-gray-50/50 p-2.5 rounded-lg relative">
                         <span className="text-primary-500 text-xs mt-0.5">💬</span>
                         {reviews.length > 0 ? (
                           <div className="flex flex-col flex-1 min-w-0">
-                            <p className="text-[11px] text-gray-600 line-clamp-1 italic">
+                            <p className="text-[11px] text-gray-600 line-clamp-3 italic leading-relaxed">
                               {reviews[0].content}
                             </p>
-                            <span className="text-[10px] text-primary-600 font-bold mt-1 flex items-center">
+                            <span className="text-[10px] text-primary-600 font-bold mt-1.5 flex items-center">
                               もっと詳しく見る
                               <svg className="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                             </span>
                           </div>
                         ) : (
                           <div className="flex flex-col flex-1">
-                            <p className="text-[11px] text-gray-400 line-clamp-1">
+                            <p className="text-[11px] text-gray-400">
                               まだレビューがありません。
                             </p>
                             <span className="text-[10px] text-primary-600 font-bold mt-1">
