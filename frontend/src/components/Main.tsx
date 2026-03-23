@@ -55,14 +55,14 @@ const AREA_DEFINITIONS = [
   { id: 2, name: "赤坂見附", lat: 35.676607396575264, lng: 139.73728881531363 },
   { id: 3, name: "新宿", lat: 35.68953440195192, lng: 139.70075664056398 },
   { id: 4, name: "王子", lat: 35.752229730596184, lng: 139.7381560725481 },
-  { id: 5, name: "大崎", lat: 35.60634567890123, lng: 139.73456789012345 }
+  { id: 5, name: "大崎", lat: 35.62847132220491, lng: 139.73875972403604 }
 ];
 
 const TOKYO_BOUNDS = {
-  north: 35.82,
-  south: 35.58,
-  west: 139.50,
-  east: 139.95,
+  north: 35.82000000000000,
+  south: 35.58000000000000,
+  west: 139.50000000000000,
+  east: 139.95000000000000,
 };
 
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY as string;
