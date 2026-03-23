@@ -541,11 +541,17 @@ export const Main: React.FC<MainProps> = (props) => {
                 <div className="overflow-auto h-60vh">
                   {filteredRestaurants.map((entry) => {
                     const restaurant = entry.restaurant;
+                    const isSelected = selectedRestaurant?.id === restaurant.id;
                     return (
                       <Marker
                         key={restaurant.id}
                         onClick={() => onSelect(restaurant)}
-                        position={{ lat: restaurant.lat, lng: restaurant.lng }} 
+                        position={{ lat: restaurant.lat, lng: restaurant.lng }}
+                        // 選択されているマーカーを少し強調（オプションがあれば）
+                        icon={isSelected ? undefined : {
+                          url: `${process.env.PUBLIC_URL}/ishii_marker.png`, // もしカスタムアイコンがあれば
+                          scaledSize: new window.google.maps.Size(30, 30)
+                        }}
                       />                    
                     )
                   })}
@@ -565,22 +571,48 @@ export const Main: React.FC<MainProps> = (props) => {
                   )              
                 }
               </GoogleMap>
+
+              {/* スマホ用：マップ上の浮遊カード */}
+              {viewMode === 'map' && selectedRestaurant && (
+                <div className="md:hidden absolute bottom-24 left-4 right-4 animate-in slide-in-from-bottom-4 duration-300">
+                  <div 
+                    className="bg-white rounded-2xl shadow-2xl flex overflow-hidden border border-gray-100"
+                    onClick={() => onOpenDialog(selectedRestaurant)}
+                  >
+                    <div className="w-24 h-24 flex-shrink-0">
+                      {selectedRestaurant.image_url ? (
+                        <img src={selectedRestaurant.image_url} className="w-full h-full object-cover" alt={selectedRestaurant.name} />
+                      ) : (
+                        <img src={`${process.env.PUBLIC_URL}/no_image_square.png`} className="w-full h-full object-cover opacity-50 p-2" alt="no-image" />
+                      )}
+                    </div>
+                    <div className="p-3 flex flex-col justify-center flex-1 min-w-0">
+                      <h3 className="font-bold text-gray-800 truncate">{selectedRestaurant.name}</h3>
+                      <div className="flex items-center gap-1 mt-1">
+                        <ReactStarsRating value={selectedRestaurant.star_point} size={12} isEdit={false} className="flex" />
+                        <span className="text-xs text-gray-500">{selectedRestaurant.star_point}</span>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1 truncate">{selectedRestaurant.explanation}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* スマホ用表示切り替えボタン */}
             <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
               <button
                 onClick={() => setViewMode(viewMode === 'list' ? 'map' : 'list')}
-                className="bg-gray-800 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold active:scale-95 transition-transform"
+                className="bg-gray-800/90 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold active:scale-95 transition-all border border-white/10"
               >
                 {viewMode === 'list' ? (
                   <>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.447-1.894L9 1m0 19l6 3m-6-3V1m6 22l5.447-2.724A2 2 0 0121 18.618V8.382a2 2 0 01-1.447-1.894L15 1m0 22V1m0 0L9 4"></path></svg>
+                    <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.447-1.894L9 1m0 19l6 3m-6-3V1m6 22l5.447-2.724A2 2 0 0121 18.618V8.382a2 2 0 01-1.447-1.894L15 1m0 22V1m0 0L9 4"></path></svg>
                     マップを表示
                   </>
                 ) : (
                   <>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     リストを表示
                   </>
                 )}
