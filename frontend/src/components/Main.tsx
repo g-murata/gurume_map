@@ -59,10 +59,10 @@ const AREA_DEFINITIONS = [
 ];
 
 const TOKYO_BOUNDS = {
-  north: 35.802229730596184,
-  south: 35.613797,
-  west: 139.653936,
-  east: 139.88256,
+  north: 35.82,
+  south: 35.58,
+  west: 139.50,
+  east: 139.95,
 };
 
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY as string;
