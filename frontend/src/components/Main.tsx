@@ -1,7 +1,7 @@
 // 一時的にコメントアウトすることもあるので
 /* eslint no-unused-vars: 0 */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { auth } from '../firebase';
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
 import { fetchShowReview, CheckUsersWithoutReviews } from '../apis/reviews';
@@ -26,13 +26,14 @@ import {DateTimeConverter} from './DateTimeConverter'
 import { AreaList } from './AreaList';
 import { User, Restraunt, Review, Tag, TagsTaggedItem, Area } from '../types/index';
 
+// 定数をコンポーネント外に定義して参照を安定させる
 const customStyles: any = {
   overlay: {
     position: "fixed",
     top: 0,
     left: 0,
     backgroundColor: "rgba(0,0,0,0.50)",
-    backdropFilter: "blur(4px)", // 背景を少しぼかす
+    backdropFilter: "blur(4px)",
     zIndex: 1000
   },
   content: {
@@ -43,7 +44,7 @@ const customStyles: any = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     overflow: "scroll",
-    borderRadius: "1rem", // モーダル自体の角丸
+    borderRadius: "1rem",
     border: "none",
     padding: "0"
   },
@@ -52,6 +53,20 @@ const customStyles: any = {
 const divStyle = {
   background: "white",
   fontSize: 7.5,
+};
+
+const AREA_DEFINITIONS = [
+  { id: 1, name: "新橋", lat: 35.66630562620729, lng: 139.7581500275268 },
+  { id: 2, name: "赤坂見附", lat: 35.676607396575264, lng: 139.73728881531363 },
+  { id: 3, name: "新宿", lat: 35.68953440195192, lng: 139.70075664056398 },
+  { id: 4, name: "王子", lat: 35.752229730596184, lng: 139.7381560725481 }
+];
+
+const TOKYO_BOUNDS = {
+  north: 35.802229730596184,
+  south: 35.613797,
+  west: 139.653936,
+  east: 139.88256,
 };
 
 const url = process.env.REACT_APP_GOOGLE_MAP_API_KEY as string;
@@ -93,6 +108,11 @@ export const Main: React.FC<MainProps> = (props) => {
   const [restaurants, setRestaurants] = useState<RestaurantEntry[]>([])
   const [reviews, setReviews] = useState<Review[]>([])
   const [selectedArea, setSelectedArea] = useState(1);
+
+  // エリアが変更された時だけマップの中心を更新するためのメモ化された座標
+  const mapCenter = useMemo(() => {
+    return AREA_DEFINITIONS.find((area) => area.id === Number(selectedArea) + 1) || AREA_DEFINITIONS[0];
+  }, [selectedArea]);
 
   const [coordinateLat, setCoordinateLat] = useState<number | string>('');
   const [coordinateLng, setCoordinateLng] = useState<number | string>('');
@@ -168,10 +188,11 @@ export const Main: React.FC<MainProps> = (props) => {
   }, [])
 
   const [size, setSize] = useState<google.maps.Size | undefined>(undefined);
-  const infoWindowOptions = { 
+  const infoWindowOptions = useMemo(() => ({ 
     pixelOffset: size,
-    disableAutoPan: true // これで勝手に動かなくなります
-  };
+    disableAutoPan: true 
+  }), [size]);
+
   const createOffsetSize = () => {
     if (window.google) {
       return setSize(new window.google.maps.Size(0, -45));
@@ -248,13 +269,6 @@ export const Main: React.FC<MainProps> = (props) => {
     setIsDirty(false);
   }
   
-  const TOKYO_BOUNDS = {
-    north: 35.802229730596184,
-    south: 35.613797,
-    west: 139.653936,
-    east: 139.88256,
-  };
-
   const [searchTerm, setSearchTerm] = useState("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -293,7 +307,6 @@ export const Main: React.FC<MainProps> = (props) => {
 
   const onSelect = (item: any) => {
     setSelectedLocation(item);
-    // 選択時にレビューも取得しておく（スマホのカード表示用）
     fetchShowReview(item.id)
       .then((data: any) => {
         setReviews(data.review)
@@ -301,7 +314,7 @@ export const Main: React.FC<MainProps> = (props) => {
   }
   const onDeselect = () => {
     setSelectedLocation({});
-    setReviews([]); // クリア
+    setReviews([]);
   }
 
   const selectedRestaurant = selectedLocation.id ? 
@@ -346,20 +359,11 @@ export const Main: React.FC<MainProps> = (props) => {
     }
   };
 
-  // 暫定的なエリア定義
-  const area_kari = [
-    { id: 1, name: "新橋", lat: 35.66630562620729, lng: 139.7581500275268 },
-    { id: 2, name: "赤坂見附", lat: 35.676607396575264, lng: 139.73728881531363 },
-    { id: 3, name: "新宿", lat: 35.68953440195192, lng: 139.70075664056398 },
-    { id: 4, name: "王子", lat: 35.752229730596184, lng: 139.7381560725481 }
-  ];
-
   return (
     <>
       {props.userRegistered && <h1 className="max-w-screen-2xl px-4 md:px-8 text-primary-600 font-bold py-2">ユーザ登録完了！</h1>}
       {(isLoading || isReviewLoading || isCheckUserReviewLoading) && <Loading />}
       
-      {/* 画像拡大表示用モーダル */}
       <Modal 
         isOpen={!!enlargedImage} 
         onRequestClose={closeImageLightbox} 
@@ -388,7 +392,6 @@ export const Main: React.FC<MainProps> = (props) => {
         
         <div className="flex flex-col h-[90vh] md:h-[88vh] bg-gray-50/50">
 
-          {/* === 検索・フィルターエリア === */}
           <div className="bg-white border-b border-gray-100 shadow-sm z-10 flex-none relative">
             <div className="w-full px-4 lg:px-6 py-3 flex justify-between items-center">
               
@@ -458,13 +461,10 @@ export const Main: React.FC<MainProps> = (props) => {
             </div>
           </div>
 
-          {/* === メインコンテンツ === */}
           <div className="flex flex-col md:flex-row flex-1 overflow-hidden w-full relative">
             
-            {/* 左側：レストランリスト */}
             <div className={`flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[420px] flex flex-col border-r border-gray-200 bg-white ${viewMode === 'map' ? 'hidden md:flex' : 'flex'}`}>
               
-              {/* リストヘッダー（PCのみ） */}
               <div className="hidden md:block px-6 py-4 border-b border-gray-50 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
                 <div className="flex items-center justify-between">
                   <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Results</h2>
@@ -562,11 +562,10 @@ export const Main: React.FC<MainProps> = (props) => {
               </div>
             </div>
             
-            {/* 右側：マップ */}
             <div className={`h-full w-full flex-1 relative ${viewMode === 'list' ? 'hidden md:block' : 'block'}`}>
               <GoogleMap
                 mapContainerClassName="w-full h-full"
-                center={area_kari.find((area) => area.id === Number(selectedArea) + 1)}
+                center={mapCenter}
                 zoom={16}
                 options={{
                   fullscreenControl: false, 
@@ -583,9 +582,8 @@ export const Main: React.FC<MainProps> = (props) => {
                         key={restaurant.id}
                         onClick={() => onSelect(restaurant)}
                         position={{ lat: restaurant.lat, lng: restaurant.lng }}
-                        // 選択されているマーカーを少し強調（オプションがあれば）
                         icon={isSelected ? undefined : {
-                          url: `${process.env.PUBLIC_URL}/ishii_marker.png`, // もしカスタムアイコンがあれば
+                          url: `${process.env.PUBLIC_URL}/ishii_marker.png`,
                           scaledSize: new window.google.maps.Size(30, 30)
                         }}
                       />                    
@@ -608,7 +606,6 @@ export const Main: React.FC<MainProps> = (props) => {
                 }
               </GoogleMap>
 
-              {/* スマホ用：マップ上の浮遊カード */}
               {viewMode === 'map' && selectedRestaurant && (
                 <div className="md:hidden absolute bottom-28 left-4 right-4 animate-in slide-in-from-bottom-4 duration-300">
                   <div 
@@ -637,7 +634,6 @@ export const Main: React.FC<MainProps> = (props) => {
                           </button>
                         </div>
                         <p className="text-xs text-gray-400 mt-0.5 truncate">{selectedRestaurant.description}</p>
-                        {/* 星評価を表示（もし最新レビューがあればその評価） */}
                         {reviews.length > 0 && (
                           <div className="flex items-center gap-1 mt-1">
                             <ReactStarsRating value={reviews[0].evaluation} size={10} isEdit={false} className="flex" />
@@ -646,7 +642,6 @@ export const Main: React.FC<MainProps> = (props) => {
                         )}
                       </div>
                     </div>
-                    {/* 最新レビューのチラ見せ */}
                     <div className="px-3 pb-3 pt-1 border-t border-gray-50">
                       <div className="flex items-start gap-2 bg-gray-50/50 p-2 rounded-lg">
                         <span className="text-primary-500 text-xs mt-0.5">💬</span>
@@ -666,7 +661,6 @@ export const Main: React.FC<MainProps> = (props) => {
               )}
             </div>
 
-            {/* スマホ用表示切り替えボタン */}
             <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
               <button
                 onClick={() => setViewMode(viewMode === 'list' ? 'map' : 'list')}
@@ -688,7 +682,6 @@ export const Main: React.FC<MainProps> = (props) => {
           </div>
         </div>
 
-        {/* 新規店名登録モーダル */}
         <Modal isOpen={modalIsOpen} onAfterOpen={() => {}} onRequestClose={() => guardedClose(closeModal)} style={customStyles} contentLabel="Create Restaurant Modal">
           <RestrauntModal mode="new" setIsLoading={setIsLoading} restaurant={{} as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={Number(coordinateLat)} coordinateLng={Number(coordinateLng)} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={handleClear} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={openImageLightbox} ReactStarsRating={ReactStarsRating} />
         </Modal>
