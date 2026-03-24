@@ -18,7 +18,6 @@ import Modal from 'react-modal';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import Loading from './Loading';
 import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
-import { ReviewModal } from './modal/ReviewModal';
 import { RestrauntModal } from './modal/RestrauntModal';
 import {TagList} from './TagList';
 import {DateTimeConverter} from './DateTimeConverter'
@@ -101,7 +100,6 @@ export const Main: React.FC<MainProps> = (props) => {
   const [isCheckUserReviewLoading, setIsCheckUserReviewLoading] = useState(false);
 
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [reviewModalIsOpen, setIsReviewOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
   const [isDirty, setIsDirty] = useState(false);
@@ -113,7 +111,6 @@ export const Main: React.FC<MainProps> = (props) => {
   const [selectedLocation, setSelectedLocation] = useState<any>({});
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
 
   const [size, setSize] = useState<google.maps.Size | undefined>(undefined);
 
@@ -168,12 +165,9 @@ export const Main: React.FC<MainProps> = (props) => {
   }
 
   const OpenReviewModal = () => {
-    setIsReviewOpen(true);
-  }
-  const closeReviewModal = () => {
-    setIsReviewOpen(false);
-    setIsDirty(false);
-    resetAllLoading();
+    // ShowRestrauntModalに渡されるコールバック。
+    // ReviewModalはShowRestrauntModal内で管理されるようになったため、
+    // ここでは何もしないか、必要に応じてステートをリセットする。
   }
 
   const onCloseDialog = () => {
@@ -196,7 +190,10 @@ export const Main: React.FC<MainProps> = (props) => {
         setRestaurants(data.restraunts)
         setIsLoading(false);        
       })
-      .catch(() => setIsLoading(false))
+      .catch((error) => {
+        console.log(error)
+        setIsLoading(false);        
+      })
 
     fetchTags().then((data: any) => setTags(data.tags)).catch(() => {})
     fetchAreas().then((data: any) => setAreas(data.areas)).catch(() => {})
