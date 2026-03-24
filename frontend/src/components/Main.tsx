@@ -353,7 +353,19 @@ export const Main: React.FC<MainProps> = (props) => {
                         <div className="flex-1 min-w-0">
                           <div className={`mb-1 text-lg font-bold transition-colors duration-300 truncate ${isSelected ? 'text-primary-600' : 'text-gray-800'}`}>{restaurant.name}</div>
                           <div className="flex flex-col gap-0.5 mb-3">
-                            <div className="flex items-center gap-1.5">{restaurant.total_reviews_count && restaurant.total_reviews_count > 0 ? (<><ReactStarsRating value={restaurant.average_evaluation || 0} size={10} isEdit={false} className="flex" /><span className="text-[10px] text-gray-400 font-bold">({restaurant.total_reviews_count})</span></>) : (<span className="text-[10px] text-gray-300 italic">No reviews</span>)}</div>
+                            <div className="flex items-center gap-1.5">
+                              {restaurant.total_reviews_count && restaurant.total_reviews_count > 0 ? (
+                                <>
+                                  <span className="text-[10px] font-bold text-amber-500 leading-none">
+                                    平均
+                                  </span>
+                                  <span className="star5_rating text-[10px]" data-rate={Math.round((restaurant.average_evaluation || 0) * 2) / 2}></span>
+                                  <span className="text-[10px] text-gray-400 font-bold">({restaurant.total_reviews_count})</span>
+                                </>
+                              ) : (
+                                <span className="text-[10px] text-gray-300 italic">No reviews</span>
+                              )}
+                            </div>
                             {restaurant.latest_review_content && <p className="text-[10px] text-gray-500 truncate italic leading-tight">"{restaurant.latest_review_content}"</p>}
                           </div>
                           <div className="mb-3">
@@ -389,7 +401,18 @@ export const Main: React.FC<MainProps> = (props) => {
                 <InfoWindow position={{ lat: selectedRestaurant.lat, lng: selectedRestaurant.lng }} options={infoWindowOptions} onCloseClick={() => onDeselect()}>
                   <div className="cursor-pointer p-1 min-w-[140px]" onClick={() => onOpenDialog(selectedRestaurant)}>
                     <h2 className="text-sm font-bold text-gray-800 mb-1">{selectedRestaurant.name}</h2>
-                    {(selectedRestaurant as any).total_reviews_count > 0 ? (<div className="flex flex-col gap-0.5"><div className="flex items-center gap-1"><ReactStarsRating value={(selectedRestaurant as any).average_evaluation} size={10} isEdit={false} className="flex" /><span className="text-[9px] text-gray-400">({(selectedRestaurant as any).total_reviews_count})</span></div><p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">"{(selectedRestaurant as any).latest_review_content}"</p></div>) : (<p className="text-[9px] text-gray-400 mt-0.5">レビュー未投稿</p>)}
+                    {(selectedRestaurant as any).total_reviews_count > 0 ? (
+                      <div className="flex flex-col gap-0.5">
+                        <div className="flex items-center gap-1">
+                          <span className="text-[10px] font-bold text-amber-500">平均</span>
+                          <span className="star5_rating text-[10px]" data-rate={Math.round(((selectedRestaurant as any).average_evaluation || 0) * 2) / 2}></span>
+                          <span className="text-[9px] text-gray-400">({(selectedRestaurant as any).total_reviews_count})</span>
+                        </div>
+                        <p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">"{(selectedRestaurant as any).latest_review_content}"</p>
+                      </div>
+                    ) : (
+                      <p className="text-[9px] text-gray-400 mt-0.5">レビュー未投稿</p>
+                    )}
                   </div>
                 </InfoWindow>
               )}
@@ -428,7 +451,8 @@ export const Main: React.FC<MainProps> = (props) => {
                       {(selectedRestaurant as any).total_reviews_count > 0 ? (
                         <div className="mt-1.5 flex flex-col gap-0.5">
                           <div className="flex items-center gap-1">
-                            <ReactStarsRating value={(selectedRestaurant as any).average_evaluation} size={10} isEdit={false} className="flex" />
+                            <span className="text-[10px] font-bold text-amber-500">平均</span>
+                            <span className="star5_rating text-[10px]" data-rate={Math.round(((selectedRestaurant as any).average_evaluation || 0) * 2) / 2}></span>
                             <span className="text-[9px] text-gray-400">({(selectedRestaurant as any).total_reviews_count})</span>
                           </div>
                           <p className="text-[10px] text-gray-500 truncate italic leading-tight mt-0.5">

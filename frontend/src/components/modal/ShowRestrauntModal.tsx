@@ -267,7 +267,9 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                                     )}
                                     <div className="flex flex-col">
                                       <span className="font-bold text-gray-800 text-base">{(props.currentUserInfo as User).name}</span>
-                                      <span className="star5_rating text-xs" data-rate={props.reviews[review_item].evaluation}></span>
+                                      <div className="flex items-center gap-1">
+                                        <span className="star5_rating text-xs" data-rate={props.reviews[review_item].evaluation}></span>
+                                      </div>
                                     </div>
                                   </>
                                 ) : (
@@ -281,7 +283,9 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                                     )}
                                     <div className="flex flex-col">
                                       <span className="font-bold text-gray-800 text-base">{props.reviews[review_item].user_name}</span>
-                                      <span className="star5_rating text-xs" data-rate={props.reviews[review_item].evaluation}></span>
+                                      <div className="flex items-center gap-1">
+                                        <span className="star5_rating text-xs" data-rate={props.reviews[review_item].evaluation}></span>
+                                      </div>
                                     </div>
                                   </>
                                 )}
