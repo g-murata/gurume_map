@@ -90,7 +90,7 @@ function App() {
               openImageLightbox={openImageLightbox}
             />
 
-            <main className="flex-1 min-h-0 relative">
+            <main className="flex-1 min-h-0 relative overflow-y-auto">
               <Routes>
                 <Route path="/" element={<PrivateRoute><Main userRegistered={userRegistered} userInfo={userInfo} openImageLightboxInApp={openImageLightbox} /></PrivateRoute>} />
                 <Route path="/about" element={<About />} />
