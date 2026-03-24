@@ -17,6 +17,11 @@ import Modal from 'react-modal';
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { fetchShowUser } from './apis/users';
+import { LoadScript } from "@react-google-maps/api";
+
+Modal.setAppElement('#root');
+
+const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY as string;
 
 function App() {
 
@@ -72,7 +77,7 @@ function App() {
   };
 
   return (
-    <>
+    <LoadScript googleMapsApiKey={googleMapsApiKey}>
       <Router>
         <AuthProvider>
           <Header
@@ -125,7 +130,7 @@ function App() {
 
         </AuthProvider>
       </Router>
-    </>
+    </LoadScript>
   );
 }
 
