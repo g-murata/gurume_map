@@ -289,8 +289,8 @@ export const Main: React.FC<MainProps> = (props) => {
 
   return (
     <>
-      {/* 共通ヘッダーとの重なりを解消するため高さを動的に指定 */}
-      <div className="flex flex-col h-[90vh] md:h-[88vh] bg-gray-50/50 overflow-hidden relative">
+      {/* 親要素（App.tsx）のFlexboxにより、h-fullでピッタリ収まる */}
+      <div className="flex flex-col h-full bg-gray-50/50 overflow-hidden relative">
         
         {/* Main Header (Area & Search) */}
         <div className="bg-white border-b border-gray-100 shadow-sm z-30 flex-none relative">

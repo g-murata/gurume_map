@@ -80,12 +80,30 @@ function App() {
     <LoadScript googleMapsApiKey={googleMapsApiKey}>
       <Router>
         <AuthProvider>
-          <Header
-            userInfo={userInfo}
-            setUserInfo={setUserInfo}
-            setUserRegistered={setUserRegistered}
-            openImageLightbox={openImageLightbox}
-          />
+          {/* 全体をFlex columnにして、ヘッダーとコンテンツを分離 */}
+          <div className="flex flex-col h-screen h-[100dvh] overflow-hidden">
+            
+            <Header
+              userInfo={userInfo}
+              setUserInfo={setUserInfo}
+              setUserRegistered={setUserRegistered}
+              openImageLightbox={openImageLightbox}
+            />
+
+            <main className="flex-1 min-h-0 relative">
+              <Routes>
+                <Route path="/" element={<PrivateRoute><Main userRegistered={userRegistered} userInfo={userInfo} openImageLightboxInApp={openImageLightbox} /></PrivateRoute>} />
+                <Route path="/about" element={<About />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<Post />} />
+                <Route path="/signup" element={<SignUp setUserInfo={setUserInfo} setUserRegistered={setUserRegistered} />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/landing" element={<Landing />} />
+              </Routes>
+            </main>
+
+          </div>
 
           <Modal 
             isOpen={!!enlargedImageData} 
@@ -116,17 +134,6 @@ function App() {
               )}
             </div>
           </Modal>
-
-          <Routes>
-            <Route path="/" element={<PrivateRoute><Main userRegistered={userRegistered} userInfo={userInfo} openImageLightboxInApp={openImageLightbox} /></PrivateRoute>} />
-            <Route path="/about" element={<About />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<Post />} />
-            <Route path="/signup" element={<SignUp setUserInfo={setUserInfo} setUserRegistered={setUserRegistered} />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/landing" element={<Landing />} />
-          </Routes>
 
         </AuthProvider>
       </Router>
