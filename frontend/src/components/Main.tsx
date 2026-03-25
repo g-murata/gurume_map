@@ -479,7 +479,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
       {/* Modals */}
       <Modal isOpen={modalIsOpen} onRequestClose={() => guardedClose(closeModal)} style={customStyles} contentLabel="Create Restaurant Modal" ariaHideApp={false}>
-        <RestrauntModal mode="new" setIsLoading={setIsLoading} restaurant={{} as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={Number(coordinateLat)} coordinateLng={Number(coordinateLng)} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
+        <RestrauntModal ReactStarsRating={ReactStarsRating} mode="new" setIsLoading={setIsLoading} restaurant={{} as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={Number(coordinateLat)} coordinateLng={Number(coordinateLng)} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
       </Modal>
 
       {selectedItem && (
@@ -487,7 +487,7 @@ export const Main: React.FC<MainProps> = (props) => {
           {!editModalIsOpen ?
             <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={3} setEvaluation={() => {}} onChange={() => {}} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={selectedRestaurant as any} item={selectedItem} tags_tagged_items={{} as any} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} />
             :
-            <RestrauntModal mode="edit" setIsLoading={setIsLoading} restaurant={selectedRestaurant as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={(selectedRestaurant as any).lat} coordinateLng={(selectedRestaurant as any).lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
+            <RestrauntModal ReactStarsRating={ReactStarsRating} mode="edit" setIsLoading={setIsLoading} restaurant={selectedRestaurant as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={(selectedRestaurant as any).lat} coordinateLng={(selectedRestaurant as any).lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
           }
         </Modal>
       )}
