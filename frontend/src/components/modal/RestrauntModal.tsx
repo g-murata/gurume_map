@@ -393,6 +393,11 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
                 )}
               )}
             </div>
+            <div className="px-4 py-2 bg-gray-50/50 border-t border-gray-100">
+              <p className="text-[10px] text-gray-400 italic">
+                ※ 選択したいタグがない場合は、管理者へご連絡ください。順次追加いたします。
+              </p>
+            </div>
           </div>
         </div>
 
