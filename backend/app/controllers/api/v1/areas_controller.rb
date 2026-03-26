@@ -18,7 +18,11 @@ module Api
           render json: { errors: area.errors.full_messages }, status: :unprocessable_entity
         end
       rescue => e
-        render json: { error: e.message }, status: :internal_server_error
+        render json: { 
+          error: e.message,
+          error_class: e.class.name,
+          backtrace: e.backtrace.first(5)
+        }, status: :unprocessable_entity
       end
 
       def update
@@ -29,7 +33,11 @@ module Api
           render json: { errors: area.errors.full_messages }, status: :unprocessable_entity
         end
       rescue => e
-        render json: { error: e.message }, status: :internal_server_error
+        render json: { 
+          error: e.message,
+          error_class: e.class.name,
+          backtrace: e.backtrace.first(5)
+        }, status: :unprocessable_entity
       end
 
       def destroy
@@ -40,7 +48,11 @@ module Api
           render json: { errors: area.errors.full_messages }, status: :unprocessable_entity
         end
       rescue => e
-        render json: { error: e.message }, status: :internal_server_error
+        render json: { 
+          error: e.message,
+          error_class: e.class.name,
+          backtrace: e.backtrace.first(5)
+        }, status: :unprocessable_entity
       end
 
       private
