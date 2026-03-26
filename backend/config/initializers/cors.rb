@@ -8,7 +8,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     if Rails.env.production?
-      origins 'https://gurume-map.netlify.app'
+      origins 'https://gurume-map.netlify.app', 'https://gurumemap.fly.dev'
     else
       origins "http://localhost:3000", "http://localhost:3001"
     end

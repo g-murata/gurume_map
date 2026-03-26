@@ -17,6 +17,8 @@ module Api
         else
           render json: { errors: area.errors.full_messages }, status: :unprocessable_entity
         end
+      rescue => e
+        render json: { error: e.message }, status: :internal_server_error
       end
 
       def update
@@ -26,6 +28,8 @@ module Api
         else
           render json: { errors: area.errors.full_messages }, status: :unprocessable_entity
         end
+      rescue => e
+        render json: { error: e.message }, status: :internal_server_error
       end
 
       def destroy
@@ -35,12 +39,14 @@ module Api
         else
           render json: { errors: area.errors.full_messages }, status: :unprocessable_entity
         end
+      rescue => e
+        render json: { error: e.message }, status: :internal_server_error
       end
 
       private
 
       def area_params
-        params.require(:area).permit(:name)
+        params.require(:area).permit(:name, :lat, :lng)
       end
     end
   end 
