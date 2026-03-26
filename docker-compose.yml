@@ -46,6 +46,19 @@ services:
     stdin_open: true
     tty: true
 
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.58.2-noble
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    environment:
+      - NODE_ENV=development
+      - BASE_URL=http://frontend:3000
+    command: npx playwright test
+    depends_on:
+      - frontend
+      - backend
+
 volumes:
   postgres_data:
   bundle_data:

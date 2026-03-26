@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  include Rails.application.routes.url_helpers
-
   has_many :reviews, dependent: :destroy
   has_many :restraunts, dependent: :destroy
   has_one_attached :image
@@ -16,6 +14,8 @@ class User < ApplicationRecord
   end
 
   def image_url
-    image.attached? ? url_for(image) : nil
+    image.attached? ? Rails.application.routes.url_helpers.url_for(image) : nil
+  rescue
+    nil
   end
 end

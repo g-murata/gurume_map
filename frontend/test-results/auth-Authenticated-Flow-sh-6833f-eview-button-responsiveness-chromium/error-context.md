@@ -1,0 +1,101 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e6]:
+      - link "GurumeMap Logo" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - text: GurumeMap
+        - img "Logo" [ref=e8]
+      - navigation [ref=e9]:
+        - generic [ref=e10]: 開発環境
+        - listitem [ref=e11]:
+          - link "使い方" [ref=e12] [cursor=pointer]:
+            - /url: /about
+        - listitem [ref=e13]:
+          - button "? 名無しさん" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]: "?"
+            - generic [ref=e16]: 名無しさん
+        - listitem [ref=e17]:
+          - link "ログアウト" [ref=e18] [cursor=pointer]:
+            - /url: /landing
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e24]:
+              - combobox [ref=e25] [cursor=pointer]
+              - generic:
+                - img
+            - button "検索" [ref=e26] [cursor=pointer]:
+              - img [ref=e27]
+              - generic [ref=e29]: 検索
+          - generic [ref=e31]:
+            - generic:
+              - img
+            - textbox "店名で検索..." [ref=e32]
+        - generic [ref=e33]:
+          - generic [ref=e36]:
+            - heading "Results" [level=2] [ref=e37]
+            - generic [ref=e38]: 0件のお店
+          - generic [ref=e44]:
+            - generic [ref=e46]: Oops! Something went wrong.
+            - generic [ref=e47]: This page didn't load Google Maps correctly. See the JavaScript console for technical details.
+      - button "テスト用登録" [ref=e48] [cursor=pointer]
+  - dialog "Create Restaurant Modal" [ref=e50]:
+    - generic [ref=e52]:
+      - generic [ref=e53]:
+        - generic [ref=e54]: 新規店名登録
+        - button "✕" [ref=e55] [cursor=pointer]
+      - paragraph [ref=e56]: 通信エラーっす！バックエンド起きてる？
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - generic [ref=e59]: 店名 ※必須
+          - generic [ref=e60]: エリア：
+        - textbox "店名 ※必須" [ref=e61]:
+          - /placeholder: 例：美味しいラーメン屋
+          - text: Playwrightの美味しい店
+      - button "🏷️ タグ付け" [ref=e63] [cursor=pointer]:
+        - generic [ref=e64]: 🏷️ タグ付け
+        - img [ref=e65]
+      - generic [ref=e68]:
+        - generic [ref=e69]: お店の公式URL (食べログなど)
+        - textbox "お店の公式URL (食べログなど)" [ref=e70]:
+          - /placeholder: https://...
+      - generic [ref=e71]:
+        - generic [ref=e72]: お店の紹介・特徴 (公式情報や客観的な特徴)
+        - textbox "お店の紹介・特徴 (公式情報や客観的な特徴)" [ref=e73]:
+          - /placeholder: 例：公園の近くにあるカレー屋。テイクアウト可。
+      - generic [ref=e74]:
+        - heading "✍️ あなたの最初のレビュー 任意" [level=3] [ref=e75]:
+          - text: ✍️ あなたの最初のレビュー
+          - generic [ref=e76]: 任意
+        - generic [ref=e77]:
+          - generic [ref=e78]: 評価
+          - button [ref=e79] [cursor=pointer]:
+            - img [ref=e81]
+            - img [ref=e83]
+            - img [ref=e85]
+            - img [ref=e87]
+            - img [ref=e89]
+        - generic [ref=e90]:
+          - generic [ref=e91]: 感想
+          - textbox "「ここのランチはコスパ最強！」など..." [ref=e92]
+        - generic [ref=e93]:
+          - generic [ref=e94]: レビューの写真 (今日食べた料理など)
+          - button "Choose File" [ref=e95]
+      - generic [ref=e96]:
+        - generic [ref=e97]: お店の写真 (任意)
+        - button "お店の写真 (任意)" [ref=e98]
+      - generic [ref=e99]:
+        - button "このお店を登録する" [active] [ref=e100] [cursor=pointer]
+        - button "キャンセル" [ref=e101] [cursor=pointer]
+  - iframe [ref=e102]:
+    - generic [ref=f3e2]:
+      - text: "Compiled with problems:"
+      - button "X" [ref=f3e3] [cursor=pointer]
+      - generic [ref=f3e4]:
+        - text: ERROR in src/components/AdminPage.tsx
+        - generic [ref=f3e5]: "TS1208: 'AdminPage.tsx' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module."
+```

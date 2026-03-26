@@ -11,6 +11,7 @@ import { Landing } from "./components/Landing";
 import { Post } from './components/blogs/Post';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import AdminPage from './components/AdminPage';
 
 import { useState, useEffect } from "react";
 import Modal from 'react-modal';
@@ -29,6 +30,16 @@ function App() {
   const [userRegistered, setUserRegistered] = useState<boolean>(false);
 
   useEffect(() => {
+    // Development環境のみ: localStorageにモックユーザーがいればそれを使ってuserInfoを取得する
+    const mockEmail = localStorage.getItem('MOCK_AUTH_USER');
+    if (mockEmail && process.env.NODE_ENV === 'development') {
+      fetchShowUser(mockEmail, 'Test User')
+        .then((data: any) => {
+          setUserInfo(data.user)
+        })
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && user.email) {
         fetchShowUser(user.email, user.displayName)
@@ -100,6 +111,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/landing" element={<Landing />} />
+                <Route path="/admin" element={<AdminPage />} />
               </Routes>
             </main>
 

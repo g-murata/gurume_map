@@ -27,6 +27,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Development/Test環境のみ: localStorageにモックユーザーがいればそれを使う
+    const mockEmail = localStorage.getItem('MOCK_AUTH_USER');
+    if (mockEmail && process.env.NODE_ENV === 'development') {
+      setUser({ email: mockEmail, displayName: 'Test User' } as User);
+      setLoading(false);
+      return;
+    }
+
     const unsubscribed = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);

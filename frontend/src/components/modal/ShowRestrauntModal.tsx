@@ -37,6 +37,7 @@ interface ShowRestrauntModalProps {
 export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<number | null>(null)
   const [editReviewModalIsOpen, setEditReviewModalIsOpen] = useState(false);
+  const [createReviewModalIsOpen, setCreateReviewModalIsOpen] = useState(false);
   
   const [profileModalUser, setProfileModalUser] = useState<User | null>(null);
   const [profileModalIsOpen, setProfileModalIsOpen] = useState(false);
@@ -69,6 +70,11 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
   }
   const closeReviewEditModal = () => {
     setEditReviewModalIsOpen(false);
+    props.setIsDirty(false);
+  }
+
+  const closeReviewCreateModal = () => {
+    setCreateReviewModalIsOpen(false);
     props.setIsDirty(false);
   }
 
@@ -111,6 +117,24 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
           reviews={props.reviews}
           setReview={props.setReview}
           ReactStarsRating={props.ReactStarsRating}
+          // @ts-ignore
+          user={auth.currentUser}
+        />
+        : createReviewModalIsOpen ?
+        <ReviewModal 
+          mode="new"
+          restaurant={props.restaurant}
+          review={{} as any}
+          setIsDirty={props.setIsDirty}
+          openImageLightbox={props.openImageLightbox}
+          closeReviewModal={closeReviewCreateModal}
+          error={props.error || undefined}
+          setError={props.setError}
+          setIsLoading={props.setIsLoading}
+          reviews={props.reviews}
+          setReview={props.setReview}
+          ReactStarsRating={props.ReactStarsRating}
+          setCheckUsersWithoutReviews={props.setCheckUsersWithoutReviews}
           // @ts-ignore
           user={auth.currentUser}
         />
@@ -220,7 +244,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                       </div>
                     ) : props.checkUsersWithoutReviews ? (
                       <button 
-                        onClick={() => props.OpenReviewModal(props.restaurant.id)}
+                        onClick={() => setCreateReviewModalIsOpen(true)}
                         className="w-full md:w-auto px-8 py-3 font-bold text-white transition-all shadow-md bg-yellow-400 hover:bg-yellow-500 rounded-2xl hover:-translate-y-0.5"
                       >
                         ✍️ レビューを投稿する

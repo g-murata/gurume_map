@@ -12,3 +12,30 @@ export const fetchAreas = (): Promise<{ areas: Area[] }> => {
       throw e;
     })
 }
+
+export const createArea = (params: { name: string }): Promise<Area> => {
+  return axios.post(areas, { area: params })
+    .then(res => res.data)
+    .catch(e => {
+      console.error(e);
+      throw e;
+    });
+};
+
+export const updateArea = (id: number, params: { name: string }): Promise<Area> => {
+  return axios.put(`${areas}/${id}`, { area: params })
+    .then(res => res.data)
+    .catch(e => {
+      console.error(e);
+      throw e;
+    });
+};
+
+export const deleteArea = (id: number): Promise<void> => {
+  return axios.delete(`${areas}/${id}`)
+    .then(res => res.data)
+    .catch(e => {
+      console.error(e);
+      throw e;
+    });
+};

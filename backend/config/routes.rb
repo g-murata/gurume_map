@@ -19,8 +19,8 @@ Rails.application.routes.draw do
           get 'get_user'
         end
       end  
-      resources :tags, only: [:index]                
-      resources :areas, only: [:index]                
+      resources :tags, only: [:index, :create, :update, :destroy]
+      resources :areas, only: [:index, :create, :update, :destroy]
       resources :tags_tagged_items, only: [:index, :create, :destroy]                
     end 
   end   

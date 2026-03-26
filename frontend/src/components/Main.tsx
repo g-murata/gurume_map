@@ -388,7 +388,7 @@ export const Main: React.FC<MainProps> = (props) => {
           </div>
           
           {/* Map Area */}
-          <div className={`h-full w-full flex-1 relative ${viewMode === 'list' ? 'hidden md:block' : 'block'}`}>
+          <div className={`h-full w-full flex-1 relative ${viewMode === 'list' ? 'hidden md:block' : 'block'}`} data-testid="google-map-container">
             <GoogleMap mapContainerClassName="w-full h-full" center={mapCenter} zoom={16} options={{ fullscreenControl: false, restriction: { latLngBounds: TOKYO_BOUNDS, strictBounds: true } }} onClick={getLatLng}>
               {filteredRestaurants.map((entry) => {
                 const restaurant = entry.restaurant;
@@ -478,6 +478,20 @@ export const Main: React.FC<MainProps> = (props) => {
       </div>
 
       {/* Modals */}
+      {process.env.NODE_ENV === 'development' && (
+        <button 
+          data-testid="test-open-register-modal"
+          onClick={() => {
+            setCoordinateLat(35.6663);
+            setCoordinateLng(139.7581);
+            setIsOpen(true);
+          }}
+          className="fixed bottom-20 right-4 z-[9999] bg-red-600 text-white text-[10px] font-bold px-3 py-2 rounded-full shadow-2xl opacity-80 hover:opacity-100 transition-opacity"
+        >
+          テスト用登録
+        </button>
+      )}
+
       <Modal isOpen={modalIsOpen} onRequestClose={() => guardedClose(closeModal)} style={customStyles} contentLabel="Create Restaurant Modal" ariaHideApp={false}>
         <RestrauntModal ReactStarsRating={ReactStarsRating} mode="new" setIsLoading={setIsLoading} restaurant={{} as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={Number(coordinateLat)} coordinateLng={Number(coordinateLng)} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
       </Modal>
