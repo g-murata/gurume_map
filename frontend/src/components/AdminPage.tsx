@@ -7,7 +7,6 @@ import Loading from './Loading';
 
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL as string;
 
-console.log(process.env.REACT_APP_ADMIN_EMAIL)
 const ManagerRow = (
   { item, onUpdate, onDelete }:
   { item: { id: number, name: string }, onUpdate: (id: number, name: string) => Promise<void>, onDelete: (id: number) => Promise<void> }
