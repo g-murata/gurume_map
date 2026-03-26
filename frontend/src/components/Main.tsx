@@ -276,8 +276,10 @@ export const Main: React.FC<MainProps> = (props) => {
     setReviews([]);
   }
 
-  const selectedRestaurant = selectedLocation.id ? 
-    filteredRestaurants.find(entry => entry.restaurant.id === selectedLocation.id)?.restaurant : undefined;
+  const selectedEntry = selectedLocation.id ? 
+    filteredRestaurants.find(entry => entry.restaurant.id === selectedLocation.id) : undefined;
+  
+  const selectedRestaurant = selectedEntry?.restaurant;
 
   const handleTagClick = (tagId: number) => {
     if (selectedTags.includes(tagId)) {
@@ -499,9 +501,9 @@ export const Main: React.FC<MainProps> = (props) => {
       {selectedItem && (
         <Modal isOpen={true} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal" ariaHideApp={false}>
           {!editModalIsOpen ?
-            <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={3} setEvaluation={() => {}} onChange={() => {}} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={selectedRestaurant as any} item={selectedItem} tags_tagged_items={{} as any} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} />
+            <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={3} setEvaluation={() => {}} onChange={() => {}} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={selectedRestaurant as any} item={selectedItem} tags_tagged_items={selectedEntry?.tags_tagged_items as any || {}} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} />
             :
-            <RestrauntModal ReactStarsRating={ReactStarsRating} mode="edit" setIsLoading={setIsLoading} restaurant={selectedRestaurant as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={(selectedRestaurant as any).lat} coordinateLng={(selectedRestaurant as any).lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
+            <RestrauntModal ReactStarsRating={ReactStarsRating} mode="edit" setIsLoading={setIsLoading} restaurant={selectedRestaurant as any} tags_tagged_items={selectedEntry?.tags_tagged_items as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={(selectedRestaurant as any).lat} coordinateLng={(selectedRestaurant as any).lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
           }
         </Modal>
       )}

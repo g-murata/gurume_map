@@ -71,6 +71,10 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
       const initialTagIds = Object.values(tags_tagged_items).map(value => value.tag_id);
       setSelectedTags(initialTagIds);
       if (initialTagIds.length > 0) setIsTagListOpen(true);
+    } else if (isEditMode) {
+      // tags_tagged_itemsがまだロードされていない場合や空の場合
+      setSelectedTags([]);
+      setIsTagListOpen(false);
     } else {
       setSelectedTags([]);
       setIsTagListOpen(false);

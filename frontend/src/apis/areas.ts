@@ -13,7 +13,7 @@ export const fetchAreas = (): Promise<{ areas: Area[] }> => {
     })
 }
 
-export const createArea = (params: { name: string }): Promise<Area> => {
+export const createArea = (params: { name: string, lat?: number, lng?: number }): Promise<Area> => {
   return axios.post(areas, { area: params })
     .then(res => res.data)
     .catch(e => {
@@ -22,7 +22,7 @@ export const createArea = (params: { name: string }): Promise<Area> => {
     });
 };
 
-export const updateArea = (id: number, params: { name: string }): Promise<Area> => {
+export const updateArea = (id: number, params: { name: string, lat?: number, lng?: number }): Promise<Area> => {
   return axios.put(`${areas}/${id}`, { area: params })
     .then(res => res.data)
     .catch(e => {

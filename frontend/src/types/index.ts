@@ -11,6 +11,8 @@ export interface User {
 export interface Area {
   id: number;
   name: string;
+  lat?: number;
+  lng?: number;
 }
 
 export interface Tag {
