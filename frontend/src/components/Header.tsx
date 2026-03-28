@@ -15,15 +15,33 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = (props) => {
-  const { user } = useAuthContext();
+  const { user, isDirty, setIsDirty } = useAuthContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const guardedNavigation = (e: React.MouseEvent, to: string) => {
+    if (isDirty) {
+      if (!window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
+        e.preventDefault();
+        return;
+      }
+      setIsDirty(false);
+    }
+    menuFunction();
+  };
 
   const handleUpdateName = () => {
     if (!props.userInfo) return;
     setIsModalOpen(true);
   };
 
-  const handleLogout = () => {
+  const handleLogout = (e: React.MouseEvent) => {
+    if (isDirty) {
+      if (!window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
+        e.preventDefault();
+        return;
+      }
+      setIsDirty(false);
+    }
     signOut(auth);
     menuFunction();
     props.setUserRegistered(false)
@@ -46,10 +64,10 @@ export const Header: React.FC<HeaderProps> = (props) => {
       <>
         {(process.env.NODE_ENV === 'development') && <div className='p-4 text-xs font-bold text-yellow-800 bg-yellow-200 rounded-lg md:mr-4'>開発環境</div>}
         <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none'>
-          <Link to="/about" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={menuFunction} >使い方</Link>
+          <Link to="/about" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={(e) => guardedNavigation(e, '/about')} >使い方</Link>
         </li>
         {/* <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none'>
-          <Link to="/blog" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={menuFunction} >開発者ブログ</Link>
+          <Link to="/blog" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={(e) => guardedNavigation(e, '/blog')} >開発者ブログ</Link>
         </li> */}
 
         {user
@@ -77,10 +95,10 @@ export const Header: React.FC<HeaderProps> = (props) => {
           :
           <>
             <li className='p-4 border-b border-gray-100 list-none md:p-2 md:border-none md:ml-4'>
-              <Link to="/signup" className="block px-4 py-2 text-sm font-semibold text-white transition-all rounded-full bg-primary-500 hover:bg-primary-600 hover:shadow-md" onClick={menuFunction} >新規会員登録</Link>
+              <Link to="/signup" className="block px-4 py-2 text-sm font-semibold text-white transition-all rounded-full bg-primary-500 hover:bg-primary-600 hover:shadow-md" onClick={(e) => guardedNavigation(e, '/signup')} >新規会員登録</Link>
             </li>
             <li className='p-4 list-none md:p-2 md:border-none'>
-              <Link to="/login" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={menuFunction} >ログイン</Link>
+              <Link to="/login" className="block text-base font-semibold text-gray-600 transition-colors hover:text-primary-500" onClick={(e) => guardedNavigation(e, '/login')} >ログイン</Link>
             </li>
           </>
         }
@@ -94,7 +112,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
         <div className="w-full max-w-screen-2xl px-4 mx-auto md:px-8">
           <header className="flex items-center justify-between py-2 md:py-4">
             
-            <Link to="/" className="flex items-center gap-2 w-1/3 text-2xl font-extrabold text-gray-800 md:text-3xl tracking-tight hover:opacity-80 transition-opacity">
+            <Link to="/" className="flex items-center gap-2 w-1/3 text-2xl font-extrabold text-gray-800 md:text-3xl tracking-tight hover:opacity-80 transition-opacity" onClick={(e) => guardedNavigation(e, '/')}>
               GurumeMap
               <img src={`${process.env.PUBLIC_URL}/fork_knife.png`} className="w-8 drop-shadow-sm" alt="Logo" />
             </Link>

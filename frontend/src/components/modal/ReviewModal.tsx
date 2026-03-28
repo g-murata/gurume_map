@@ -31,21 +31,9 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
   const [localIsLoading, setLocalIsLoading] = useState(false);
 
   const checkDirty = useCallback(() => {
-    const contentElement = document.getElementById('content') as HTMLTextAreaElement | null;
-    const content = contentElement?.value || '';
-    
-    if (isEditMode && review) {
-      const isEvaluationDirty = Number(evaluation) !== Number(review.evaluation);
-      const isContentDirty = content !== (review.content || '');
-      const isImageDirty = reviewImageFile !== null || deleteImage;
-      setIsDirty(isEvaluationDirty || isContentDirty || isImageDirty);
-    } else {
-      const hasContent = content !== '';
-      const hasImage = reviewImageFile !== null;
-      const hasEvaluation = Number(evaluation) !== 3;
-      setIsDirty(hasContent || hasImage || hasEvaluation);
-    }
-  }, [isEditMode, evaluation, review, reviewImageFile, deleteImage, setIsDirty]);
+    // ユーザーの要望により、新規・編集どちらも最初から警告が出るように true にする
+    setIsDirty(true);
+  }, [setIsDirty]);
 
   useEffect(() => {
     checkDirty();
@@ -165,7 +153,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
     }
 
     if (isCurrentlyDirty) {
-      if (window.confirm("書きかけの内容がありますが、キャンセルしてもよろしいですか？")) {
+      if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
         closeReviewModal();
       }
     } else {

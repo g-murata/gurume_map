@@ -67,6 +67,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
     setSelectedReviewItem(index)
     props.setEvaluation(props.reviews[index].evaluation)
     setEditReviewModalIsOpen(true)
+    props.setIsDirty(true);
   }
   const closeReviewEditModal = () => {
     setEditReviewModalIsOpen(false);
@@ -244,7 +245,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
                       </div>
                     ) : props.checkUsersWithoutReviews ? (
                       <button 
-                        onClick={() => setCreateReviewModalIsOpen(true)}
+                        onClick={() => { setCreateReviewModalIsOpen(true); props.setIsDirty(true); }}
                         className="w-full md:w-auto px-8 py-3 font-bold text-white transition-all shadow-md bg-yellow-400 hover:bg-yellow-500 rounded-2xl hover:-translate-y-0.5"
                       >
                         ✍️ レビューを投稿する

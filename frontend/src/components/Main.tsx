@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { auth } from '../firebase';
+import { useAuthContext } from '../context/AuthContext';
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
 import { fetchShowReview, CheckUsersWithoutReviews } from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
@@ -85,6 +86,7 @@ interface MainProps {
 }
 
 export const Main: React.FC<MainProps> = (props) => {
+  const { isDirty, setIsDirty } = useAuthContext();
   const user = auth.currentUser;
   const [error, setError] = useState('');
 
@@ -102,7 +104,7 @@ export const Main: React.FC<MainProps> = (props) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
-  const [isDirty, setIsDirty] = useState(false);
+  // const [isDirty, setIsDirty] = useState(false); // Deleted!
 
   const [tags, setTags] = useState<Tag[]>([]);  
   const [areas, setAreas] = useState<Area[]>([]);  
@@ -116,7 +118,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
   const guardedClose = (closeFunction: () => void) => {
     if (isDirty) {
-      if (window.confirm("書きかけの内容がありますが、閉じてもよろしいですか？")) {
+      if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
         setIsDirty(false);
         closeFunction();
       }
@@ -132,7 +134,7 @@ export const Main: React.FC<MainProps> = (props) => {
   };
 
   const onEditDialog = (value: any) => {
-    setIsDirty(false);
+    setIsDirty(true);
     setEditModalIsOpen(true);
   }
 
@@ -155,6 +157,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
   const OpenModal = () => {
     if (user && user.email !== "guest@guest.co.jp") {
+      setIsDirty(true);
       setIsOpen(true);
     }
   }
@@ -182,6 +185,39 @@ export const Main: React.FC<MainProps> = (props) => {
     setIsDirty(false);
     resetAllLoading();
   }
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = ''; // Standard way to trigger the browser's warning
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // ブラウザの「戻る」ボタンへの対応
+    const handlePopState = (e: PopStateEvent) => {
+      if (isDirty) {
+        if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
+          setIsDirty(false);
+        } else {
+          // 履歴を元に戻して現在のページに留まる
+          window.history.pushState(null, '', window.location.href);
+        }
+      }
+    };
+    
+    if (isDirty) {
+      // 戻るボタンを検知するためにダミーの履歴を追加
+      window.history.pushState(null, '', window.location.href);
+      window.addEventListener('popstate', handlePopState);
+    }
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isDirty]);
 
   useEffect(() => {
     setIsLoading(true);

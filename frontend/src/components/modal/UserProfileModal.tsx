@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Modal from 'react-modal';
 import { User } from '../../types/index';
 import { patchUpdateUser, fetchShowUser } from '../../apis/users';
+import { useAuthContext } from '../../context/AuthContext';
 
 const customStyles: any = {
   overlay: {
@@ -38,7 +39,11 @@ interface UserProfileModalProps {
 }
 
 export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onClose, userInfo, setUserInfo, isReadOnly = false, openImageLightbox }) => {
+  const { isDirty, setIsDirty } = useAuthContext();
   const [mode, setMode] = useState<'view' | 'edit'>('view');
+  // ... rest of state stays same ...
+
+  // I'll need to use replace more carefully to include setIsDirty(true/false)
   const [currentUser, setCurrentUser] = useState<User>(userInfo);
   const [newName, setNewName] = useState(userInfo.name);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -47,37 +52,27 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const handleEditClick = () => {
+    setMode('edit');
+    setNewName(currentUser.name);
+    setPreviewUrl(currentUser.image_url || null);
+    setIsDirty(true);
+  };
+
   const handleClose = () => {
+    if (isDirty) {
+      if (!window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
+        return;
+      }
+    }
     setMode('view');
     setError('');
     setNewName(currentUser.name);
     setImageFile(null);
     setPreviewUrl(currentUser.image_url || null);
+    setIsDirty(false);
     onClose();
   };
-
-  const handleEditClick = () => {
-    setMode('edit');
-    setNewName(currentUser.name);
-    setPreviewUrl(currentUser.image_url || null);
-  };
-
-  // モーダルが開いた時に最新情報を取得
-  useEffect(() => {
-    if (isOpen && userInfo.email) {
-      fetchShowUser(userInfo.email)
-        .then((data: any) => {
-          setCurrentUser(data.user);
-          setNewName(data.user.name);
-          setPreviewUrl(data.user.image_url || null);
-          // 自分の情報なら親コンポーネントも更新して同期
-          if (!isReadOnly) {
-            setUserInfo(data.user);
-          }
-        })
-        .catch(err => console.error("Failed to fetch user stats", err));
-    }
-  }, [isOpen, userInfo.email, isReadOnly, setUserInfo]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -88,6 +83,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
         return;
       }
       setImageFile(file);
+      setIsDirty(true);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewUrl(reader.result as string);
@@ -103,6 +99,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
 
     if (!isNameChanged && !isImageChanged) {
       setMode('view');
+      setIsDirty(false);
       return;
     }
 
@@ -120,11 +117,22 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
       setUserInfo(response.user);
       setMode('view');
       setImageFile(null);
+      setIsDirty(false);
     } catch (err) {
       setError('更新に失敗しました。');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCancelEdit = () => {
+    if (isDirty) {
+      if (!window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
+        return;
+      }
+    }
+    setMode('view');
+    setIsDirty(false);
   };
 
   return (
@@ -267,7 +275,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onCl
                 </button>
                 <button
                   type="button"
-                  onClick={() => setMode('view')}
+                  onClick={handleCancelEdit}
                   className="w-full bg-white hover:bg-gray-50 text-gray-500 font-bold py-4 px-6 rounded-2xl border-2 border-gray-100 transition-all"
                 >
                   キャンセル

@@ -6,6 +6,8 @@ import Loading from '../components/Loading';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isDirty: boolean;
+  setIsDirty: (isDirty: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,6 +27,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     // Development/Test環境のみ: localStorageにモックユーザーがいればそれを使う
@@ -47,6 +50,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const value = {
     user,
     loading,
+    isDirty,
+    setIsDirty,
   };
 
   if (loading) {

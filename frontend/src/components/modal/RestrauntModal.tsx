@@ -79,36 +79,14 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
       setSelectedTags([]);
       setIsTagListOpen(false);
     }
-    setIsDirty(false);
+    // ユーザーの要望により、新規・編集どちらも最初から警告が出るように true にする
+    setIsDirty(true);
   }, [isEditMode, tags_tagged_items, setIsDirty]);
 
   // Dirtyチェック (入力内容に変更があるか判定)
   const checkDirty = () => {
-    const nameInput = document.getElementById('name') as HTMLInputElement | null;
-    const urlInput = document.getElementById('url') as HTMLInputElement | null;
-    const descriptionInput = document.getElementById('description') as HTMLTextAreaElement | null;
-    const reviewContentInput = document.getElementById('review_content') as HTMLTextAreaElement | null;
-    
-    const name = nameInput?.value || '';
-    const url = urlInput?.value || '';
-    const description = descriptionInput?.value || '';
-    const reviewContent = reviewContentInput?.value || '';
-    
-    if (isEditMode) {
-      const isTextDirty = name !== restaurant.name || 
-                          url !== (restaurant.url || '') || 
-                          description !== (restaurant.description || '');
-      const initialTagIds = tags_tagged_items ? Object.values(tags_tagged_items).map(value => value.tag_id).sort() : [];
-      const isTagsDirty = JSON.stringify(initialTagIds) !== JSON.stringify([...selectedTags].sort());
-      const isImageDirty = image !== null || deleteImage;
-      setIsDirty(isTextDirty || isTagsDirty || isImageDirty);
-    } else {
-      const hasText = name !== '' || url !== '' || description !== '';
-      const hasReview = reviewContent !== '' || initialEvaluation !== 3;
-      const hasTags = selectedTags.length > 0;
-      const hasImage = image !== null;
-      setIsDirty(hasText || hasTags || hasImage || hasReview);
-    }
+    // 常に true を維持（Qiita仕様: 何か書いてあってもなくても警告を出す）
+    setIsDirty(true);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -318,7 +296,7 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
     }
 
     if (isCurrentlyDirty) {
-      if (window.confirm("書きかけの内容がありますが、キャンセルしてもよろしいですか？")) {
+      if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
         isEditMode ? onCloseEditDialog() : closeModal();
       }
     } else {
