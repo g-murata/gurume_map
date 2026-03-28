@@ -272,34 +272,9 @@ export const RestrauntModal: React.FC<RestrauntModalProps> = (props) => {
   };
 
   const handleCancel = () => {
-    const nameInput = document.getElementById('name') as HTMLInputElement | null;
-    const urlInput = document.getElementById('url') as HTMLInputElement | null;
-    const descriptionInput = document.getElementById('description') as HTMLTextAreaElement | null;
-    const reviewContentInput = document.getElementById('review_content') as HTMLTextAreaElement | null;
-    
-    const name = nameInput?.value || '';
-    const url = urlInput?.value || '';
-    const description = descriptionInput?.value || '';
-    const reviewContent = reviewContentInput?.value || '';
-    
-    let isCurrentlyDirty = false;
-    if (isEditMode) {
-      const isTextDirty = name !== restaurant.name || 
-                          url !== (restaurant.url || '') || 
-                          description !== (restaurant.description || '');
-      const initialTagIds = tags_tagged_items ? Object.values(tags_tagged_items).map(value => value.tag_id).sort() : [];
-      const isTagsDirty = JSON.stringify(initialTagIds) !== JSON.stringify([...selectedTags].sort());
-      const isImageDirty = image !== null || deleteImage;
-      isCurrentlyDirty = isTextDirty || isTagsDirty || isImageDirty;
-    } else {
-      isCurrentlyDirty = name !== '' || url !== '' || description !== '' || selectedTags.length > 0 || image !== null || reviewContent !== '' || initialEvaluation !== 3;
-    }
-
-    if (isCurrentlyDirty) {
-      if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
-        isEditMode ? onCloseEditDialog() : closeModal();
-      }
-    } else {
+    // ユーザーの要望により、内容に関わらず「離れますか？」を表示する
+    if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
+      setIsDirty(false);
       isEditMode ? onCloseEditDialog() : closeModal();
     }
   };

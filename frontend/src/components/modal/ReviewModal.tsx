@@ -139,24 +139,9 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
   };
 
   const handleCancel = () => {
-    const contentElement = document.getElementById('content') as HTMLTextAreaElement | null;
-    const content = contentElement?.value || '';
-    let isCurrentlyDirty = false;
-
-    if (isEditMode && review) {
-      const isEvaluationDirty = Number(evaluation) !== Number(review.evaluation);
-      const isContentDirty = content.trim() !== (review.content || '').trim();
-      const isImageDirty = reviewImageFile !== null || deleteImage;
-      isCurrentlyDirty = isEvaluationDirty || isContentDirty || isImageDirty;
-    } else {
-      isCurrentlyDirty = content.trim() !== '' || reviewImageFile !== null || Number(evaluation) !== 3;
-    }
-
-    if (isCurrentlyDirty) {
-      if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
-        closeReviewModal();
-      }
-    } else {
+    // ユーザーの要望により、内容に関わらず「離れますか？」を表示する
+    if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
+      setIsDirty(false);
       closeReviewModal();
     }
   };
