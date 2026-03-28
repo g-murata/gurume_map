@@ -41,9 +41,6 @@ interface UserProfileModalProps {
 export const UserProfileModal: React.FC<UserProfileModalProps> = ({ isOpen, onClose, userInfo, setUserInfo, isReadOnly = false, openImageLightbox }) => {
   const { isDirty, setIsDirty } = useAuthContext();
   const [mode, setMode] = useState<'view' | 'edit'>('view');
-  // ... rest of state stays same ...
-
-  // I'll need to use replace more carefully to include setIsDirty(true/false)
   const [currentUser, setCurrentUser] = useState<User>(userInfo);
   const [newName, setNewName] = useState(userInfo.name);
   const [imageFile, setImageFile] = useState<File | null>(null);

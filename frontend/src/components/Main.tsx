@@ -217,7 +217,7 @@ export const Main: React.FC<MainProps> = (props) => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [isDirty]);
+  }, [isDirty, setIsDirty]);
 
   useEffect(() => {
     setIsLoading(true);
