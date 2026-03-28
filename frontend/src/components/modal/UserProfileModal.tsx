@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Modal from 'react-modal';
 import { User } from '../../types/index';
-import { patchUpdateUser, fetchShowUser } from '../../apis/users';
+import { patchUpdateUser } from '../../apis/users';
 import { useAuthContext } from '../../context/AuthContext';
 
 const customStyles: any = {
