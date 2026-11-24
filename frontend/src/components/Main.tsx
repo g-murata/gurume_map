@@ -6,7 +6,7 @@ import { auth } from '../firebase';
 import { useAuthContext } from '../context/AuthContext';
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
 import { fetchShowReview, CheckUsersWithoutReviews, GetLatestReviews } from '../apis/reviews';
-import { fetchTags} from '../apis/tags';
+import { fetchTags } from '../apis/tags';
 import { fetchAreas } from '../apis/areas';
 import {
   GoogleMap,
@@ -20,8 +20,8 @@ import ReactStarsRating from 'react-awesome-stars-rating';
 import Loading from './Loading';
 import { ShowRestrauntModal } from './modal/ShowRestrauntModal';
 import { RestrauntModal } from './modal/RestrauntModal';
-import {TagList} from './TagList';
-import {DateTimeConverter} from './DateTimeConverter'
+import { TagList } from './TagList';
+import { DateTimeConverter } from './DateTimeConverter'
 import { AreaList } from './AreaList';
 import { LatestReviewsCarousel } from './LatestReviewsCarousel';
 import { User, Restraunt, Review, Tag, TagsTaggedItem, Area, LatestReview } from '../types/index';
@@ -66,11 +66,11 @@ const TOKYO_BOUNDS = {
 };
 
 interface RestaurantEntry {
-  restaurant: Restraunt & { 
-    user_email?: string; 
-    user_name?: string; 
-    image_url?: string; 
-    created_at: string; 
+  restaurant: Restraunt & {
+    user_email?: string;
+    user_name?: string;
+    image_url?: string;
+    created_at: string;
     updated_at?: string;
     average_evaluation?: number;
     total_reviews_count?: number;
@@ -108,8 +108,8 @@ export const Main: React.FC<MainProps> = (props) => {
 
   // const [isDirty, setIsDirty] = useState(false); // Deleted!
 
-  const [tags, setTags] = useState<Tag[]>([]);  
-  const [areas, setAreas] = useState<Area[]>([]);  
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [areas, setAreas] = useState<Area[]>([]);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<any>({});
@@ -209,7 +209,7 @@ export const Main: React.FC<MainProps> = (props) => {
         }
       }
     };
-    
+
     if (isDirty) {
       // 戻るボタンを検知するためにダミーの履歴を追加
       window.history.pushState(null, '', window.location.href);
@@ -227,15 +227,15 @@ export const Main: React.FC<MainProps> = (props) => {
     fetchRestaurants()
       .then((data: any) => {
         setRestaurants(data.restraunts)
-        setIsLoading(false);        
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error)
-        setIsLoading(false);        
+        setIsLoading(false);
       })
 
-    fetchTags().then((data: any) => setTags(data.tags)).catch(() => {})
-    fetchAreas().then((data: any) => setAreas(data.areas)).catch(() => {})
+    fetchTags().then((data: any) => setTags(data.tags)).catch(() => { })
+    fetchAreas().then((data: any) => setAreas(data.areas)).catch(() => { })
     refreshLatestReviews();
   }, [])
 
@@ -285,9 +285,9 @@ export const Main: React.FC<MainProps> = (props) => {
     }
   };
 
-  const infoWindowOptions = useMemo(() => ({ 
+  const infoWindowOptions = useMemo(() => ({
     pixelOffset: size,
-    disableAutoPan: true 
+    disableAutoPan: true
   }), [size]);
 
   const filteredRestaurants = useMemo(() => {
@@ -322,7 +322,19 @@ export const Main: React.FC<MainProps> = (props) => {
     if (!latestReview.restaurant) return;
     const targetRestrauntId = latestReview.restaurant.id;
 
-    // 地域プルダウン（selectedArea）は変更せず、現在のエリア選択を維持したままモーダルを開く
+    // TODO: ===============地域エリア切り替えは要見当。===============
+    const targetAreaId = latestReview.restaurant.area_id;
+
+    // 1. エリア切り替え（areas配列からインデックスを探す）
+    const targetAreaIndex = (areas as any[]).findIndex((a: any) => Number(a.id) === Number(targetAreaId));
+    if (targetAreaIndex !== -1) {
+      setSelectedArea(targetAreaIndex);
+    } else if (targetAreaId) {
+      setSelectedArea(Math.max(0, targetAreaId - 1));
+    }
+    // ============================================================
+
+    // 2. 店舗オブジェクトを取得（店舗一覧にあればそれを、無ければlatestReviewから生成）
     const entry = restaurants.find(r => r.restaurant.id === targetRestrauntId);
     const targetRestaurant = entry ? entry.restaurant : {
       ...latestReview.restaurant,
@@ -336,16 +348,16 @@ export const Main: React.FC<MainProps> = (props) => {
   const onSelect = (item: any) => {
     setSelectedLocation(item);
     setReviews([]);
-    fetchShowReview(item.id).then((data: any) => setReviews(data.review)).catch(() => {});
+    fetchShowReview(item.id).then((data: any) => setReviews(data.review)).catch(() => { });
   }
   const onDeselect = () => {
     setSelectedLocation({});
     setReviews([]);
   }
 
-  const selectedEntry = selectedLocation.id ? 
+  const selectedEntry = selectedLocation.id ?
     filteredRestaurants.find(entry => entry.restaurant.id === selectedLocation.id) : undefined;
-  
+
   const selectedRestaurant = selectedEntry?.restaurant;
 
   const handleTagClick = (tagId: number) => {
@@ -360,7 +372,7 @@ export const Main: React.FC<MainProps> = (props) => {
     <>
       {/* 親要素（App.tsx）のFlexboxにより、h-fullでピッタリ収まる */}
       <div className="flex flex-col h-full bg-gray-50/50 overflow-hidden relative">
-        
+
         {/* Main Header (Area & Search) */}
         <div className="bg-white border-b border-gray-100 shadow-sm z-30 flex-none relative">
           <div className="w-full px-4 lg:px-6 py-2 md:py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-3">
@@ -405,9 +417,9 @@ export const Main: React.FC<MainProps> = (props) => {
                 </div>
                 <input className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-12 pr-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 transition-all shadow-sm" type="text" placeholder="店名で検索..." value={searchTerm} onClick={() => onDeselect()} onChange={(e) => setSearchTerm(e.target.value)} />
               </div>
-              <div className="flex flex-wrap justify-center gap-2 max-w-2xl mb-4">      
+              <div className="flex flex-wrap justify-center gap-2 max-w-2xl mb-4">
                 {tags.map((tag) => (
-                  <button key={tag.id} className={`text-sm px-4 py-1.5 rounded-full transition-all duration-200 border ${selectedTags.includes(tag.id) ? 'bg-primary-50 text-primary-600 border-primary-200 font-bold shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-100'}`} onClick={() => handleTagClick(tag.id)}>{tag.name}</button >  
+                  <button key={tag.id} className={`text-sm px-4 py-1.5 rounded-full transition-all duration-200 border ${selectedTags.includes(tag.id) ? 'bg-primary-50 text-primary-600 border-primary-200 font-bold shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-100'}`} onClick={() => handleTagClick(tag.id)}>{tag.name}</button >
                 ))}
               </div>
               {(searchTerm || selectedTags.length > 0) && (
@@ -419,7 +431,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
         {/* Content Body */}
         <div className="flex flex-col md:flex-row flex-1 min-h-0 overflow-hidden w-full relative">
-          
+
           {/* List Sidebar */}
           <div className={`flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[420px] flex flex-col min-h-0 border-r border-gray-200 bg-white ${viewMode === 'map' ? 'hidden md:flex' : 'flex'}`}>
             <div className="hidden md:block px-6 py-4 border-b border-gray-50 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
@@ -459,10 +471,10 @@ export const Main: React.FC<MainProps> = (props) => {
                             {restaurant.latest_review_content && <p className="text-[10px] text-gray-500 truncate italic leading-tight">"{restaurant.latest_review_content}"</p>}
                           </div>
                           <div className="mb-3">
-                            <TagList 
+                            <TagList
                               // @ts-ignore
-                              tags_tagged_items={entry.tags_tagged_items} 
-                              tags={tags} 
+                              tags_tagged_items={entry.tags_tagged_items}
+                              tags={tags}
                             />
                           </div>
                         </div>
@@ -476,7 +488,7 @@ export const Main: React.FC<MainProps> = (props) => {
               })}
             </div>
           </div>
-          
+
           {/* Map Area */}
           <div className={`h-full w-full flex-1 relative ${viewMode === 'list' ? 'hidden md:block' : 'block'}`} data-testid="google-map-container">
             <GoogleMap mapContainerClassName="w-full h-full" center={mapCenter} zoom={16} options={{ fullscreenControl: false, restriction: { latLngBounds: TOKYO_BOUNDS, strictBounds: true } }} onClick={getLatLng}>
@@ -484,7 +496,7 @@ export const Main: React.FC<MainProps> = (props) => {
                 const restaurant = entry.restaurant;
                 const isSelected = selectedRestaurant?.id === restaurant.id;
                 return (
-                  <Marker key={restaurant.id} onClick={() => onSelect(restaurant)} position={{ lat: restaurant.lat, lng: restaurant.lng }} icon={isSelected || !window.google?.maps ? undefined : { url: `${process.env.PUBLIC_URL}/ishii_marker.png`, scaledSize: new window.google.maps.Size(30, 30) }} />                    
+                  <Marker key={restaurant.id} onClick={() => onSelect(restaurant)} position={{ lat: restaurant.lat, lng: restaurant.lng }} icon={isSelected || !window.google?.maps ? undefined : { url: `${process.env.PUBLIC_URL}/ishii_marker.png`, scaledSize: new window.google.maps.Size(30, 30) }} />
                 )
               })}
               {(selectedRestaurant !== undefined && window.innerWidth > 768) && (
@@ -510,7 +522,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
             {viewMode === 'map' && selectedRestaurant && (
               <div className="md:hidden absolute bottom-28 left-4 right-4 animate-in slide-in-from-bottom-4 duration-300">
-                <div 
+                <div
                   className="bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-100"
                   onClick={() => onOpenDialog(selectedRestaurant)}
                 >
@@ -525,7 +537,7 @@ export const Main: React.FC<MainProps> = (props) => {
                     <div className="p-3 flex flex-col justify-center flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <h3 className="font-bold text-gray-800 truncate pr-2">{selectedRestaurant.name}</h3>
-                        <button 
+                        <button
                           className="text-gray-400 p-1"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -536,7 +548,7 @@ export const Main: React.FC<MainProps> = (props) => {
                         </button>
                       </div>
                       <p className="text-[10px] text-gray-400 truncate">{selectedRestaurant.description}</p>
-                      
+
                       {/* 評価と最新レビューを1行ずつコンパクトに表示 */}
                       {(selectedRestaurant as any).total_reviews_count > 0 ? (
                         <div className="mt-1.5 flex flex-col gap-0.5">
@@ -569,7 +581,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
       {/* Modals */}
       {process.env.NODE_ENV === 'development' && (
-        <button 
+        <button
           data-testid="test-open-register-modal"
           onClick={() => {
             setCoordinateLat(35.6663);
@@ -583,15 +595,15 @@ export const Main: React.FC<MainProps> = (props) => {
       )}
 
       <Modal isOpen={modalIsOpen} onRequestClose={() => guardedClose(closeModal)} style={customStyles} contentLabel="Create Restaurant Modal" ariaHideApp={false}>
-        <RestrauntModal ReactStarsRating={ReactStarsRating} mode="new" setIsLoading={setIsLoading} restaurant={{} as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={Number(coordinateLat)} coordinateLng={Number(coordinateLng)} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
+        <RestrauntModal ReactStarsRating={ReactStarsRating} mode="new" setIsLoading={setIsLoading} restaurant={{} as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={Number(coordinateLat)} coordinateLng={Number(coordinateLng)} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => { }} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
       </Modal>
 
       {selectedItem && (
         <Modal isOpen={true} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal" ariaHideApp={false}>
           {!editModalIsOpen ?
-            <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={3} setEvaluation={() => {}} onChange={() => {}} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={selectedRestaurant as any} item={selectedItem} tags_tagged_items={selectedEntry?.tags_tagged_items as any || {}} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} onReviewsChange={refreshLatestReviews} />
+            <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={3} setEvaluation={() => { }} onChange={() => { }} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={selectedRestaurant as any} item={selectedItem} tags_tagged_items={selectedEntry?.tags_tagged_items as any || {}} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} onReviewsChange={refreshLatestReviews} />
             :
-            <RestrauntModal ReactStarsRating={ReactStarsRating} mode="edit" setIsLoading={setIsLoading} restaurant={selectedRestaurant as any} tags_tagged_items={selectedEntry?.tags_tagged_items as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={(selectedRestaurant as any).lat} coordinateLng={(selectedRestaurant as any).lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
+            <RestrauntModal ReactStarsRating={ReactStarsRating} mode="edit" setIsLoading={setIsLoading} restaurant={selectedRestaurant as any} tags_tagged_items={selectedEntry?.tags_tagged_items as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={(selectedRestaurant as any).lat} coordinateLng={(selectedRestaurant as any).lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => { }} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
           }
         </Modal>
       )}
