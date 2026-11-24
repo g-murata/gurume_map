@@ -169,3 +169,24 @@ html, body {
 .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* 最新レビューの横スライドアニメーション（ティッカー） */
+@keyframes ticker-slide {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-ticker {
+    display: flex;
+    width: max-content;
+    animation: ticker-slide 45s linear infinite;
+}
+
+.animate-ticker:hover,
+.animate-ticker:focus-within {
+    animation-play-state: paused;
+}

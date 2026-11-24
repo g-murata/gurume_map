@@ -48,18 +48,20 @@ describe('LatestReviewsCarousel', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  test('レビューカードの情報が正しくレンダリングされること', () => {
-    render(
+  test('レビューカードの情報が正しくレンダリングされ、スライドクラスが付与されていること', () => {
+    const { container } = render(
       <LatestReviewsCarousel reviews={mockReviews} onSelectReview={jest.fn()} />
     );
 
     expect(screen.getByText('最新レビュー')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.getByText('ラーメン新橋亭')).toBeInTheDocument();
-    expect(screen.getByText('📍 新橋')).toBeInTheDocument();
-    expect(screen.getByText('とても美味しいラーメンでした。また来ます！')).toBeInTheDocument();
-    expect(screen.getByText('新宿ステーキハウス')).toBeInTheDocument();
-    expect(screen.getByText('📍 新宿')).toBeInTheDocument();
+    expect(screen.getAllByText('ラーメン新橋亭')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('新橋')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('とても美味しいラーメンでした。また来ます！')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('新宿ステーキハウス')[0]).toBeInTheDocument();
+
+    // アニメーションクラスが存在することを確認
+    const ticker = container.querySelector('.animate-ticker');
+    expect(ticker).toBeInTheDocument();
   });
 
   test('カードをクリックするとonSelectReviewが該当のレビューとともに呼ばれること', () => {
@@ -68,42 +70,10 @@ describe('LatestReviewsCarousel', () => {
       <LatestReviewsCarousel reviews={mockReviews} onSelectReview={handleSelectReview} />
     );
 
-    const card = screen.getByText('ラーメン新橋亭');
+    const card = screen.getAllByText('ラーメン新橋亭')[0];
     fireEvent.click(card);
 
     expect(handleSelectReview).toHaveBeenCalledTimes(1);
     expect(handleSelectReview).toHaveBeenCalledWith(mockReviews[0]);
-  });
-
-  test('isCollapsibleがtrueのとき最小化ボタンが表示され、トグルできること', () => {
-    const handleToggle = jest.fn();
-    const { rerender } = render(
-      <LatestReviewsCarousel
-        reviews={mockReviews}
-        onSelectReview={jest.fn()}
-        isCollapsible={true}
-        isCollapsed={false}
-        onToggleCollapse={handleToggle}
-      />
-    );
-
-    const toggleButton = screen.getByRole('button', { name: /最新レビューを最小化/i });
-    expect(toggleButton).toBeInTheDocument();
-    fireEvent.click(toggleButton);
-    expect(handleToggle).toHaveBeenCalledTimes(1);
-
-    // 最小化状態に更新
-    rerender(
-      <LatestReviewsCarousel
-        reviews={mockReviews}
-        onSelectReview={jest.fn()}
-        isCollapsible={true}
-        isCollapsed={true}
-        onToggleCollapse={handleToggle}
-      />
-    );
-
-    expect(screen.queryByText('ラーメン新橋亭')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /最新レビューを展開/i })).toBeInTheDocument();
   });
 });

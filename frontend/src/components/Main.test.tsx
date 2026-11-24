@@ -107,7 +107,7 @@ describe('Main Component', () => {
     await waitFor(() => expect(screen.getAllByText('テストレストランA').length).toBeGreaterThan(0));
 
     // 検索・フィルターボタンをクリックして検索フォームを表示
-    const filterButton = screen.getByRole('button', { name: /検索/ });
+    const filterButton = screen.getAllByRole('button', { name: /検索/ })[0];
     fireEvent.click(filterButton);
 
     const searchInput = screen.getByPlaceholderText('店名で検索...');

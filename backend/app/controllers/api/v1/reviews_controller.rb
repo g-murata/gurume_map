@@ -103,7 +103,7 @@ module Api
       end
 
       def get_latest_reviews
-        reviews = Review.with_attached_image.includes(:user, restraunt: :area).order(created_at: :desc).limit(5)
+        reviews = Review.with_attached_image.includes(:user, restraunt: :area).order(created_at: :desc).limit(10)
 
         formatted_reviews = reviews.map do |r|
           review_with_image_url(r).merge(

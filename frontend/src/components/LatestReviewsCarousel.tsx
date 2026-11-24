@@ -4,132 +4,78 @@ import { LatestReview } from '../types/index';
 interface LatestReviewsCarouselProps {
   reviews: LatestReview[];
   onSelectReview: (review: LatestReview) => void;
-  isCollapsible?: boolean;
-  isCollapsed?: boolean;
-  onToggleCollapse?: () => void;
   className?: string;
 }
 
 export const LatestReviewsCarousel: React.FC<LatestReviewsCarouselProps> = ({
   reviews,
   onSelectReview,
-  isCollapsible = false,
-  isCollapsed = false,
-  onToggleCollapse,
   className = '',
 }) => {
   if (!reviews || reviews.length === 0) {
     return null;
   }
 
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString);
-      const m = date.getMonth() + 1;
-      const d = date.getDate();
-      return `${m}/${d}`;
-    } catch {
-      return '';
-    }
-  };
+  // ループアニメーション用にレビュー配列を2回繰り返す（件数が少ない場合でも滑らかに流れるように）
+  const duplicatedReviews = [...reviews, ...reviews];
 
   return (
-    <div className={`w-full ${className}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 bg-white/95">
-        <div className="flex items-center gap-1.5">
-          <span className="text-base" role="img" aria-label="latest-reviews">🔥</span>
-          <span className="text-xs font-bold text-gray-700 tracking-wide">最新レビュー</span>
-          <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-1.5 py-0.2 rounded-full">
-            {reviews.length}
-          </span>
-        </div>
-        {isCollapsible && onToggleCollapse && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleCollapse();
-            }}
-            className="text-[11px] font-bold text-gray-400 hover:text-gray-600 flex items-center gap-0.5 px-2 py-0.5 rounded-md hover:bg-gray-100 transition-colors"
-            aria-label={isCollapsed ? '最新レビューを展開' : '最新レビューを最小化'}
-          >
-            {isCollapsed ? (
-              <>
-                <span>展開</span>
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </>
-            ) : (
-              <>
-                <span>最小化</span>
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
-                </svg>
-              </>
-            )}
-          </button>
-        )}
+    <div className={`flex items-center gap-2 overflow-hidden relative ${className}`}>
+      {/* 先頭バッジ（大画面で表示） */}
+      <div className="hidden lg:flex items-center gap-1 flex-shrink-0 text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200/60 px-2 py-1 rounded-lg whitespace-nowrap shadow-2xs z-20">
+        <span>🔥</span>
+        <span>最新レビュー</span>
       </div>
 
-      {/* Cards list / collapsed state */}
-      {!isCollapsed && (
-        <div className="p-3 bg-gray-50/70 border-b border-gray-100">
-          <div className="flex gap-2.5 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
-            {reviews.map((review) => {
-              const ratingRate = Math.round((review.evaluation || 0) * 2) / 2;
-              return (
-                <div
-                  key={review.id}
-                  onClick={() => onSelectReview(review)}
-                  className="w-[220px] flex-shrink-0 bg-white border border-gray-200/80 hover:border-primary-400 rounded-xl p-2.5 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group hover:-translate-y-0.5"
-                >
-                  {/* Top: Area badge & Date */}
-                  <div className="flex items-center justify-between gap-1 mb-1.5">
-                    {review.restaurant?.area_name ? (
-                      <span className="bg-primary-50 text-primary-600 text-[10px] font-bold px-1.5 py-0.5 rounded border border-primary-100 truncate max-w-[120px]">
-                        📍 {review.restaurant.area_name}
+      {/* 左右のエッジフェード効果 */}
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent z-10 hidden sm:block" />
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white to-transparent z-10 hidden sm:block" />
+
+      {/* 横に自動で流れるスライドコンテナ */}
+      <div className="flex-1 min-w-0 overflow-hidden relative py-0.5">
+        <div className="animate-ticker flex gap-2.5 items-center">
+          {duplicatedReviews.map((review, index) => {
+            return (
+              <div
+                key={`${review.id}-${index}`}
+                onClick={() => onSelectReview(review)}
+                className="flex-shrink-0 flex items-center gap-2 bg-gray-50/90 hover:bg-primary-50/70 border border-gray-200 hover:border-primary-300 rounded-xl px-2.5 py-1 cursor-pointer transition-all duration-150 hover:shadow-md w-[180px] sm:w-[200px] md:w-[230px] group select-none"
+                title={`${review.restaurant?.name || ''} - ${review.content || ''}`}
+              >
+                {review.image_url ? (
+                  <img
+                    src={review.image_url}
+                    alt="review"
+                    className="w-8 h-8 rounded-lg object-cover flex-shrink-0 border border-gray-100"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 border border-amber-100 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    ★
+                  </div>
+                )}
+                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                  <div className="flex items-center gap-1 leading-tight">
+                    {review.restaurant?.area_name && (
+                      <span className="text-[9px] font-bold text-primary-600 bg-primary-100/70 px-1 py-0.2 rounded truncate max-w-[50px] flex-shrink-0">
+                        {review.restaurant.area_name}
                       </span>
-                    ) : (
-                      <span />
                     )}
-                    <span className="text-[10px] text-gray-400 font-medium">
-                      {formatDate(review.created_at)}
+                    <span className="text-xs font-bold text-gray-800 truncate group-hover:text-primary-600 transition-colors">
+                      {review.restaurant?.name || '店舗名'}
+                    </span>
+                    <span className="text-[10px] font-bold text-amber-500 ml-auto flex-shrink-0">
+                      ★{review.evaluation}
                     </span>
                   </div>
-
-                  {/* Middle: Restaurant name & Rating */}
-                  <div className="mb-1.5">
-                    <div className="text-xs font-bold text-gray-800 truncate group-hover:text-primary-600 transition-colors">
-                      {review.restaurant?.name || '店舗名'}
-                    </div>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <span className="star5_rating text-[10px]" data-rate={ratingRate}></span>
-                      <span className="text-[10px] font-bold text-amber-500">
-                        {review.evaluation}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Bottom: Image (if any) + Review Content */}
-                  <div className="flex gap-2 items-start pt-1 border-t border-gray-50">
-                    {review.image_url && (
-                      <img
-                        src={review.image_url}
-                        alt="review"
-                        className="w-10 h-10 object-cover rounded-lg flex-shrink-0 border border-gray-100"
-                      />
-                    )}
-                    <p className="text-[11px] text-gray-600 line-clamp-2 leading-relaxed flex-1">
-                      {review.content || '（コメントなし）'}
-                    </p>
-                  </div>
+                  <p className="text-[10px] text-gray-500 truncate leading-tight mt-0.5">
+                    {review.content || '（コメントなし）'}
+                  </p>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
-      )}
+      </div>
     </div>
   );
 };

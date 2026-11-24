@@ -94,7 +94,6 @@ export const Main: React.FC<MainProps> = (props) => {
   const [restaurants, setRestaurants] = useState<RestaurantEntry[]>([])
   const [reviews, setReviews] = useState<Review[]>([])
   const [latestReviews, setLatestReviews] = useState<LatestReview[]>([]);
-  const [isMobileCarouselCollapsed, setIsMobileCarouselCollapsed] = useState(false);
   const [selectedArea, setSelectedArea] = useState<number>(1);
 
   const [coordinateLat, setCoordinateLat] = useState<number | string>('');
@@ -373,18 +372,39 @@ export const Main: React.FC<MainProps> = (props) => {
         
         {/* Main Header (Area & Search) */}
         <div className="bg-white border-b border-gray-100 shadow-sm z-30 flex-none relative">
-          <div className="w-full px-4 lg:px-6 py-3 flex justify-between items-center gap-3">
-            <div className="flex-1 min-w-0">
+          <div className="w-full px-4 lg:px-6 py-2 md:py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-3">
+            {/* 上段（スマホ時）: エリアプルダウン ＋ リスト/マップ切替 ＋ 検索ボタン */}
+            <div className="flex items-center justify-between gap-2 flex-shrink-0 w-full md:w-auto">
               <AreaList areas={areas as any} selectedArea={selectedArea} setSelectedArea={setSelectedArea} />
+
+              {/* スマホ用のアクションボタン */}
+              <div className="md:hidden flex items-center gap-1.5 flex-shrink-0">
+                <div className="flex bg-gray-100 p-1 rounded-xl">
+                  <button onClick={() => setViewMode('list')} className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-primary-600' : 'text-gray-400'}`}>リスト</button>
+                  <button onClick={() => setViewMode('map')} className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${viewMode === 'map' ? 'bg-white shadow-sm text-primary-600' : 'text-gray-400'}`}>マップ</button>
+                </div>
+                <button onClick={() => setIsSearchOpen(!isSearchOpen)} className={`flex items-center justify-center gap-1.5 h-9 px-3 text-xs font-bold rounded-xl transition-all duration-200 shadow-sm ${isSearchOpen || searchTerm || selectedTags.length > 0 ? 'bg-primary-50 text-primary-600 border border-primary-200' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}`}>
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                  <span>{searchTerm || selectedTags.length > 0 ? '絞り込み中' : '検索'}</span>
+                </button>
+              </div>
             </div>
-            <div className="md:hidden flex bg-gray-100 p-1 rounded-xl">
-              <button onClick={() => setViewMode('list')} className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-primary-600' : 'text-gray-400'}`}>リスト</button>
-              <button onClick={() => setViewMode('map')} className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'map' ? 'bg-white shadow-sm text-primary-600' : 'text-gray-400'}`}>マップ</button>
+
+            {/* 最新レビュー: スマホでは下段（2行目）で画面幅いっぱいに、PCでは中央に */}
+            <div className="flex-1 min-w-0 overflow-hidden w-full md:w-auto md:mx-2 border-t md:border-t-0 border-gray-100 pt-1.5 md:pt-0">
+              <LatestReviewsCarousel
+                reviews={latestReviews}
+                onSelectReview={handleSelectLatestReview}
+              />
             </div>
-            <button onClick={() => setIsSearchOpen(!isSearchOpen)} className={`flex items-center justify-center gap-2 h-10 px-4 text-sm font-bold rounded-xl transition-all duration-200 shadow-sm ${isSearchOpen || searchTerm || selectedTags.length > 0 ? 'bg-primary-50 text-primary-600 border border-primary-200' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}`}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              <span className="hidden sm:inline">{searchTerm || selectedTags.length > 0 ? '絞り込み中' : '検索'}</span>
-            </button>
+
+            {/* PC用（md以上）の検索ボタン */}
+            <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+              <button onClick={() => setIsSearchOpen(!isSearchOpen)} className={`flex items-center justify-center gap-2 h-10 px-4 text-sm font-bold rounded-xl transition-all duration-200 shadow-sm ${isSearchOpen || searchTerm || selectedTags.length > 0 ? 'bg-primary-50 text-primary-600 border border-primary-200' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}`}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <span>{searchTerm || selectedTags.length > 0 ? '絞り込み中' : '検索'}</span>
+              </button>
+            </div>
           </div>
           <div className={`overflow-hidden transition-all duration-300 ease-in-out bg-gray-50 ${isSearchOpen ? 'max-h-[500px] border-b border-gray-200 opacity-100' : 'max-h-0 opacity-0'}`}>
             <div className="max-w-screen-xl mx-auto px-4 py-6 flex flex-col items-center">
@@ -411,10 +431,6 @@ export const Main: React.FC<MainProps> = (props) => {
           
           {/* List Sidebar */}
           <div className={`flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[420px] flex flex-col min-h-0 border-r border-gray-200 bg-white ${viewMode === 'map' ? 'hidden md:flex' : 'flex'}`}>
-            <LatestReviewsCarousel
-              reviews={latestReviews}
-              onSelectReview={handleSelectLatestReview}
-            />
             <div className="hidden md:block px-6 py-4 border-b border-gray-50 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Results</h2>
@@ -472,20 +488,6 @@ export const Main: React.FC<MainProps> = (props) => {
           
           {/* Map Area */}
           <div className={`h-full w-full flex-1 relative ${viewMode === 'list' ? 'hidden md:block' : 'block'}`} data-testid="google-map-container">
-            {/* モバイルマップ表示時の最新レビューフロート */}
-            {latestReviews.length > 0 && (
-              <div className="md:hidden absolute top-3 left-3 right-3 z-20 pointer-events-auto">
-                <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                  <LatestReviewsCarousel
-                    reviews={latestReviews}
-                    onSelectReview={handleSelectLatestReview}
-                    isCollapsible={true}
-                    isCollapsed={isMobileCarouselCollapsed}
-                    onToggleCollapse={() => setIsMobileCarouselCollapsed(!isMobileCarouselCollapsed)}
-                  />
-                </div>
-              </div>
-            )}
             <GoogleMap mapContainerClassName="w-full h-full" center={mapCenter} zoom={16} options={{ fullscreenControl: false, restriction: { latLngBounds: TOKYO_BOUNDS, strictBounds: true } }} onClick={getLatLng}>
               {filteredRestaurants.map((entry) => {
                 const restaurant = entry.restaurant;
