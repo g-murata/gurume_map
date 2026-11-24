@@ -5,7 +5,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { auth } from '../firebase';
 import { useAuthContext } from '../context/AuthContext';
 import { fetchRestaurants, deleteRestraunt } from '../apis/restraunts';
-import { fetchShowReview, CheckUsersWithoutReviews } from '../apis/reviews';
+import { fetchShowReview, CheckUsersWithoutReviews, GetLatestReviews } from '../apis/reviews';
 import { fetchTags} from '../apis/tags';
 import { fetchAreas } from '../apis/areas';
 import {
@@ -23,7 +23,8 @@ import { RestrauntModal } from './modal/RestrauntModal';
 import {TagList} from './TagList';
 import {DateTimeConverter} from './DateTimeConverter'
 import { AreaList } from './AreaList';
-import { User, Restraunt, Review, Tag, TagsTaggedItem, Area } from '../types/index';
+import { LatestReviewsCarousel } from './LatestReviewsCarousel';
+import { User, Restraunt, Review, Tag, TagsTaggedItem, Area, LatestReview } from '../types/index';
 
 // 定数をコンポーネント外に定義して参照を安定させる
 const customStyles: any = {
@@ -92,6 +93,8 @@ export const Main: React.FC<MainProps> = (props) => {
 
   const [restaurants, setRestaurants] = useState<RestaurantEntry[]>([])
   const [reviews, setReviews] = useState<Review[]>([])
+  const [latestReviews, setLatestReviews] = useState<LatestReview[]>([]);
+  const [isMobileCarouselCollapsed, setIsMobileCarouselCollapsed] = useState(false);
   const [selectedArea, setSelectedArea] = useState<number>(1);
 
   const [coordinateLat, setCoordinateLat] = useState<number | string>('');
@@ -178,6 +181,7 @@ export const Main: React.FC<MainProps> = (props) => {
     setEditModalIsOpen(false);
     setIsDirty(false);
     resetAllLoading();
+    refreshLatestReviews();
   }
 
   const onCloseEditDialog = () => {
@@ -233,6 +237,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
     fetchTags().then((data: any) => setTags(data.tags)).catch(() => {})
     fetchAreas().then((data: any) => setAreas(data.areas)).catch(() => {})
+    refreshLatestReviews();
   }, [])
 
   useEffect(() => {
@@ -302,6 +307,42 @@ export const Main: React.FC<MainProps> = (props) => {
     return AREA_DEFINITIONS.find((area) => area.id === areaId) || AREA_DEFINITIONS[0];
   }, [selectedArea]);
 
+  const refreshLatestReviews = () => {
+    GetLatestReviews()
+      .then((data: any) => {
+        if (data && data.reviews) {
+          setLatestReviews(data.reviews);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch latest reviews", err);
+      });
+  };
+
+  const handleSelectLatestReview = (latestReview: LatestReview) => {
+    if (!latestReview.restaurant) return;
+    const targetRestrauntId = latestReview.restaurant.id;
+    const targetAreaId = latestReview.restaurant.area_id;
+
+    // 1. エリア切り替え（areas配列からインデックスを探す）
+    const targetAreaIndex = (areas as any[]).findIndex((a: any) => Number(a.id) === Number(targetAreaId));
+    if (targetAreaIndex !== -1) {
+      setSelectedArea(targetAreaIndex);
+    } else if (targetAreaId) {
+      setSelectedArea(Math.max(0, targetAreaId - 1));
+    }
+
+    // 2. 店舗オブジェクトを取得（店舗一覧にあればそれを、無ければlatestReviewから生成）
+    const entry = restaurants.find(r => r.restaurant.id === targetRestrauntId);
+    const targetRestaurant = entry ? entry.restaurant : {
+      ...latestReview.restaurant,
+      created_at: latestReview.created_at,
+    };
+
+    // 3. 店舗詳細モーダルを開く
+    onOpenDialog(targetRestaurant);
+  };
+
   const onSelect = (item: any) => {
     setSelectedLocation(item);
     setReviews([]);
@@ -370,6 +411,10 @@ export const Main: React.FC<MainProps> = (props) => {
           
           {/* List Sidebar */}
           <div className={`flex-1 md:flex-none md:h-full w-full md:w-96 lg:w-[420px] flex flex-col min-h-0 border-r border-gray-200 bg-white ${viewMode === 'map' ? 'hidden md:flex' : 'flex'}`}>
+            <LatestReviewsCarousel
+              reviews={latestReviews}
+              onSelectReview={handleSelectLatestReview}
+            />
             <div className="hidden md:block px-6 py-4 border-b border-gray-50 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Results</h2>
@@ -427,12 +472,26 @@ export const Main: React.FC<MainProps> = (props) => {
           
           {/* Map Area */}
           <div className={`h-full w-full flex-1 relative ${viewMode === 'list' ? 'hidden md:block' : 'block'}`} data-testid="google-map-container">
+            {/* モバイルマップ表示時の最新レビューフロート */}
+            {latestReviews.length > 0 && (
+              <div className="md:hidden absolute top-3 left-3 right-3 z-20 pointer-events-auto">
+                <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                  <LatestReviewsCarousel
+                    reviews={latestReviews}
+                    onSelectReview={handleSelectLatestReview}
+                    isCollapsible={true}
+                    isCollapsed={isMobileCarouselCollapsed}
+                    onToggleCollapse={() => setIsMobileCarouselCollapsed(!isMobileCarouselCollapsed)}
+                  />
+                </div>
+              </div>
+            )}
             <GoogleMap mapContainerClassName="w-full h-full" center={mapCenter} zoom={16} options={{ fullscreenControl: false, restriction: { latLngBounds: TOKYO_BOUNDS, strictBounds: true } }} onClick={getLatLng}>
               {filteredRestaurants.map((entry) => {
                 const restaurant = entry.restaurant;
                 const isSelected = selectedRestaurant?.id === restaurant.id;
                 return (
-                  <Marker key={restaurant.id} onClick={() => onSelect(restaurant)} position={{ lat: restaurant.lat, lng: restaurant.lng }} icon={isSelected ? undefined : { url: `${process.env.PUBLIC_URL}/ishii_marker.png`, scaledSize: new window.google.maps.Size(30, 30) }} />                    
+                  <Marker key={restaurant.id} onClick={() => onSelect(restaurant)} position={{ lat: restaurant.lat, lng: restaurant.lng }} icon={isSelected || !window.google?.maps ? undefined : { url: `${process.env.PUBLIC_URL}/ishii_marker.png`, scaledSize: new window.google.maps.Size(30, 30) }} />                    
                 )
               })}
               {(selectedRestaurant !== undefined && window.innerWidth > 768) && (
@@ -537,7 +596,7 @@ export const Main: React.FC<MainProps> = (props) => {
       {selectedItem && (
         <Modal isOpen={true} onRequestClose={() => guardedClose(onCloseDialog)} style={customStyles} contentLabel="Show Restaurant Modal" ariaHideApp={false}>
           {!editModalIsOpen ?
-            <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={3} setEvaluation={() => {}} onChange={() => {}} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={selectedRestaurant as any} item={selectedItem} tags_tagged_items={selectedEntry?.tags_tagged_items as any || {}} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} />
+            <ShowRestrauntModal ReactStarsRating={ReactStarsRating} evaluation={3} setEvaluation={() => {}} onChange={() => {}} onEditDialog={onEditDialog} handleDeleteSubmit={handleDeleteSubmit} onCloseDialog={() => guardedClose(onCloseDialog)} OpenReviewModal={OpenReviewModal} setReview={setReviews} restaurant={selectedRestaurant as any} item={selectedItem} tags_tagged_items={selectedEntry?.tags_tagged_items as any || {}} tags={tags} reviews={reviews} checkUsersWithoutReviews={checkUsersWithoutReviews} setCheckUsersWithoutReviews={setCheckUsersWithoutReviews} isReviewLoading={isReviewLoading} isCheckUserReviewLoading={isCheckUserReviewLoading} setIsLoading={setIsLoading} error={error} setError={setError} setIsDirty={setIsDirty} openImageLightbox={props.openImageLightboxInApp} currentUserInfo={props.userInfo} onReviewsChange={refreshLatestReviews} />
             :
             <RestrauntModal ReactStarsRating={ReactStarsRating} mode="edit" setIsLoading={setIsLoading} restaurant={selectedRestaurant as any} tags_tagged_items={selectedEntry?.tags_tagged_items as any} tags={tags} areas={areas as any} selectedArea={selectedArea} coordinateLat={(selectedRestaurant as any).lat} coordinateLng={(selectedRestaurant as any).lng} setIsDirty={setIsDirty} onSelect={onOpenDialog} setRestraunt={setRestaurants} handleClear={() => {}} setError={setError} error={error} user={user as any} restaurants={restaurants} closeModal={closeModal} onCloseEditDialog={onCloseEditDialog} openImageLightbox={props.openImageLightboxInApp} />
           }

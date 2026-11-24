@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { reviews, review, check_users_without_review, get_latest_reviews } from '../urls/index';
-import { Review } from '../types/index';
+import { Review, LatestReview } from '../types/index';
 
 export interface PostReviewParams {
   evaluation: number;
@@ -96,13 +96,10 @@ export const CheckUsersWithoutReviews = (params: { restraunt_id: number; email: 
     .catch((e) => { throw e; })
 };
 
-export const GetLatestReviews = (): Promise<{ reviews: Review[] }> => {
+export const GetLatestReviews = (): Promise<{ reviews: LatestReview[] }> => {
   return axios.get(get_latest_reviews)
     .then(res => {
-      return res.data
+      return res.data;
     })
-    .catch((e) => {
-      console.error(e);
-      throw e;
-    })
-};
+    .catch((e) => { throw e; });
+};;

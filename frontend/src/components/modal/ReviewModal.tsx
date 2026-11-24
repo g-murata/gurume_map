@@ -17,6 +17,7 @@ interface ReviewModalProps {
   setIsLoading?: (loading: boolean) => void;
   error?: string;
   setError?: (error: string) => void;
+  onSuccess?: () => void;
 }
 
 export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
@@ -125,6 +126,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
       }
 
       setIsDirty(false);
+      if (props.onSuccess) props.onSuccess();
       closeReviewModal();
     } catch (error: any) {
       if (error.response && error.response.status === 422) {
@@ -142,6 +144,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
     // ユーザーの要望により、内容に関わらず「離れますか？」を表示する
     if (window.confirm("このサイトを離れますか？\n行った変更が保存されない可能性があります。")) {
       setIsDirty(false);
+      if (props.onSuccess) props.onSuccess();
       closeReviewModal();
     }
   };

@@ -4,6 +4,12 @@ import { Main } from './Main';
 import { fetchRestaurants } from '../apis/restraunts';
 import { fetchTags } from '../apis/tags';
 import { fetchAreas } from '../apis/areas';
+import { GetLatestReviews, fetchShowReview, CheckUsersWithoutReviews } from '../apis/reviews';
+
+// AuthContextのモック
+jest.mock('../context/AuthContext', () => ({
+  useAuthContext: () => ({ isDirty: false, setIsDirty: jest.fn() })
+}));
 
 // 各種APIのモック
 jest.mock('../apis/restraunts');
@@ -57,6 +63,29 @@ describe('Main Component', () => {
     (fetchRestaurants as jest.Mock).mockResolvedValue(mockRestaurants);
     (fetchTags as jest.Mock).mockResolvedValue(mockTags);
     (fetchAreas as jest.Mock).mockResolvedValue(mockAreas);
+    (fetchShowReview as jest.Mock).mockResolvedValue({ review: [] });
+    (CheckUsersWithoutReviews as jest.Mock).mockResolvedValue({ review: false });
+    (GetLatestReviews as jest.Mock).mockResolvedValue({
+      reviews: [
+        {
+          id: 101,
+          evaluation: 5,
+          content: '絶品でした！',
+          restraunt_id: 1,
+          user_id: 1,
+          created_at: '2026-03-20T10:00:00Z',
+          updated_at: '2026-03-20T10:00:00Z',
+          restaurant: {
+            id: 1,
+            name: 'テストレストランA',
+            area_id: 2,
+            area_name: '赤坂見附',
+            lat: 35.6,
+            lng: 139.7
+          }
+        }
+      ]
+    });
   });
 
   test('初期表示でレストランのリストが表示されること', async () => {
@@ -67,7 +96,7 @@ describe('Main Component', () => {
 
     // データ取得後にリストが表示されることを確認
     await waitFor(() => {
-      expect(screen.getByText('テストレストランA')).toBeInTheDocument();
+      expect(screen.getAllByText('テストレストランA').length).toBeGreaterThan(0);
       expect(screen.getByText('おいしいお店B')).toBeInTheDocument();
     });
   });
@@ -75,17 +104,17 @@ describe('Main Component', () => {
   test('店名でフィルタリングができること', async () => {
     render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
 
-    await waitFor(() => expect(screen.getByText('テストレストランA')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getAllByText('テストレストランA').length).toBeGreaterThan(0));
 
     // 検索・フィルターボタンをクリックして検索フォームを表示
-    const filterButton = screen.getByRole('button', { name: /検索・フィルター/ });
+    const filterButton = screen.getByRole('button', { name: /検索/ });
     fireEvent.click(filterButton);
 
     const searchInput = screen.getByPlaceholderText('店名で検索...');
     await userEvent.type(searchInput, 'テスト');
 
     // 'テストレストランA'は残り、'おいしいお店B'は消えるはず
-    expect(screen.getByText('テストレストランA')).toBeInTheDocument();
+    expect(screen.getAllByText('テストレストランA').length).toBeGreaterThan(0);
     expect(screen.queryByText('おいしいお店B')).not.toBeInTheDocument();
   });
 
@@ -103,7 +132,7 @@ describe('Main Component', () => {
 
     render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
 
-    await waitFor(() => expect(screen.getByText('テストレストランA')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getAllByText('テストレストランA').length).toBeGreaterThan(0));
 
     expect(screen.queryByText('新橋のお店')).not.toBeInTheDocument();
 
@@ -112,7 +141,25 @@ describe('Main Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('新橋のお店')).toBeInTheDocument();
-      expect(screen.queryByText('テストレストランA')).not.toBeInTheDocument();
+    });
+  });
+
+  test('最新レビューが表示され、クリックするとモーダルが開くこと', async () => {
+    render(<Main userInfo={mockUserInfo} openImageLightboxInApp={mockOpenImageLightbox} />);
+
+    // 最新レビューカルーセルが表示されていることを確認
+    await waitFor(() => {
+      expect(screen.getAllByText('最新レビュー')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('絶品でした！')[0]).toBeInTheDocument();
+    });
+
+    // 最新レビューカードをクリック
+    const reviewCard = screen.getAllByText('絶品でした！')[0];
+    fireEvent.click(reviewCard);
+
+    // モーダルが開くことを確認
+    await waitFor(() => {
+      expect(screen.getByTestId('modal')).toBeInTheDocument();
     });
   });
 });

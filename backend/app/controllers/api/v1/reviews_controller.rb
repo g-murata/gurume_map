@@ -103,11 +103,27 @@ module Api
       end
 
       def get_latest_reviews
-        review = Review.order(created_at: :desc).first
+        reviews = Review.with_attached_image.includes(:user, restraunt: :area).order(created_at: :desc).limit(5)
+
+        formatted_reviews = reviews.map do |r|
+          review_with_image_url(r).merge(
+            "user_name" => r.user&.name,
+            "user_image_url" => r.user&.image_url,
+            "restaurant" => r.restraunt ? {
+              "id" => r.restraunt.id,
+              "name" => r.restraunt.name,
+              "area_id" => r.restraunt.area_id,
+              "area_name" => r.restraunt.area&.name,
+              "lat" => r.restraunt.lat,
+              "lng" => r.restraunt.lng
+            } : nil
+          )
+        end
 
         render json: {
-          review: review,
-          restraunt: review&.restraunt,
+          reviews: formatted_reviews,
+          review: reviews.first,
+          restraunt: reviews.first&.restraunt
         }, status: :ok
       end
 

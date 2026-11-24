@@ -49,6 +49,17 @@ export interface Review {
   updated_at: string;
 }
 
+export interface LatestReview extends Review {
+  restaurant?: {
+    id: number;
+    name: string;
+    area_id: number;
+    area_name?: string;
+    lat: number;
+    lng: number;
+  };
+}
+
 export interface Blog {
   id: number;
   title: string;

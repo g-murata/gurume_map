@@ -32,6 +32,7 @@ interface ShowRestrauntModalProps {
   onChange: (e: any) => void;
   ReactStarsRating: any;
   currentUserInfo: User | false | null;
+  onReviewsChange?: () => void;
 }
 
 export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => {
@@ -91,6 +92,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
           newReviews.splice(index, 1)
           props.setReview(newReviews);
           props.setCheckUsersWithoutReviews(true);
+          if (props.onReviewsChange) props.onReviewsChange();
           if (props.setIsLoading) props.setIsLoading(false);
         })
         .catch((error) => {
@@ -118,6 +120,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
           reviews={props.reviews}
           setReview={props.setReview}
           ReactStarsRating={props.ReactStarsRating}
+          onSuccess={props.onReviewsChange}
           // @ts-ignore
           user={auth.currentUser}
         />
@@ -136,6 +139,7 @@ export const ShowRestrauntModal: React.FC<ShowRestrauntModalProps> = (props) => 
           setReview={props.setReview}
           ReactStarsRating={props.ReactStarsRating}
           setCheckUsersWithoutReviews={props.setCheckUsersWithoutReviews}
+          onSuccess={props.onReviewsChange}
           // @ts-ignore
           user={auth.currentUser}
         />
