@@ -149,7 +149,7 @@ describe('Main Component', () => {
 
     // 最新レビューカルーセルが表示されていることを確認
     await waitFor(() => {
-      expect(screen.getAllByText('最新レビュー')[0]).toBeInTheDocument();
+      expect(screen.getByText('最新')).toBeInTheDocument();
       expect(screen.getAllByText('絶品でした！')[0]).toBeInTheDocument();
     });
 

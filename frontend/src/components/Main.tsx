@@ -321,24 +321,15 @@ export const Main: React.FC<MainProps> = (props) => {
   const handleSelectLatestReview = (latestReview: LatestReview) => {
     if (!latestReview.restaurant) return;
     const targetRestrauntId = latestReview.restaurant.id;
-    const targetAreaId = latestReview.restaurant.area_id;
 
-    // 1. エリア切り替え（areas配列からインデックスを探す）
-    const targetAreaIndex = (areas as any[]).findIndex((a: any) => Number(a.id) === Number(targetAreaId));
-    if (targetAreaIndex !== -1) {
-      setSelectedArea(targetAreaIndex);
-    } else if (targetAreaId) {
-      setSelectedArea(Math.max(0, targetAreaId - 1));
-    }
-
-    // 2. 店舗オブジェクトを取得（店舗一覧にあればそれを、無ければlatestReviewから生成）
+    // 地域プルダウン（selectedArea）は変更せず、現在のエリア選択を維持したままモーダルを開く
     const entry = restaurants.find(r => r.restaurant.id === targetRestrauntId);
     const targetRestaurant = entry ? entry.restaurant : {
       ...latestReview.restaurant,
       created_at: latestReview.created_at,
     };
 
-    // 3. 店舗詳細モーダルを開く
+    // 店舗詳細モーダルを開く
     onOpenDialog(targetRestaurant);
   };
 

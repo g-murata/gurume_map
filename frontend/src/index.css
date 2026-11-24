@@ -170,23 +170,26 @@ html, body {
     padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* 最新レビューの横スライドアニメーション（ティッカー） */
-@keyframes ticker-slide {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+/* 最新レビューの横スクロールバー（要素が隠れている時に表示） */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
 }
 
-.animate-ticker {
-    display: flex;
-    width: max-content;
-    animation: ticker-slide 45s linear infinite;
+.custom-scrollbar::-webkit-scrollbar {
+    height: 4px;
 }
 
-.animate-ticker:hover,
-.animate-ticker:focus-within {
-    animation-play-state: paused;
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }

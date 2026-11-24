@@ -10,8 +10,8 @@ const mockReviews: LatestReview[] = [
     restraunt_id: 10,
     user_id: 1,
     image_url: 'https://example.com/ramen.jpg',
-    created_at: '2026-03-25T12:00:00Z',
-    updated_at: '2026-03-25T12:00:00Z',
+    created_at: '2026-03-25T00:00:00Z',
+    updated_at: '2026-03-25T00:00:00Z',
     restaurant: {
       id: 10,
       name: 'ラーメン新橋亭',
@@ -27,8 +27,8 @@ const mockReviews: LatestReview[] = [
     content: '最高のステーキ。',
     restraunt_id: 20,
     user_id: 2,
-    created_at: '2026-03-24T18:30:00Z',
-    updated_at: '2026-03-24T18:30:00Z',
+    created_at: '2026-03-20T00:00:00Z',
+    updated_at: '2026-03-20T00:00:00Z',
     restaurant: {
       id: 20,
       name: '新宿ステーキハウス',
@@ -48,20 +48,19 @@ describe('LatestReviewsCarousel', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  test('レビューカードの情報が正しくレンダリングされ、スライドクラスが付与されていること', () => {
-    const { container } = render(
+  test('一番最新のレビューが日付付きで固定表示され、他のレビューも表示されること', () => {
+    render(
       <LatestReviewsCarousel reviews={mockReviews} onSelectReview={jest.fn()} />
     );
 
-    expect(screen.getByText('最新レビュー')).toBeInTheDocument();
-    expect(screen.getAllByText('ラーメン新橋亭')[0]).toBeInTheDocument();
-    expect(screen.getAllByText('新橋')[0]).toBeInTheDocument();
-    expect(screen.getAllByText('とても美味しいラーメンでした。また来ます！')[0]).toBeInTheDocument();
-    expect(screen.getAllByText('新宿ステーキハウス')[0]).toBeInTheDocument();
+    // 1件目の最新固定カード（「最新」バッジと日付）
+    expect(screen.getByText('最新')).toBeInTheDocument();
+    expect(screen.getByText('3/25')).toBeInTheDocument();
+    expect(screen.getByText('ラーメン新橋亭')).toBeInTheDocument();
 
-    // アニメーションクラスが存在することを確認
-    const ticker = container.querySelector('.animate-ticker');
-    expect(ticker).toBeInTheDocument();
+    // 2件目のカード
+    expect(screen.getByText('3/20')).toBeInTheDocument();
+    expect(screen.getByText('新宿ステーキハウス')).toBeInTheDocument();
   });
 
   test('カードをクリックするとonSelectReviewが該当のレビューとともに呼ばれること', () => {
@@ -70,7 +69,7 @@ describe('LatestReviewsCarousel', () => {
       <LatestReviewsCarousel reviews={mockReviews} onSelectReview={handleSelectReview} />
     );
 
-    const card = screen.getAllByText('ラーメン新橋亭')[0];
+    const card = screen.getByText('ラーメン新橋亭');
     fireEvent.click(card);
 
     expect(handleSelectReview).toHaveBeenCalledTimes(1);
